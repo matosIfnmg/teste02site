@@ -21,12 +21,12 @@
             font-family: 'Inter', sans-serif;
         }
         .sidebar {
-            min-height: calc(100vh - 4rem); 
-            max-height: calc(100vh - 4rem);
+            min-height: calc(100vh - 8rem); /* Ajustado para novo header */
+            max-height: calc(100vh - 8rem); /* Ajustado para novo header */
             overflow-y: auto;
         }
         .main-content {
-             min-height: calc(100vh - 4rem);
+             min-height: calc(100vh - 8rem); /* Ajustado para novo header */
         }
         .product-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -51,32 +51,61 @@
             color: #991B1B;
             border: 1px solid #FCA5A5;
         }
-        /* Estilos para a área de arrastar e soltar imagem (placeholder) */
         .drop-zone {
-            border: 2px dashed #cbd5e1; /* border-gray-300 */
-            border-radius: 0.375rem; /* rounded-md */
+            border: 2px dashed #cbd5e1;
+            border-radius: 0.375rem;
             padding: 2rem;
             text-align: center;
             cursor: pointer;
-            background-color: #f9fafb; /* bg-gray-50 */
+            background-color: #f9fafb;
         }
         .drop-zone.dragover {
-            background-color: #eff6ff; /* bg-blue-50 */
-            border-color: #93c5fd; /* border-blue-300 */
+            background-color: #eff6ff;
+            border-color: #93c5fd;
         }
         .product-image-preview {
             max-width: 100px;
             max-height: 100px;
             object-fit: cover;
-            border-radius: 0.25rem; /* rounded-sm */
-            margin-top: 0.5rem; /* mt-2 */
+            border-radius: 0.25rem;
+            margin-top: 0.5rem;
+        }
+        .top-bar-link {
+            @apply text-xs text-gray-600 hover:text-blue-600 transition-colors duration-200 flex items-center;
+        }
+        .top-bar-icon {
+            @apply w-4 h-4 mr-1;
         }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
 
-    <header class="bg-white shadow-md sticky top-0 z-50">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+    <div class="bg-gray-200 py-2 border-b border-gray-300">
+        <div class="container mx-auto px-6 flex flex-wrap justify-between items-center text-sm">
+            <div class="flex items-center space-x-4">
+                <a href="tel:+551122507200" class="top-bar-link">
+                    <svg class="top-bar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.308 1.154a11.042 11.042 0 005.516 5.516l1.154-2.308a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                    (11) 2250-7200
+                </a>
+                <a href="https://wa.me/5511914505059" target="_blank" class="top-bar-link">
+                     <svg class="top-bar-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.33 3.42 16.79L2.05 22L7.31 20.62C8.75 21.38 10.36 21.82 12.04 21.82C17.5 21.82 21.95 17.37 21.95 11.91C21.95 6.45 17.5 2 12.04 2ZM12.04 20.13C10.56 20.13 9.15 19.74 7.96 19.03L7.62 18.83L4.39 19.69L5.29 16.52L5.07 16.17C4.32 14.91 3.82 13.46 3.82 11.91C3.82 7.39 7.52 3.69 12.04 3.69C16.56 3.69 20.26 7.39 20.26 11.91C20.26 16.43 16.56 20.13 12.04 20.13ZM17.46 14.47C17.24 14.36 16.05 13.79 15.86 13.73C15.67 13.66 15.53 13.62 15.38 13.84C15.24 14.06 14.81 14.59 14.67 14.73C14.53 14.87 14.39 14.91 14.17 14.8C13.94 14.69 13.01 14.35 11.92 13.38C11.07 12.61 10.53 11.7 10.36 11.41C10.18 11.12 10.31 11 10.43 10.88C10.54 10.77 10.67 10.59 10.81 10.43C10.96 10.27 11 10.16 11.07 10.02C11.14 9.88 11.09 9.74 11.04 9.63C10.98 9.52 10.55 8.46 10.38 8.06C10.21 7.66 10.03 7.71 9.89 7.7C9.77 7.7 9.61 7.7 9.46 7.7C9.31 7.7 9.06 7.77 8.84 7.99C8.62 8.21 8.05 8.74 8.05 9.88C8.05 11.02 8.88 12.1 9.02 12.24C9.16 12.38 10.55 14.52 12.68 15.43C13.64 15.84 14.3 16.08 14.79 16.26C15.51 16.52 15.99 16.49 16.35 16.43C16.75 16.36 17.64 15.79 17.83 15.29C18.02 14.8 18.02 14.39 17.97 14.29C17.92 14.18 17.68 14.07 17.46 14.47Z"></path></svg>
+                     (11) 91450-5059 (WhatsApp)
+                </a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="#" id="my-orders-link" class="top-bar-link">
+                    <svg class="top-bar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                    Meus Pedidos
+                </a>
+                <a href="#" id="contact-us-link" class="top-bar-link">
+                    <svg class="top-bar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    Fale Conosco
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <header class="bg-white shadow-md sticky top-0 z-40"> <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="#" id="store-logo" class="text-2xl font-bold text-blue-600">LogoLoja</a>
             <nav id="store-nav">
                 <a href="#" class="px-4 text-gray-600 hover:text-blue-500">Início</a>
@@ -120,48 +149,12 @@
                     <section class="mb-12">
                         <h2 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-2">Destaques da Semana</h2>
                         <div id="product-row-1" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
-                                <img src="https://placehold.co/300x200/E0E7FF/4F46E5?text=Produto+1" alt="Imagem do Produto 1" class="w-full h-48 object-cover rounded-md mb-4 product-image">
-                                <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">Nome do Produto A</h3>
-                                <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ 99,90</p>
-                                <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button">Adicionar ao Carrinho</button>
                             </div>
-                            <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
-                                <img src="https://placehold.co/300x200/DBEAFE/1D4ED8?text=Produto+2" alt="Imagem do Produto 2" class="w-full h-48 object-cover rounded-md mb-4 product-image">
-                                <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">Nome do Produto B</h3>
-                                <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ 129,50</p>
-                                <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button">Adicionar ao Carrinho</button>
-                            </div>
-                             <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
-                                <img src="https://placehold.co/300x200/BFDBFE/1E40AF?text=Produto+3" alt="Imagem do Produto 3" class="w-full h-48 object-cover rounded-md mb-4 product-image">
-                                <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">Nome do Produto C</h3>
-                                <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ 75,00</p>
-                                <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button">Adicionar ao Carrinho</button>
-                            </div>
-                        </div>
                     </section>
                      <section class="mb-12">
                         <h2 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-2">Novidades</h2>
                         <div id="product-row-2" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                             <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
-                                <img src="https://placehold.co/300x200/93C5FD/1C3FAA?text=Produto+4" alt="Imagem do Produto 4" class="w-full h-48 object-cover rounded-md mb-4 product-image">
-                                <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">Nome do Produto D</h3>
-                                <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ 210,00</p>
-                                <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button">Adicionar ao Carrinho</button>
                             </div>
-                            <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
-                                <img src="https://placehold.co/300x200/60A5FA/1B3A9A?text=Produto+5" alt="Imagem do Produto 5" class="w-full h-48 object-cover rounded-md mb-4 product-image">
-                                <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">Nome do Produto E</h3>
-                                <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ 45,99</p>
-                                <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button">Adicionar ao Carrinho</button>
-                            </div>
-                             <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
-                                <img src="https://placehold.co/300x200/3B82F6/1A358A?text=Produto+6" alt="Imagem do Produto 6" class="w-full h-48 object-cover rounded-md mb-4 product-image">
-                                <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">Nome do Produto F</h3>
-                                <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ 88,80</p>
-                                <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button">Adicionar ao Carrinho</button>
-                            </div>
-                        </div>
                     </section>
                     <section>
                         <h2 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-2">Mais Vendidos</h2>
@@ -187,7 +180,12 @@
             </div>
 
             <div id="admin-panel" class="hidden w-full bg-white p-6 rounded-lg shadow-lg main-content">
-                <h2 class="text-3xl font-bold mb-8 text-center text-gray-700">Painel do Administrador</h2>
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold text-gray-700">Painel do Administrador</h2>
+                    <button id="back-to-store-button" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300">
+                        Ver Loja
+                    </button>
+                </div>
 
                 <section id="product-management" class="mb-10">
                     <h3 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-3">Gerenciar Produtos</h3>
@@ -266,8 +264,10 @@
         const dynamicContentArea = document.getElementById('dynamic-content-area');
         const storeView = document.getElementById('store-view');
         const adminPanel = document.getElementById('admin-panel');
-        const mainProductList = document.getElementById('main-product-list'); // Para exibir produtos na loja
+        const mainProductList = document.getElementById('main-product-list');
         const cartSidebar = document.getElementById('cart-sidebar');
+        const backToStoreButton = document.getElementById('back-to-store-button');
+
 
         // Elementos do Painel Admin
         const addProductForm = document.getElementById('add-product-form');
@@ -279,11 +279,11 @@
         const imageDropZone = document.getElementById('image-drop-zone');
         const productImageFileInput = document.getElementById('product-image-file');
         const imagePreview = document.getElementById('image-preview');
-        let uploadedImageFile = null; // Para armazenar o arquivo de imagem
+        let uploadedImageFile = null; 
 
 
         // --- ESTADO DA APLICAÇÃO ---
-        let products = [ // Produtos iniciais de exemplo para a loja
+        let products = [ 
             { id: 'prod1', name: "Nome do Produto A", price: 99.90, imageUrl: "https://placehold.co/300x200/E0E7FF/4F46E5?text=Produto+1", description: "Descrição breve do produto A." },
             { id: 'prod2', name: "Nome do Produto B", price: 129.50, imageUrl: "https://placehold.co/300x200/DBEAFE/1D4ED8?text=Produto+2", description: "Descrição breve do produto B." },
             { id: 'prod3', name: "Nome do Produto C", price: 75.00, imageUrl: "https://placehold.co/300x200/BFDBFE/1E40AF?text=Produto+3", description: "Descrição breve do produto C." },
@@ -298,12 +298,10 @@
         let isAdminLoggedIn = false;
 
         // --- FUNÇÕES DE RENDERIZAÇÃO ---
-
-        // Renderiza produtos na página principal da loja
         function renderStoreProducts() {
             const productRow1 = document.getElementById('product-row-1');
             const productRow2 = document.getElementById('product-row-2');
-            const productRow3 = document.getElementById('product-row-3'); // Para "Mais Vendidos" ou outros
+            const productRow3 = document.getElementById('product-row-3'); 
 
             if (!productRow1 || !productRow2 || !productRow3) {
                 console.error("Um ou mais containers de linha de produto não encontrados.");
@@ -314,30 +312,26 @@
             productRow2.innerHTML = '';
             productRow3.innerHTML = '';
 
-
             products.forEach((product, index) => {
                 const productHTML = `
                     <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center" data-id="${product.id}">
                         <img src="${product.imageUrl || 'https://placehold.co/300x200/cccccc/969696?text=Sem+Imagem'}" alt="Imagem de ${product.name}" class="w-full h-48 object-cover rounded-md mb-4 product-image">
                         <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">${product.name}</h3>
                         <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ ${product.price.toFixed(2)}</p>
-                        <p class="text-xs text-gray-500 mb-2 product-description h-10 overflow-hidden">${product.description || ''}</p>
+                        <p class="text-xs text-gray-500 mb-2 product-description h-10 overflow-hidden" title="${product.description || ''}">${product.description || 'Sem descrição detalhada.'}</p>
                         <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button">Adicionar ao Carrinho</button>
                     </div>
                 `;
-                // Distribui os produtos entre as linhas
                 if (index < 3) productRow1.innerHTML += productHTML;
                 else if (index < 6) productRow2.innerHTML += productHTML;
-                else productRow3.innerHTML += productHTML; // O restante vai para a terceira linha
+                else productRow3.innerHTML += productHTML; 
             });
             addEventListenersToAddToCartButtons();
         }
 
-
-        // Renderiza produtos no painel do administrador
         function renderAdminProducts() {
             if (!adminProductListContainer || !noAdminProductsMessage) return;
-            adminProductListContainer.innerHTML = ''; // Limpa a lista atual
+            adminProductListContainer.innerHTML = ''; 
 
             if (products.length === 0) {
                 noAdminProductsMessage.classList.remove('hidden');
@@ -363,7 +357,6 @@
             }
         }
         
-        // Renderiza lista de administradores
         function renderAdminUsers() {
             if (!adminUsersListContainer) return;
             adminUsersListContainer.innerHTML = '';
@@ -371,7 +364,6 @@
                 const adminDiv = document.createElement('div');
                 adminDiv.className = 'p-2 border-b border-gray-200 text-sm text-gray-600';
                 adminDiv.textContent = admin.email;
-                // Poderia adicionar um botão de remover aqui no futuro, exceto para o admin principal
                 adminUsersListContainer.appendChild(adminDiv);
             });
         }
@@ -404,7 +396,7 @@
             document.getElementById('store-logo').textContent = "LogoLoja";
             document.getElementById('store-nav').classList.remove('hidden');
             
-            renderStoreProducts(); // Garante que os produtos da loja sejam re-renderizados
+            renderStoreProducts(); 
         }
 
         if (loginForm) {
@@ -423,7 +415,7 @@
                     loginFeedbackDiv.classList.add('feedback-message', 'feedback-success');
                     setTimeout(() => {
                        showAdminView(admin.email);
-                    }, 500); // Pequeno delay para mostrar a mensagem
+                    }, 500); 
                 } else {
                     loginFeedbackDiv.textContent = "Email ou senha inválidos.";
                     loginFeedbackDiv.classList.add('feedback-message', 'feedback-error');
@@ -434,6 +426,11 @@
         if (adminLogoutButton) {
             adminLogoutButton.addEventListener('click', showStoreView);
         }
+        
+        if (backToStoreButton) {
+            backToStoreButton.addEventListener('click', showStoreView);
+        }
+
 
         // --- GERENCIAMENTO DE PRODUTOS (ADMIN) ---
         if (addProductForm) {
@@ -445,15 +442,12 @@
                 const description = document.getElementById('product-description').value;
 
                 if (uploadedImageFile) {
-                    // Em um app real, você faria upload do arquivo e obteria uma URL
-                    // Por agora, vamos usar um Object URL para preview local se não houver URL manual
                     if (!imageUrl) imageUrl = URL.createObjectURL(uploadedImageFile);
                 }
 
-
                 if (name && price > 0) {
                     const newProduct = {
-                        id: 'prod' + (products.length + 1) + Date.now(), // ID simples
+                        id: 'prod' + (products.length + 1) + Date.now(), 
                         name,
                         price,
                         imageUrl: imageUrl || 'https://placehold.co/300x200/cccccc/969696?text=Nova+Imagem',
@@ -461,14 +455,19 @@
                     };
                     products.push(newProduct);
                     renderAdminProducts();
-                    renderStoreProducts(); // Atualiza a loja também
+                    renderStoreProducts(); 
                     addProductForm.reset();
                     imagePreview.classList.add('hidden');
                     imagePreview.src = '';
                     uploadedImageFile = null;
-                    document.getElementById('product-image-url').value = ''; // Limpa o campo URL
+                    document.getElementById('product-image-url').value = ''; 
                 } else {
-                    alert("Por favor, preencha nome e preço do produto.");
+                    // Substituindo alert por mensagem no DOM
+                    const feedback = document.createElement('p');
+                    feedback.textContent = "Por favor, preencha nome e preço do produto.";
+                    feedback.className = "text-red-500 text-sm mt-2";
+                    addProductForm.appendChild(feedback);
+                    setTimeout(() => feedback.remove(), 3000);
                 }
             });
         }
@@ -476,87 +475,99 @@
         function addEventListenersToRemoveProductButtons() {
             const removeButtons = adminProductListContainer.querySelectorAll('.remove-product-button');
             removeButtons.forEach(button => {
-                button.addEventListener('click', function() {
+                // Clonar e substituir para evitar múltiplos listeners em re-renderizações
+                const newButton = button.cloneNode(true);
+                button.parentNode.replaceChild(newButton, button);
+                newButton.addEventListener('click', function() {
                     const productId = this.dataset.id;
                     products = products.filter(p => p.id !== productId);
                     renderAdminProducts();
-                    renderStoreProducts(); // Atualiza a loja também
+                    renderStoreProducts(); 
                 });
             });
         }
         
-        // --- LÓGICA DE UPLOAD/DRAG-AND-DROP DE IMAGEM (SIMPLIFICADO) ---
         if (imageDropZone) {
             imageDropZone.addEventListener('click', () => productImageFileInput.click());
-
             imageDropZone.addEventListener('dragover', (event) => {
                 event.preventDefault();
                 imageDropZone.classList.add('dragover');
             });
-
-            imageDropZone.addEventListener('dragleave', () => {
-                imageDropZone.classList.remove('dragover');
-            });
-
+            imageDropZone.addEventListener('dragleave', () => imageDropZone.classList.remove('dragover'));
             imageDropZone.addEventListener('drop', (event) => {
                 event.preventDefault();
                 imageDropZone.classList.remove('dragover');
                 const files = event.dataTransfer.files;
-                if (files.length > 0) {
-                    handleImageFile(files[0]);
-                }
+                if (files.length > 0) handleImageFile(files[0]);
             });
-
             productImageFileInput.addEventListener('change', (event) => {
                 const files = event.target.files;
-                if (files.length > 0) {
-                    handleImageFile(files[0]);
-                }
+                if (files.length > 0) handleImageFile(files[0]);
             });
         }
 
         function handleImageFile(file) {
+            const feedbackDiv = addProductForm.querySelector('.image-upload-feedback');
+            if (feedbackDiv) feedbackDiv.remove(); // Remove feedback anterior
+
             if (file && file.type.startsWith('image/')) {
-                uploadedImageFile = file; // Armazena o arquivo
+                uploadedImageFile = file; 
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     imagePreview.src = e.target.result;
                     imagePreview.classList.remove('hidden');
-                    document.getElementById('product-image-url').value = ''; // Limpa o campo URL se uma imagem for carregada/arrastada
+                    document.getElementById('product-image-url').value = ''; 
                 }
                 reader.readAsDataURL(file);
             } else {
-                alert("Por favor, selecione um arquivo de imagem válido.");
+                const feedback = document.createElement('p');
+                feedback.textContent = "Por favor, selecione um arquivo de imagem válido.";
+                feedback.className = "text-red-500 text-sm mt-1 image-upload-feedback"; // Adiciona classe para remoção
+                imageDropZone.parentNode.insertBefore(feedback, imageDropZone.nextSibling);
+
                 uploadedImageFile = null;
                 imagePreview.classList.add('hidden');
                 imagePreview.src = '';
             }
         }
 
-
-        // --- GERENCIAMENTO DE ADMINISTRADORES (ADMIN) ---
         if (addAdminForm) {
             addAdminForm.addEventListener('submit', function(event) {
                 event.preventDefault();
                 const email = document.getElementById('admin-new-email').value;
                 const password = document.getElementById('admin-new-password').value;
+                const feedbackDiv = addAdminForm.querySelector('.admin-add-feedback');
+                if (feedbackDiv) feedbackDiv.remove();
+
 
                 if (email && password) {
                     if (adminUsers.find(user => user.email === email)) {
-                        alert("Este email de administrador já existe.");
+                        const feedback = document.createElement('p');
+                        feedback.textContent = "Este email de administrador já existe.";
+                        feedback.className = "text-red-500 text-sm mt-2 admin-add-feedback";
+                        addAdminForm.appendChild(feedback);
+                        setTimeout(() => feedback.remove(), 3000);
                         return;
                     }
                     adminUsers.push({ email, password });
                     console.log("Novo administrador adicionado (em memória):", { email, password });
                     renderAdminUsers();
                     addAdminForm.reset();
+                     const feedback = document.createElement('p');
+                    feedback.textContent = "Administrador adicionado com sucesso!";
+                    feedback.className = "text-green-500 text-sm mt-2 admin-add-feedback";
+                    addAdminForm.appendChild(feedback);
+                    setTimeout(() => feedback.remove(), 3000);
                 } else {
-                    alert("Por favor, preencha email e senha para o novo administrador.");
+                    const feedback = document.createElement('p');
+                    feedback.textContent = "Por favor, preencha email e senha para o novo administrador.";
+                    feedback.className = "text-red-500 text-sm mt-2 admin-add-feedback";
+                    addAdminForm.appendChild(feedback);
+                    setTimeout(() => feedback.remove(), 3000);
                 }
             });
         }
 
-        // --- LÓGICA DO CARRINHO DE COMPRAS (CLIENTE) ---
         const cartItemsContainer = document.getElementById('cart-items-list');
         const cartTotalValueElement = document.getElementById('cart-total-value');
         const checkoutButton = document.getElementById('checkout-button');
@@ -568,7 +579,6 @@
                 console.error("Um ou mais elementos do carrinho não foram encontrados no DOM.");
                 return;
             }
-
             cartItemsContainer.innerHTML = '';
             let total = 0;
 
@@ -578,7 +588,6 @@
             } else {
                 cartEmptyMessage.classList.add('hidden');
                 cartTotalSection.classList.remove('hidden');
-
                 cart.forEach((item, index) => {
                     const itemElement = document.createElement('div');
                     itemElement.className = 'flex justify-between items-center mb-4 pb-2 border-b border-gray-200';
@@ -600,13 +609,19 @@
         function addEventListenersToAddToCartButtons() {
             const addToCartButtons = document.querySelectorAll('.add-to-cart-button');
             addToCartButtons.forEach(button => {
-                 // Remove listener antigo para evitar duplicação, se houver
                 const newButton = button.cloneNode(true);
                 button.parentNode.replaceChild(newButton, button);
-
                 newButton.addEventListener('click', (event) => {
                     if (isAdminLoggedIn) {
-                        alert("Funcionalidade de adicionar ao carrinho desabilitada no modo administrador.");
+                        const feedbackDiv = document.getElementById('admin-action-feedback');
+                        if (feedbackDiv) feedbackDiv.remove();
+
+                        const feedback = document.createElement('p');
+                        feedback.id = 'admin-action-feedback';
+                        feedback.textContent = "Funcionalidade de adicionar ao carrinho desabilitada no modo administrador.";
+                        feedback.className = "fixed bottom-4 right-4 bg-yellow-400 text-yellow-800 p-3 rounded-md shadow-lg";
+                        document.body.appendChild(feedback);
+                        setTimeout(() => feedback.remove(), 3000);
                         return;
                     }
                     const productCard = event.target.closest('.product-card');
@@ -631,7 +646,6 @@
             removeButtons.forEach(button => {
                 const newButton = button.cloneNode(true);
                 button.parentNode.replaceChild(newButton, button);
-
                 newButton.addEventListener('click', (event) => {
                     const productIdToRemove = event.target.dataset.id;
                     cart = cart.filter(item => item.id !== productIdToRemove);
@@ -640,10 +654,19 @@
             });
         }
 
-
         // --- INICIALIZAÇÃO ---
-        showStoreView(); // Mostra a loja por padrão
-        updateCartDisplay(); // Inicializa o carrinho
+        showStoreView(); 
+        updateCartDisplay(); 
+
+        // Links do topo (apenas placeholders por enquanto)
+        document.getElementById('my-orders-link')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('Funcionalidade "Meus Pedidos" a ser implementada.');
+        });
+        document.getElementById('contact-us-link')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('Funcionalidade "Fale Conosco" a ser implementada.');
+        });
 
     </script>
 
