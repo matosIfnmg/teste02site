@@ -25,11 +25,12 @@
             min-height: calc(100vh - 4rem); 
         }
         .main-content-section {
-            min-height: calc(100vh - 8rem); /* Ajustado para dar mais espaço */
+            min-height: calc(100vh - 8rem); 
         }
         .product-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
+            position: relative; /* Para o botão de wishlist */
         }
         .product-card:hover {
             transform: translateY(-5px);
@@ -88,7 +89,7 @@
             height: 100%;
             max-height: 400px;
             object-fit: contain; 
-            border-radius: 0.5rem; /* rounded-lg */
+            border-radius: 0.5rem; 
         }
         .add-to-cart-feedback {
             transition: opacity 0.3s ease-in-out;
@@ -99,15 +100,15 @@
             border: 1px solid #e5e7eb; 
         }
         .category-filter-button.active {
-            background-color: #3B82F6; /* bg-blue-600 */
+            background-color: #3B82F6;
             color: white;
         }
         #admin-add-product-feedback-container {
             padding: 1rem;
-            border: 1px solid #6EE7B7; /* green-300 */
-            background-color: #D1FAE5; /* green-100 */
-            color: #065F46; /* green-700 */
-            border-radius: 0.375rem; /* rounded-md */
+            border: 1px solid #6EE7B7;
+            background-color: #D1FAE5;
+            color: #065F46;
+            border-radius: 0.375rem;
             margin-top: 1rem;
         }
         .out-of-stock-overlay {
@@ -119,8 +120,8 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 1.125rem; /* text-lg */
-            border-radius: 0.375rem; /* rounded-md */
+            font-size: 1.125rem;
+            border-radius: 0.375rem;
             text-align: center;
             padding: 0.5rem;
         }
@@ -129,7 +130,7 @@
             color: white;
             border: none;
             padding: 0.5rem;
-            border-radius: 9999px; /* rounded-full */
+            border-radius: 9999px;
             cursor: pointer;
             transition: background-color 0.2s ease;
         }
@@ -138,16 +139,16 @@
         }
         .image-indicators {
             position: absolute;
-            bottom: 0.5rem; /* bottom-2 */
+            bottom: 0.5rem;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 0.5rem; /* space-x-2 */
+            gap: 0.5rem;
         }
         .image-indicator-dot {
-            width: 0.5rem; /* w-2 */
-            height: 0.5rem; /* h-2 */
-            border-radius: 9999px; /* rounded-full */
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 9999px;
             background-color: rgba(255, 255, 255, 0.5);
             cursor: pointer;
         }
@@ -155,16 +156,48 @@
             background-color: white;
         }
         .admin-nav-button.active {
-            background-color: #3B82F6; /* bg-blue-600 */
+            background-color: #3B82F6;
             color: white;
         }
         .admin-nav-button {
-            background-color: #E5E7EB; /* bg-gray-200 */
-            color: #374151; /* text-gray-700 */
+            background-color: #E5E7EB;
+            color: #374151;
         }
         .filter-btn.active {
-            background-color: #3B82F6; /* bg-blue-600 */
+            background-color: #3B82F6;
             color: white;
+        }
+        .wishlist-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            padding: 0.5rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .wishlist-button svg {
+            width: 1.25rem; /* w-5 */
+            height: 1.25rem; /* h-5 */
+            fill: none;
+            stroke: #F87171; /* text-red-400 */
+        }
+        .wishlist-button.active svg {
+            fill: #EF4444; /* text-red-500 */
+            stroke: #EF4444;
+        }
+        .star-rating span {
+            cursor: pointer;
+            font-size: 1.5rem; /* text-2xl */
+            color: #D1D5DB; /* text-gray-300 */
+        }
+        .star-rating span.selected, .star-rating span:hover, .star-rating span:hover ~ span {
+            color: #FBBF24; /* text-yellow-400 */
+        }
+        .star-rating span:hover ~ span { /* Make subsequent stars also yellow on hover */
+             color: #FBBF24;
         }
     </style>
 </head>
@@ -181,7 +214,7 @@
         </div>
         
         <div id="login-section-menu">
-            <h3 class="text-lg font-medium text-gray-700 mb-3 border-b pb-2">Acesso Restrito</h3>
+            <h3 class="text-lg font-medium text-gray-700 mb-3 border-b pb-2">Acesso Restrito (Admin)</h3>
             <div id="login-feedback-menu" class="hidden"></div>
             <form id="login-form-menu">
                 <div class="mb-3">
@@ -192,29 +225,39 @@
                     <label for="senha-menu" class="block text-sm font-medium text-gray-600 mb-1">Senha</label>
                     <input type="password" id="senha-menu" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="********" required>
                 </div>
-                <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300 text-sm">Entrar</button>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300 text-sm">Entrar (Admin)</button>
             </form>
         </div>
 
         <div id="admin-info-section-menu" class="hidden mt-4">
-            <p class="text-sm text-gray-600 mb-2">Logado como: <span id="admin-email-display-menu" class="font-medium"></span></p>
+            <p class="text-sm text-gray-600 mb-2">Logado como Admin: <span id="admin-email-display-menu" class="font-medium"></span></p>
             <button id="admin-logout-button-menu" class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-300 text-sm mb-2">Logout Admin</button>
             <a href="#" id="admin-panel-link-side-menu" class="block text-sm text-center w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300">Painel Admin</a>
         </div>
         
         <div class="mt-6 pt-4 border-t">
             <h3 class="text-lg font-medium text-gray-700 mb-3">Cliente</h3>
-            <a href="#" id="register-client-link" class="block text-sm text-blue-600 hover:underline mb-2">Criar minha conta</a>
-            <a href="#" id="login-client-link" class="block text-sm text-blue-600 hover:underline">Fazer Login (Cliente)</a>
-        </div>
-
-        <div class="mt-6 pt-4 border-t">
-            <h3 class="text-lg font-medium text-gray-700 mb-3">Meus Pedidos</h3>
-            <nav class="space-y-1">
-                <a href="#" class="block text-sm text-gray-600 hover:bg-gray-100 p-2 rounded-md" data-order-status="open">Em Aberto / Aguardando Pagamento</a>
-                <a href="#" class="block text-sm text-gray-600 hover:bg-gray-100 p-2 rounded-md" data-order-status="paid">Pagos</a>
-                <a href="#" class="block text-sm text-gray-600 hover:bg-gray-100 p-2 rounded-md" data-order-status="completed">Concluídos / Recebidos</a>
-            </nav>
+            <div id="client-login-section-menu">
+                <form id="client-login-form-menu">
+                     <div class="mb-3">
+                        <label for="client-email-menu" class="block text-sm font-medium text-gray-600 mb-1">Email Cliente</label>
+                        <input type="email" id="client-email-menu" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm" placeholder="cliente@email.com" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="client-senha-menu" class="block text-sm font-medium text-gray-600 mb-1">Senha Cliente</label>
+                        <input type="password" id="client-senha-menu" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm" placeholder="********" required>
+                    </div>
+                    <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 text-sm mb-2">Login Cliente</button>
+                </form>
+                <div id="client-login-feedback-menu" class="text-xs mt-1"></div>
+                <a href="#" id="register-client-link" class="block text-sm text-blue-600 hover:underline text-center mt-2">Criar minha conta</a>
+            </div>
+            <div id="client-info-section-menu" class="hidden mt-2">
+                <p class="text-sm text-gray-600 mb-2">Logado como: <span id="client-email-display-menu" class="font-medium"></span></p>
+                <a href="#" id="my-wishlist-link-menu" class="block text-sm text-gray-600 hover:bg-gray-100 p-2 rounded-md">Minha Lista de Desejos</a>
+                <a href="#" id="my-orders-link-menu" class="block text-sm text-gray-600 hover:bg-gray-100 p-2 rounded-md">Meus Pedidos</a>
+                <button id="client-logout-button-menu" class="mt-2 w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 text-sm">Logout Cliente</button>
+            </div>
         </div>
     </aside>
 
@@ -276,13 +319,15 @@
                     </button>
                 </div>
 
-                <div class="mb-6 border-b pb-3 flex gap-2">
+                <div class="mb-6 border-b pb-3 flex flex-wrap gap-2">
                     <button id="show-product-management-btn" class="admin-nav-button px-4 py-2 rounded-md text-sm font-medium">Gerenciar Produtos</button>
+                    <button id="show-admin-orders-btn" class="admin-nav-button px-4 py-2 rounded-md text-sm font-medium">Gerenciar Pedidos</button>
                     <button id="show-cash-register-btn" class="admin-nav-button px-4 py-2 rounded-md text-sm font-medium">Caixa / Vendas</button>
                 </div>
 
                 <section id="product-management-section" class="mb-10">
-                    <h3 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-3">Gerenciar Produtos</h3>
+                    <!-- Conteúdo de Gerenciar Produtos (existente) -->
+                     <h3 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-3">Gerenciar Produtos</h3>
                     <form id="add-product-form" class="mb-4 p-6 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
                         <h4 id="form-product-title" class="text-xl font-medium mb-4 text-gray-700">Adicionar Novo Produto</h4>
                         <input type="hidden" id="editing-product-id"> 
@@ -347,8 +392,16 @@
                     </div>
                 </section>
 
+                <section id="admin-orders-management-section" class="hidden mb-10">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-3">Gerenciar Pedidos</h3>
+                    <div id="admin-orders-list" class="space-y-4">
+                        <p class="text-gray-500">Nenhum pedido encontrado.</p>
+                    </div>
+                </section>
+
                 <section id="admin-cash-register-section" class="hidden mb-10">
-                    <h3 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-3">Caixa / Relatório de Vendas</h3>
+                    <!-- Conteúdo de Caixa / Vendas (existente) -->
+                     <h3 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-3">Caixa / Relatório de Vendas</h3>
                     <div class="mb-4 flex flex-wrap gap-2">
                         <button id="filter-today" class="filter-btn bg-gray-200 hover:bg-gray-300 text-gray-700 py-1 px-3 rounded-md text-sm">Hoje</button>
                         <button id="filter-week" class="filter-btn bg-gray-200 hover:bg-gray-300 text-gray-700 py-1 px-3 rounded-md text-sm">Esta Semana</button>
@@ -372,57 +425,24 @@
                         </div>
                     </div>
                 </section>
-
-                <section id="admin-user-management-section" class="hidden mb-10">
-                    <h3 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-3">Gerenciar Administradores</h3>
-                    <form id="add-admin-form" class="mb-8 p-6 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
-                        <h4 class="text-xl font-medium mb-4 text-gray-700">Adicionar Novo Admin</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label for="admin-new-email" class="block text-sm font-medium text-gray-600 mb-1">Email</label>
-                                <input type="email" id="admin-new-email" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
-                            </div>
-                            <div>
-                                <label for="admin-new-password" class="block text-sm font-medium text-gray-600 mb-1">Senha</label>
-                                <input type="password" id="admin-new-password" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
-                            </div>
-                        </div>
-                        <button type="submit" class="w-full md:w-auto bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700">Adicionar Admin</button>
-                    </form>
-                    <h4 class="text-xl font-medium mb-4 text-gray-700">Admins Cadastrados</h4>
-                    <div id="admin-users-list" class="space-y-2"></div>
-                </section>
             </div>
 
-            <div id="orders-view" class="hidden bg-white p-6 md:p-8 rounded-lg shadow-lg main-content-section">
-                <h2 class="text-3xl font-bold mb-8 text-center text-gray-700">Meus Pedidos</h2>
-                <p id="orders-status-message" class="text-center text-gray-600">Selecione um status de pedido no menu lateral.</p>
+            <div id="wishlist-view" class="hidden bg-white p-6 md:p-8 rounded-lg shadow-lg main-content-section">
+                <h2 class="text-3xl font-bold mb-8 text-center text-gray-700">Minha Lista de Desejos</h2>
+                <div id="wishlist-items-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Itens da lista de desejos -->
+                </div>
+                <p id="empty-wishlist-message" class="text-center text-gray-500 hidden">Sua lista de desejos está vazia.</p>
             </div>
             
-            <div id="cart-view-dedicated" class="hidden bg-white p-6 md:p-8 rounded-lg shadow-lg main-content-section">
-                <div class="max-w-3xl mx-auto">
-                    <div class="flex justify-between items-center mb-8">
-                        <h2 class="text-3xl font-bold text-gray-800">Meu Carrinho</h2>
-                        <button id="continue-shopping-from-cart-view" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300">
-                            Continuar Comprando
-                        </button>
-                    </div>
-                    <div id="cart-items-list-dedicated" class="space-y-4 mb-8"></div>
-                    <div id="cart-empty-message-dedicated" class="text-center text-gray-500 py-8 hidden">
-                        <p class="text-xl mb-4">Seu carrinho está vazio.</p>
-                        <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                    </div>
-                    <div id="cart-summary-dedicated" class="mt-6 pt-6 border-t border-gray-200">
-                        <div class="flex justify-between items-center text-xl font-semibold text-gray-700 mb-6">
-                            <span>Total:</span>
-                            <span id="cart-total-value-dedicated">R$ 0,00</span>
-                        </div>
-                        <button id="checkout-button-dedicated" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-md transition duration-300 text-lg">
-                            Ir para Pagamento
-                        </button>
-                    </div>
+            <div id="client-orders-view" class="hidden bg-white p-6 md:p-8 rounded-lg shadow-lg main-content-section">
+                <h2 class="text-3xl font-bold mb-8 text-center text-gray-700">Meus Pedidos</h2>
+                <div id="client-orders-list-container" class="space-y-6">
+                     <!-- Pedidos do cliente aqui -->
                 </div>
+                 <p id="no-client-orders-message" class="text-center text-gray-500 hidden">Você ainda não fez nenhum pedido.</p>
             </div>
+
 
             <div id="checkout-view" class="hidden bg-white p-6 md:p-8 rounded-lg shadow-lg main-content-section">
                 <div class="max-w-2xl mx-auto">
@@ -430,7 +450,59 @@
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                         Voltar ao Carrinho
                     </button>
-                    <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Pagamento</h2>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Finalizar Compra</h2>
+                    
+                    <div id="checkout-delivery-options" class="mb-6">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-3">Modalidade de Compra</h3>
+                        <div class="flex gap-4">
+                            <label class="flex items-center p-3 border rounded-md cursor-pointer hover:border-blue-500 flex-1">
+                                <input type="radio" name="deliveryOption" value="pickup" class="mr-2" checked>
+                                Retirar na Loja
+                            </label>
+                            <label class="flex items-center p-3 border rounded-md cursor-pointer hover:border-blue-500 flex-1">
+                                <input type="radio" name="deliveryOption" value="delivery" class="mr-2">
+                                Entrega (Delivery)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="checkout-delivery-address-form" class="hidden mb-6 p-4 border rounded-md bg-gray-50">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-3">Endereço de Entrega</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="delivery-name" class="block text-sm font-medium text-gray-600 mb-1">Nome Completo</label>
+                                <input type="text" id="delivery-name" class="w-full p-2 border border-gray-300 rounded-md" required>
+                            </div>
+                            <div>
+                                <label for="delivery-phone" class="block text-sm font-medium text-gray-600 mb-1">Telefone</label>
+                                <input type="tel" id="delivery-phone" class="w-full p-2 border border-gray-300 rounded-md" required>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="delivery-street" class="block text-sm font-medium text-gray-600 mb-1">Rua / Avenida</label>
+                                <input type="text" id="delivery-street" class="w-full p-2 border border-gray-300 rounded-md" required>
+                            </div>
+                            <div>
+                                <label for="delivery-number" class="block text-sm font-medium text-gray-600 mb-1">Número</label>
+                                <input type="text" id="delivery-number" class="w-full p-2 border border-gray-300 rounded-md" required>
+                            </div>
+                             <div>
+                                <label for="delivery-neighborhood" class="block text-sm font-medium text-gray-600 mb-1">Bairro</label>
+                                <input type="text" id="delivery-neighborhood" class="w-full p-2 border border-gray-300 rounded-md" required>
+                            </div>
+                            <div>
+                                <label for="delivery-city" class="block text-sm font-medium text-gray-600 mb-1">Cidade</label>
+                                <input type="text" id="delivery-city" class="w-full p-2 border border-gray-300 rounded-md" required>
+                            </div>
+                            <div>
+                                <label for="delivery-cep" class="block text-sm font-medium text-gray-600 mb-1">CEP</label>
+                                <input type="text" id="delivery-cep" class="w-full p-2 border border-gray-300 rounded-md" required>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="delivery-reference" class="block text-sm font-medium text-gray-600 mb-1">Ponto de Referência (opcional)</label>
+                                <input type="text" id="delivery-reference" class="w-full p-2 border border-gray-300 rounded-md">
+                            </div>
+                        </div>
+                    </div>
                     
                     <div id="checkout-summary" class="mb-8 p-4 border rounded-md bg-gray-50">
                         <h3 class="text-xl font-semibold text-gray-700 mb-3">Resumo do Pedido</h3>
@@ -465,7 +537,30 @@
                     </div>
                 </div>
             </div>
-
+             <div id="cart-view-dedicated" class="hidden bg-white p-6 md:p-8 rounded-lg shadow-lg main-content-section">
+                <div class="max-w-3xl mx-auto">
+                    <div class="flex justify-between items-center mb-8">
+                        <h2 class="text-3xl font-bold text-gray-800">Meu Carrinho</h2>
+                        <button id="continue-shopping-from-cart-view" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300">
+                            Continuar Comprando
+                        </button>
+                    </div>
+                    <div id="cart-items-list-dedicated" class="space-y-4 mb-8"></div>
+                    <div id="cart-empty-message-dedicated" class="text-center text-gray-500 py-8 hidden">
+                        <p class="text-xl mb-4">Seu carrinho está vazio.</p>
+                        <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                    <div id="cart-summary-dedicated" class="mt-6 pt-6 border-t border-gray-200">
+                        <div class="flex justify-between items-center text-xl font-semibold text-gray-700 mb-6">
+                            <span>Total:</span>
+                            <span id="cart-total-value-dedicated">R$ 0,00</span>
+                        </div>
+                        <button id="checkout-button-dedicated" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-md transition duration-300 text-lg">
+                            Ir para Pagamento
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -480,6 +575,7 @@
         const sideMenu = document.getElementById('side-menu');
         const sideMenuOverlay = document.getElementById('side-menu-overlay');
 
+        // Admin Login
         const loginFormMenu = document.getElementById('login-form-menu');
         const loginFeedbackMenu = document.getElementById('login-feedback-menu');
         const loginSectionMenu = document.getElementById('login-section-menu');
@@ -488,32 +584,52 @@
         const adminLogoutButtonMenu = document.getElementById('admin-logout-button-menu');
         const adminPanelLinkSideMenu = document.getElementById('admin-panel-link-side-menu');
         
+        // Client Login
+        const clientLoginSectionMenu = document.getElementById('client-login-section-menu');
+        const clientLoginFormMenu = document.getElementById('client-login-form-menu');
+        const clientLoginFeedbackMenu = document.getElementById('client-login-feedback-menu');
+        const clientInfoSectionMenu = document.getElementById('client-info-section-menu');
+        const clientEmailDisplayMenu = document.getElementById('client-email-display-menu');
+        const clientLogoutButtonMenu = document.getElementById('client-logout-button-menu');
+        const registerClientLink = document.getElementById('register-client-link');
+        const myWishlistLinkMenu = document.getElementById('my-wishlist-link-menu');
+        const myOrdersLinkMenu = document.getElementById('my-orders-link-menu');
+
+
         const dynamicContentArea = document.getElementById('dynamic-content-area');
         const storeView = document.getElementById('store-view');
         const adminPanel = document.getElementById('admin-panel');
         const productDetailView = document.getElementById('product-detail-view');
-        const ordersView = document.getElementById('orders-view');
-        const ordersStatusMessage = document.getElementById('orders-status-message');
+        // const ordersView = document.getElementById('orders-view'); // Original orders view, might be replaced or repurposed
+        const clientOrdersView = document.getElementById('client-orders-view');
+        const clientOrdersListContainer = document.getElementById('client-orders-list-container');
+        const noClientOrdersMessage = document.getElementById('no-client-orders-message');
+
+        const wishlistView = document.getElementById('wishlist-view');
+        const wishlistItemsContainer = document.getElementById('wishlist-items-container');
+        const emptyWishlistMessage = document.getElementById('empty-wishlist-message');
+        
         const checkoutView = document.getElementById('checkout-view');
         const cartViewDedicated = document.getElementById('cart-view-dedicated');
 
         const backToStoreButtonAdmin = document.getElementById('back-to-store-button-admin');
 
-        // Admin Panel Sections
+        // Admin Panel Sections & Nav
         const productManagementSection = document.getElementById('product-management-section');
+        const adminOrdersManagementSection = document.getElementById('admin-orders-management-section');
         const adminCashRegisterSection = document.getElementById('admin-cash-register-section');
-        const adminUserManagementSection = document.getElementById('admin-user-management-section'); // Assuming you might want this later
-
-        // Admin Panel Navigation
+        
         const showProductManagementBtn = document.getElementById('show-product-management-btn');
+        const showAdminOrdersBtn = document.getElementById('show-admin-orders-btn');
         const showCashRegisterBtn = document.getElementById('show-cash-register-btn');
-        // const showUserManagementBtn = document.getElementById('show-user-management-btn'); // If you add this button
+        const adminOrdersListContainer = document.getElementById('admin-orders-list');
+
 
         const addProductForm = document.getElementById('add-product-form');
         const adminProductListContainer = document.getElementById('admin-product-list');
         const noAdminProductsMessage = document.getElementById('no-admin-products');
-        const addAdminForm = document.getElementById('add-admin-form');
-        const adminUsersListContainer = document.getElementById('admin-users-list');
+        // const addAdminForm = document.getElementById('add-admin-form'); // Not used in this update
+        // const adminUsersListContainer = document.getElementById('admin-users-list'); // Not used in this update
         const formProductTitle = document.getElementById('form-product-title');
         const submitProductFormButton = document.getElementById('submit-product-form-button');
         const cancelEditProductButton = document.getElementById('cancel-edit-product-button');
@@ -539,6 +655,9 @@
         const paymentConfirmedButton = document.getElementById('payment-confirmed-button');
         const checkoutItemsList = document.getElementById('checkout-items-list');
         const checkoutTotalValue = document.getElementById('checkout-total-value');
+        const checkoutDeliveryOptions = document.getElementById('checkout-delivery-options');
+        const checkoutDeliveryAddressForm = document.getElementById('checkout-delivery-address-form');
+
 
         const cartItemsListDedicated = document.getElementById('cart-items-list-dedicated');
         const cartTotalValueDedicated = document.getElementById('cart-total-value-dedicated');
@@ -556,7 +675,6 @@
         const newProductCategoryInput = document.getElementById('new-product-category-input');
         const addNewCategoryButton = document.getElementById('add-new-category-button');
 
-        // Cash Register Elements
         const filterTodayButton = document.getElementById('filter-today');
         const filterWeekButton = document.getElementById('filter-week');
         const filterMonthButton = document.getElementById('filter-month');
@@ -574,26 +692,30 @@
             { id: 'cat3', name: 'Mais Vendidos' }
         ];
         let products = [ 
-            { id: 'prod1', name: "Produto Exemplo Alfa", categoryId: 'cat2', price: 99.90, imageUrls: ["https://placehold.co/400x300/E0E7FF/4F46E5?text=Produto+Alfa+1", "https://placehold.co/400x300/E0E7FF/4F46E5?text=Produto+Alfa+2"], description: "Descrição detalhada do Produto Exemplo Alfa.", stock: 10 },
-            { id: 'prod2', name: "Produto Exemplo Beta", categoryId: 'cat1', price: 129.50, imageUrls: ["https://placehold.co/400x300/DBEAFE/1D4ED8?text=Produto+Beta"], description: "O Produto Exemplo Beta combina design moderno com funcionalidade superior.", stock: 5 },
-            { id: 'prod3', name: "Produto Exemplo Gama", categoryId: 'cat2', price: 75.00, imageUrls: ["https://placehold.co/400x300/BFDBFE/1E40AF?text=Produto+Gama"], description: "Conheça o Produto Exemplo Gama.", stock: 0 },
-            { id: 'prod4', name: "Produto Exemplo Delta", categoryId: 'cat3', price: 210.00, imageUrls: ["https://placehold.co/400x300/93C5FD/1C3FAA?text=Produto+Delta", "https://placehold.co/400x300/93C5FD/1C3FAA?text=Produto+Delta+Img2"], description: "Produto Exemplo Delta: robustez e tecnologia.", stock: 20 },
-            { id: 'prod5', name: "Produto Exemplo Epsilon", categoryId: 'cat2', price: 45.99, imageUrls: ["https://placehold.co/400x300/60A5FA/1B3A9A?text=Produto+Epsilon"], description: "Leve e compacto, o Produto Exemplo Epsilon.", stock: 15 },
-            { id: 'prod6', name: "Produto Exemplo Zeta", categoryId: 'cat1', price: 88.80, imageUrls: ["https://placehold.co/400x300/3B82F6/1A358A?text=Produto+Zeta"], description: "O Produto Exemplo Zeta oferece um excelente custo-benefício.", stock: 8 }
+            { id: 'prod1', name: "Produto Exemplo Alfa", categoryId: 'cat2', price: 99.90, imageUrls: ["https://placehold.co/400x300/E0E7FF/4F46E5?text=Produto+Alfa+1", "https://placehold.co/400x300/E0E7FF/4F46E5?text=Produto+Alfa+2"], description: "Descrição detalhada do Produto Exemplo Alfa.", stock: 10, reviews: [] },
+            { id: 'prod2', name: "Produto Exemplo Beta", categoryId: 'cat1', price: 129.50, imageUrls: ["https://placehold.co/400x300/DBEAFE/1D4ED8?text=Produto+Beta"], description: "O Produto Exemplo Beta combina design moderno com funcionalidade superior.", stock: 5, reviews: [] },
+            { id: 'prod3', name: "Produto Exemplo Gama", categoryId: 'cat2', price: 75.00, imageUrls: ["https://placehold.co/400x300/BFDBFE/1E40AF?text=Produto+Gama"], description: "Conheça o Produto Exemplo Gama.", stock: 0, reviews: [] },
+            { id: 'prod4', name: "Produto Exemplo Delta", categoryId: 'cat3', price: 210.00, imageUrls: ["https://placehold.co/400x300/93C5FD/1C3FAA?text=Produto+Delta", "https://placehold.co/400x300/93C5FD/1C3FAA?text=Produto+Delta+Img2"], description: "Produto Exemplo Delta: robustez e tecnologia.", stock: 20, reviews: [] },
+            { id: 'prod5', name: "Produto Exemplo Epsilon", categoryId: 'cat2', price: 45.99, imageUrls: ["https://placehold.co/400x300/60A5FA/1B3A9A?text=Produto+Epsilon"], description: "Leve e compacto, o Produto Exemplo Epsilon.", stock: 15, reviews: [] },
+            { id: 'prod6', name: "Produto Exemplo Zeta", categoryId: 'cat1', price: 88.80, imageUrls: ["https://placehold.co/400x300/3B82F6/1A358A?text=Produto+Zeta"], description: "O Produto Exemplo Zeta oferece um excelente custo-benefício.", stock: 8, reviews: [] }
         ];
         let adminUsers = [
-            { email: "viniciusaraujomatos1@gmail.com", password: "Belohorizonte2020@" }
+            { email: "admin@loja.com", password: "admin123" } // Admin padrão
+        ];
+        let clients = [
+            { id: 'client1', email: "vini@cliente.com", password: "1234", name: "Vinicius Cliente", phone: "31999998888", wishlist: [], orders: [] }
         ];
         let cart = [];
-        let salesRecords = []; // Para o sistema de caixa
+        let salesRecords = []; 
         let isAdminLoggedIn = false;
         let currentAdminEmail = null;
+        let loggedInClient = null; 
         let activeFeedbackTimeout = null; 
         let currentCategoryFilter = 'cat0'; 
         let currentSearchTerm = '';
         let isEditingProduct = false;
         let currentDetailImageIndex = 0;
-        let currentAdminPanelSection = 'product-management'; // 'product-management' ou 'cash-register'
+        let currentAdminPanelSection = 'product-management'; 
         let currentSalesFilterPeriod = 'all-time';
 
 
@@ -615,21 +737,34 @@
         openMenuButton?.addEventListener('click', openSideMenu);
         closeMenuButton?.addEventListener('click', closeSideMenu);
         sideMenuOverlay?.addEventListener('click', closeSideMenu);
+        
         adminPanelLinkSideMenu?.addEventListener('click', (e) => {
             e.preventDefault();
             if(isAdminLoggedIn) {
-                showAdminView(currentAdminEmail, currentAdminPanelSection); // Mantém a seção atual ou vai para a padrão
+                showAdminView(currentAdminEmail, currentAdminPanelSection); 
             }
+            closeSideMenu();
+        });
+        myWishlistLinkMenu?.addEventListener('click', (e) => {
+            e.preventDefault();
+            if(loggedInClient) showWishlistView();
+            closeSideMenu();
+        });
+        myOrdersLinkMenu?.addEventListener('click', (e) => {
+            e.preventDefault();
+            if(loggedInClient) showClientOrdersView();
             closeSideMenu();
         });
 
 
         // --- FUNÇÕES DE RENDERIZAÇÃO E CONTROLE DE VIEW ---
-        function setActiveView(activeViewElement) {
-            [storeView, adminPanel, productDetailView, ordersView, checkoutView, cartViewDedicated].forEach(view => { 
-                view?.classList.add('hidden');
+        function setActiveView(activeViewElementId) {
+            const views = [storeView, adminPanel, productDetailView, clientOrdersView, wishlistView, checkoutView, cartViewDedicated];
+            views.forEach(view => { 
+                if(view) view.classList.add('hidden');
             });
-            activeViewElement?.classList.remove('hidden');
+            const activeView = document.getElementById(activeViewElementId);
+            if(activeView) activeView.classList.remove('hidden');
         }
         
         function renderStoreProducts() {
@@ -662,9 +797,15 @@
                     
                     const isOutOfStock = product.stock <= 0;
                     const mainImageUrl = product.imageUrls && product.imageUrls.length > 0 ? product.imageUrls[0] : 'https://placehold.co/300x200/cccccc/969696?text=Sem+Imagem';
+                    const isInWishlist = loggedInClient && loggedInClient.wishlist.includes(product.id);
 
                     productCard.innerHTML = `
-                        <div class="relative w-full h-48 mb-4">
+                        <button class="wishlist-button ${isInWishlist ? 'active' : ''}" data-product-id="${product.id}" title="Adicionar à Lista de Desejos">
+                            <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                        </button>
+                        <div class="relative w-full h-48 mb-4 product-image-container">
                             <img src="${mainImageUrl}" alt="Imagem de ${product.name}" class="w-full h-full object-cover rounded-md product-image">
                             ${isOutOfStock ? '<div class="out-of-stock-overlay">Fora de Estoque</div>' : ''}
                         </div>
@@ -676,10 +817,14 @@
                         </button>
                         <div class="add-to-cart-feedback hidden mt-2 text-sm w-full"></div>
                     `;
-                    productCard.addEventListener('click', (e) => {
-                        if (!e.target.classList.contains('add-to-cart-button-list') && !e.target.closest('.add-to-cart-feedback')) { 
-                            showProductDetailView(product.id);
-                        }
+                    productCard.querySelector('.product-image-container').addEventListener('click', (e) => {
+                         // Evita que o clique na imagem dispare o clique no card se o botão de wishlist foi clicado
+                        if (e.target.closest('.wishlist-button')) return;
+                        showProductDetailView(product.id);
+                    });
+                     productCard.querySelector('.wishlist-button').addEventListener('click', (e) => {
+                        e.stopPropagation(); // Impede que o clique no botão de wishlist abra os detalhes do produto
+                        toggleWishlistItem(product.id, e.currentTarget);
                     });
                     productGrid.appendChild(productCard);
                 });
@@ -747,6 +892,46 @@
             }
         }
 
+        function renderProductReviews(productId) {
+            const reviewsContainer = document.getElementById('product-reviews-container');
+            if (!reviewsContainer) return;
+
+            const product = products.find(p => p.id === productId);
+            reviewsContainer.innerHTML = '<h4 class="text-lg font-semibold text-gray-700 mb-3">Avaliações de Clientes</h4>';
+
+            if (!product || !product.reviews || product.reviews.length === 0) {
+                reviewsContainer.innerHTML += '<p class="text-gray-500 text-sm">Este produto ainda não possui avaliações.</p>';
+                return;
+            }
+
+            let totalRating = 0;
+            product.reviews.forEach(review => totalRating += review.rating);
+            const averageRating = totalRating / product.reviews.length;
+
+            reviewsContainer.innerHTML += `
+                <div class="mb-4">
+                    <p class="text-yellow-500 text-xl font-bold">${'★'.repeat(Math.round(averageRating))}${'☆'.repeat(5 - Math.round(averageRating))} 
+                    <span class="text-sm text-gray-600 ml-1">(${averageRating.toFixed(1)} de 5 estrelas) - ${product.reviews.length} avaliações</span></p>
+                </div>
+            `;
+
+            const reviewsList = document.createElement('div');
+            reviewsList.className = 'space-y-4';
+            product.reviews.forEach(review => {
+                const reviewDiv = document.createElement('div');
+                reviewDiv.className = 'p-3 border rounded-md bg-gray-50';
+                reviewDiv.innerHTML = `
+                    <div class="flex items-center mb-1">
+                        <p class="text-yellow-500 font-semibold">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</p>
+                        <p class="text-xs text-gray-500 ml-2">- ${new Date(review.date).toLocaleDateString('pt-BR')}</p>
+                    </div>
+                    <p class="text-sm text-gray-700">${review.comment || '<i>Sem comentário.</i>'}</p>
+                `;
+                reviewsList.appendChild(reviewDiv);
+            });
+            reviewsContainer.appendChild(reviewsList);
+        }
+
 
         function showProductDetailView(productId) {
             const product = products.find(p => p.id === productId);
@@ -755,6 +940,7 @@
             currentDetailImageIndex = 0; 
             const isOutOfStock = product.stock <= 0;
             const firstImage = (product.imageUrls && product.imageUrls.length > 0) ? product.imageUrls[0] : 'https://placehold.co/600x400/cccccc/969696?text=Sem+Imagem';
+            const isInWishlist = loggedInClient && loggedInClient.wishlist.includes(product.id);
 
             productDetailView.innerHTML = `
                 <button id="back-to-store-from-detail" class="mb-6 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md transition duration-300 inline-flex items-center">
@@ -772,7 +958,14 @@
                          ${isOutOfStock ? '<div class="out-of-stock-overlay">Fora de Estoque</div>' : ''}
                     </div>
                     <div class="md:w-1/2 flex flex-col">
-                        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">${product.name}</h1>
+                        <div class="flex justify-between items-start">
+                            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">${product.name}</h1>
+                            <button class="wishlist-button ${isInWishlist ? 'active' : ''} ml-4" data-product-id="${product.id}" title="Adicionar à Lista de Desejos">
+                                <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                </svg>
+                            </button>
+                        </div>
                         <p class="text-2xl font-semibold text-blue-600 mb-5">R$ ${product.price.toFixed(2)}</p>
                         <p class="text-gray-600 mb-6 leading-relaxed">${product.description}</p>
                         ${isOutOfStock ? '<p class="text-red-500 font-bold text-lg mt-auto mb-3">Produto Indisponível</p>' : ''}
@@ -782,11 +975,15 @@
                         <div class="add-to-cart-feedback hidden mt-2 text-sm"></div>
                     </div>
                 </div>
+                <div id="product-reviews-container" class="mt-10 pt-6 border-t">
+                    <!-- Avaliações serão renderizadas aqui -->
+                </div>
             `;
-            setActiveView(productDetailView);
+            setActiveView('product-detail-view');
             updateProductDetailImageView(product); 
+            renderProductReviews(productId);
 
-            document.getElementById('back-to-store-from-detail')?.addEventListener('click', showStoreView);
+            document.getElementById('back-to-store-from-detail')?.addEventListener('click', () => setActiveView('store-view'));
             
             document.getElementById('prev-image-btn')?.addEventListener('click', () => {
                 if (!product.imageUrls || product.imageUrls.length === 0) return;
@@ -807,38 +1004,43 @@
                     handleAddToCart(productToAdd, this); 
                 }
             });
+             productDetailView.querySelector('.wishlist-button').addEventListener('click', (e) => {
+                toggleWishlistItem(product.id, e.currentTarget);
+            });
             closeSideMenu();
         }
         
         function showAdminPanelSection(sectionId) {
             currentAdminPanelSection = sectionId;
-            [productManagementSection, adminCashRegisterSection, adminUserManagementSection].forEach(section => {
+            [productManagementSection, adminOrdersManagementSection, adminCashRegisterSection].forEach(section => {
                 if (section) section.classList.add('hidden');
             });
-            [showProductManagementBtn, showCashRegisterBtn].forEach(button => {
+            [showProductManagementBtn, showAdminOrdersBtn, showCashRegisterBtn].forEach(button => {
                  if(button) button.classList.remove('active');
             });
 
             if (sectionId === 'product-management') {
                 if(productManagementSection) productManagementSection.classList.remove('hidden');
                 if(showProductManagementBtn) showProductManagementBtn.classList.add('active');
+            } else if (sectionId === 'admin-orders') {
+                if(adminOrdersManagementSection) adminOrdersManagementSection.classList.remove('hidden');
+                if(showAdminOrdersBtn) showAdminOrdersBtn.classList.add('active');
+                renderAdminOrders();
             } else if (sectionId === 'cash-register') {
                 if(adminCashRegisterSection) adminCashRegisterSection.classList.remove('hidden');
                 if(showCashRegisterBtn) showCashRegisterBtn.classList.add('active');
-                renderCashRegisterDisplay(currentSalesFilterPeriod); // Renderiza o caixa ao mostrar a seção
-            } else if (sectionId === 'user-management') {
-                // if(adminUserManagementSection) adminUserManagementSection.classList.remove('hidden');
-                // if(showUserManagementBtn) showUserManagementBtn.classList.add('active');
+                renderCashRegisterDisplay(currentSalesFilterPeriod); 
             }
         }
 
         showProductManagementBtn?.addEventListener('click', () => showAdminPanelSection('product-management'));
+        showAdminOrdersBtn?.addEventListener('click', () => showAdminPanelSection('admin-orders'));
         showCashRegisterBtn?.addEventListener('click', () => showAdminPanelSection('cash-register'));
 
         function showAdminView(adminEmail, sectionToShow = 'product-management') {
             isAdminLoggedIn = true;
             currentAdminEmail = adminEmail;
-            setActiveView(adminPanel);
+            setActiveView('admin-panel');
             
             loginSectionMenu.classList.add('hidden');
             adminInfoSectionMenu.classList.remove('hidden');
@@ -851,26 +1053,36 @@
             
             populateCategoryDropdown();
             renderAdminProducts();
-            renderAdminUsers();
+            // renderAdminUsers(); // Removido pois não está sendo usado/pedido nesta atualização
             showAdminPanelSection(sectionToShow);
             resetProductForm(); 
             closeSideMenu();
         }
 
         function showStoreView() {
-            setActiveView(storeView);
+            setActiveView('store-view');
             if (!isAdminLoggedIn) {
                 loginSectionMenu.classList.remove('hidden'); 
                 adminInfoSectionMenu.classList.add('hidden'); 
                 adminPanelLinkSideMenu.classList.add('hidden');
                 document.getElementById('store-logo').textContent = "LogoLoja";
-            } else {
+            } else { // Admin está logado, mas vendo a loja
                 loginSectionMenu.classList.add('hidden');
                 adminInfoSectionMenu.classList.remove('hidden');
                 adminPanelLinkSideMenu.classList.remove('hidden');
                 adminEmailDisplayMenu.textContent = currentAdminEmail;
                 document.getElementById('store-logo').textContent = "LogoLoja (Admin)";
             }
+             // Lógica para menu do cliente
+            if (!loggedInClient) {
+                clientLoginSectionMenu.classList.remove('hidden');
+                clientInfoSectionMenu.classList.add('hidden');
+            } else {
+                clientLoginSectionMenu.classList.add('hidden');
+                clientInfoSectionMenu.classList.remove('hidden');
+                clientEmailDisplayMenu.textContent = loggedInClient.email;
+            }
+
             document.getElementById('store-nav').classList.remove('hidden'); 
             openMenuButton.classList.remove('lg:hidden'); 
             renderCategoryFilters();
@@ -878,18 +1090,52 @@
             closeSideMenu();
         }
         
-        function showOrdersView(status) {
-            setActiveView(ordersView);
-            ordersStatusMessage.textContent = `Visualizando pedidos: ${status}. (Funcionalidade a ser implementada).`;
+        function showWishlistView() {
+            if (!loggedInClient) {
+                showModal("Acesso Negado", "Faça login para ver sua lista de desejos.", null, false);
+                return;
+            }
+            setActiveView('wishlist-view');
+            wishlistItemsContainer.innerHTML = '';
+            if (loggedInClient.wishlist.length === 0) {
+                emptyWishlistMessage.classList.remove('hidden');
+            } else {
+                emptyWishlistMessage.classList.add('hidden');
+                loggedInClient.wishlist.forEach(productId => {
+                    const product = products.find(p => p.id === productId);
+                    if (product) {
+                        const productCard = createProductCard(product, true); // true para isWishlistView
+                        wishlistItemsContainer.appendChild(productCard);
+                    }
+                });
+            }
             closeSideMenu();
         }
 
+        function showClientOrdersView() {
+            if (!loggedInClient) {
+                showModal("Acesso Negado", "Faça login para ver seus pedidos.", null, false);
+                return;
+            }
+            setActiveView('client-orders-view');
+            renderClientOrders();
+            closeSideMenu();
+        }
+
+
         function showCheckoutView() {
+            if (!loggedInClient) {
+                showModal("Login Necessário", "Por favor, faça login como cliente para prosseguir com a compra.", () => {
+                    // Poderia redirecionar para o menu de login ou abrir um modal de login aqui
+                    openSideMenu(); // Abre o menu para o cliente logar
+                }, false);
+                return;
+            }
             if (cart.length === 0) {
                 showCartViewDedicated(); 
                 return;
             }
-            setActiveView(checkoutView);
+            setActiveView('checkout-view');
             pixKeyTextElement.value = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
             checkoutItemsList.innerHTML = '';
             let total = 0;
@@ -901,11 +1147,36 @@
                 total += item.price * item.quantity;
             });
             checkoutTotalValue.textContent = `R$ ${total.toFixed(2)}`;
+
+            // Reset e esconde formulário de endereço por padrão
+            checkoutDeliveryAddressForm.classList.add('hidden');
+            document.getElementById('delivery-name').value = loggedInClient.name || '';
+            document.getElementById('delivery-phone').value = loggedInClient.phone || '';
+            // Limpar outros campos de endereço se necessário
+            ['delivery-street', 'delivery-number', 'delivery-neighborhood', 'delivery-city', 'delivery-cep', 'delivery-reference'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+
+            document.querySelectorAll('input[name="deliveryOption"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'delivery') {
+                        checkoutDeliveryAddressForm.classList.remove('hidden');
+                    } else {
+                        checkoutDeliveryAddressForm.classList.add('hidden');
+                    }
+                });
+                 // Garante que o estado inicial do formulário de endereço seja respeitado
+                if (radio.value === 'delivery' && radio.checked) {
+                    checkoutDeliveryAddressForm.classList.remove('hidden');
+                }
+            });
+
             closeSideMenu();
         }
 
         function showCartViewDedicated() {
-            setActiveView(cartViewDedicated);
+            setActiveView('cart-view-dedicated');
             cartItemsListDedicated.innerHTML = '';
             let total = 0;
 
@@ -942,8 +1213,8 @@
             closeSideMenu();
         }
 
-
-        if (loginFormMenu) {
+        // --- SISTEMA DE LOGIN (ADMIN E CLIENTE) ---
+        if (loginFormMenu) { // Admin Login
             loginFormMenu.addEventListener('submit', function(event) {
                 event.preventDefault();
                 const email = document.getElementById('email-menu').value;
@@ -952,18 +1223,84 @@
                 loginFeedbackMenu.innerHTML = '';
                 loginFeedbackMenu.classList.remove('hidden', 'feedback-success', 'feedback-error');
                 if (admin) {
-                    loginFeedbackMenu.textContent = "Login bem-sucedido! Carregando painel...";
+                    loginFeedbackMenu.textContent = "Login Admin bem-sucedido!";
                     loginFeedbackMenu.classList.add('feedback-message', 'feedback-success');
                     setTimeout(() => {
-                        showAdminView(admin.email, 'product-management'); // Default to product management
+                        showAdminView(admin.email, 'product-management'); 
                         loginFeedbackMenu.classList.add('hidden'); 
                     }, 500); 
                 } else {
-                    loginFeedbackMenu.textContent = "Email ou senha inválidos.";
+                    loginFeedbackMenu.textContent = "Email ou senha de Admin inválidos.";
                     loginFeedbackMenu.classList.add('feedback-message', 'feedback-error');
                 }
             });
         }
+
+        clientLoginFormMenu?.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = document.getElementById('client-email-menu').value;
+            const password = document.getElementById('client-senha-menu').value;
+            const client = clients.find(c => c.email === email && c.password === password);
+            
+            clientLoginFeedbackMenu.textContent = '';
+            if (client) {
+                loggedInClient = client;
+                clientLoginFeedbackMenu.textContent = "Login bem-sucedido!";
+                clientLoginFeedbackMenu.className = 'text-xs mt-1 text-green-600';
+                updateClientMenu();
+                renderStoreProducts(); // Re-render para atualizar botões de wishlist
+                setTimeout(() => { 
+                    clientLoginFeedbackMenu.textContent = '';
+                    closeSideMenu();
+                 }, 1000);
+            } else {
+                clientLoginFeedbackMenu.textContent = "Email ou senha de cliente inválidos.";
+                clientLoginFeedbackMenu.className = 'text-xs mt-1 text-red-600';
+            }
+        });
+
+        registerClientLink?.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Simples prompt para cadastro, idealmente seria um formulário
+            const email = prompt("Digite seu email para cadastro:");
+            const password = prompt("Digite sua senha:");
+            const name = prompt("Digite seu nome completo:");
+            if (email && password && name) {
+                if (clients.find(c => c.email === email)) {
+                    showModal("Erro de Cadastro", "Este email já está cadastrado.", null, false);
+                } else {
+                    const newClient = { id: `client${clients.length + 1}${Date.now()}`, email, password, name, phone: '', wishlist: [], orders: [] };
+                    clients.push(newClient);
+                    loggedInClient = newClient; // Loga automaticamente após cadastro
+                    updateClientMenu();
+                    showModal("Cadastro Realizado", "Cadastro realizado com sucesso! Você já está logado.", null, false);
+                    closeSideMenu();
+                }
+            } else {
+                showModal("Cadastro Cancelado", "Informações incompletas para cadastro.", null, false);
+            }
+        });
+
+
+        function updateClientMenu() {
+            if (loggedInClient) {
+                clientLoginSectionMenu.classList.add('hidden');
+                clientInfoSectionMenu.classList.remove('hidden');
+                clientEmailDisplayMenu.textContent = loggedInClient.email;
+            } else {
+                clientLoginSectionMenu.classList.remove('hidden');
+                clientInfoSectionMenu.classList.add('hidden');
+            }
+        }
+        
+        clientLogoutButtonMenu?.addEventListener('click', () => {
+            loggedInClient = null;
+            updateClientMenu();
+            renderStoreProducts(); // Re-render para atualizar botões de wishlist
+            showModal("Logout", "Você foi desconectado.", null, false);
+            showStoreView(); // Volta para a loja
+        });
+
 
         adminLogoutButtonMenu?.addEventListener('click', () => {
             isAdminLoggedIn = false; 
@@ -971,9 +1308,9 @@
             showStoreView(); 
         });
         backToStoreButtonAdmin?.addEventListener('click', showStoreView);
-        backToCartButton?.addEventListener('click', showCartViewDedicated); 
+        backToCartButton?.addEventListener('click', () => setActiveView('cart-view-dedicated')); 
         checkoutButtonDedicated?.addEventListener('click', showCheckoutView);
-        continueShoppingFromCartViewButton?.addEventListener('click', showStoreView);
+        continueShoppingFromCartViewButton?.addEventListener('click', () => setActiveView('store-view'));
 
         function resetProductForm() {
             addProductForm.reset();
@@ -998,7 +1335,7 @@
         });
         adminViewStoreAfterAddButton?.addEventListener('click', () => {
             adminAddProductFeedbackContainer.classList.add('hidden');
-            showStoreView();
+            setActiveView('store-view');
         });
 
 
@@ -1015,7 +1352,7 @@
                 const editingId = editingProductIdInput.value;
 
                 let imageUrls = [];
-                if (uploadedImageFile && imagePreview.src) { // Check if imagePreview.src is valid
+                if (uploadedImageFile && imagePreview.src) { 
                     imageUrls.push(imagePreview.src); 
                 } else if (mainImageUrl) {
                     imageUrls.push(mainImageUrl);
@@ -1037,14 +1374,15 @@
                         if (productIndex > -1) {
                             products[productIndex] = { 
                                 ...products[productIndex], 
-                                name, price, categoryId, imageUrls, description, stock 
+                                name, price, categoryId, imageUrls, description, stock,
+                                reviews: products[productIndex].reviews || [] // Mantém as reviews existentes
                             };
                             adminAddProductFeedbackMessage.textContent = "Produto atualizado com sucesso!";
                         }
                     } else {
                         const newProduct = {
                             id: 'prod' + (products.length + 1) + Date.now(), 
-                            name, price, categoryId, imageUrls, description, stock
+                            name, price, categoryId, imageUrls, description, stock, reviews: []
                         };
                         products.push(newProduct);
                         adminAddProductFeedbackMessage.textContent = "Produto adicionado com sucesso!";
@@ -1180,38 +1518,6 @@
                 uploadedImageFile = null; imagePreview.classList.add('hidden'); imagePreview.src = '';
             }
         }
-
-        if (addAdminForm) {
-            addAdminForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-                const email = document.getElementById('admin-new-email').value;
-                const password = document.getElementById('admin-new-password').value;
-                const feedbackDiv = addAdminForm.querySelector('.admin-add-feedback');
-                if (feedbackDiv) feedbackDiv.remove();
-                if (email && password) {
-                    if (adminUsers.find(user => user.email === email)) {
-                        const feedback = document.createElement('p');
-                        feedback.textContent = "Este email de administrador já existe.";
-                        feedback.className = "text-red-500 text-sm mt-2 admin-add-feedback";
-                        addAdminForm.querySelector('button[type="submit"]').insertAdjacentElement('afterend', feedback);
-                        setTimeout(() => feedback.remove(), 3000); return;
-                    }
-                    adminUsers.push({ email, password });
-                    renderAdminUsers(); addAdminForm.reset();
-                    const feedback = document.createElement('p');
-                    feedback.textContent = "Administrador adicionado com sucesso!";
-                    feedback.className = "text-green-500 text-sm mt-2 admin-add-feedback";
-                    addAdminForm.querySelector('button[type="submit"]').insertAdjacentElement('afterend', feedback);
-                    setTimeout(() => feedback.remove(), 3000);
-                } else {
-                    const feedback = document.createElement('p');
-                    feedback.textContent = "Por favor, preencha email e senha.";
-                    feedback.className = "text-red-500 text-sm mt-2 admin-add-feedback";
-                    addAdminForm.querySelector('button[type="submit"]').insertAdjacentElement('afterend', feedback);
-                    setTimeout(() => feedback.remove(), 3000);
-                }
-            });
-        }
         
         const cartItemsContainer = document.getElementById('cart-items-list'); 
         const cartTotalValueElement = document.getElementById('cart-total-value'); 
@@ -1219,7 +1525,7 @@
         const cartEmptyMessage = document.getElementById('cart-empty-message'); 
         const cartTotalSection = document.getElementById('cart-total-section'); 
 
-        checkoutButtonSidebar?.addEventListener('click', showCartViewDedicated); 
+        checkoutButtonSidebar?.addEventListener('click', showCheckoutView); 
 
         function handleAddToCart(productData, buttonElement) {
             if (isAdminLoggedIn) {
@@ -1282,7 +1588,7 @@
                         e.preventDefault(); e.stopPropagation();
                         clearTimeout(activeFeedbackTimeout);
                         revertButtonAndHide();
-                        showCartViewDedicated(); 
+                        setActiveView('cart-view-dedicated'); 
                     });
                     feedbackDiv.querySelector('.continue-shopping-link-feedback')?.addEventListener('click', (e) => {
                         e.preventDefault(); e.stopPropagation();
@@ -1447,21 +1753,6 @@
             addEventListenersToRemoveProductButtons(); 
         }
 
-        function renderAdminUsers() {
-            if (!adminUsersListContainer) return;
-            adminUsersListContainer.innerHTML = '';
-            if (adminUsers.length === 0) {
-                adminUsersListContainer.innerHTML = '<p class="text-gray-500">Nenhum administrador cadastrado.</p>';
-            } else {
-                adminUsers.forEach(user => {
-                    const userDiv = document.createElement('div');
-                    userDiv.className = 'p-2 border rounded-md bg-gray-50 text-sm text-gray-700';
-                    userDiv.textContent = user.email;
-                    adminUsersListContainer.appendChild(userDiv);
-                });
-            }
-        }
-
         copyPixKeyButton?.addEventListener('click', () => {
             pixKeyTextElement.select();
             try {
@@ -1473,7 +1764,7 @@
                     copyFeedbackElement.classList.add('hidden');
                 }, 2000);
             } catch (err) {
-                console.error('Falha ao copiar a chave Pix: ', err);
+                console.error   ('Falha ao copiar a chave Pix: ', err);
                 copyFeedbackElement.textContent = "Erro ao copiar.";
                 copyFeedbackElement.classList.remove('hidden', 'text-green-600');
                 copyFeedbackElement.classList.add('text-red-600');
@@ -1485,9 +1776,40 @@
         });
 
         paymentConfirmedButton?.addEventListener('click', () => {
+            if (!loggedInClient) {
+                showModal("Login Necessário", "Por favor, faça login como cliente para finalizar a compra.", null, false);
+                return;
+            }
+
+            const deliveryOption = document.querySelector('input[name="deliveryOption"]:checked').value;
+            let shippingAddress = null;
+            let clientName = loggedInClient.name;
+            let clientPhone = loggedInClient.phone;
+
+            if (deliveryOption === 'delivery') {
+                clientName = document.getElementById('delivery-name').value.trim();
+                clientPhone = document.getElementById('delivery-phone').value.trim();
+                const street = document.getElementById('delivery-street').value.trim();
+                const number = document.getElementById('delivery-number').value.trim();
+                const neighborhood = document.getElementById('delivery-neighborhood').value.trim();
+                const city = document.getElementById('delivery-city').value.trim();
+                const cep = document.getElementById('delivery-cep').value.trim();
+                const reference = document.getElementById('delivery-reference').value.trim();
+
+                if (!clientName || !clientPhone || !street || !number || !neighborhood || !city || !cep) {
+                    showModal("Dados Incompletos", "Por favor, preencha todos os campos obrigatórios do endereço de entrega.", null, false);
+                    return;
+                }
+                shippingAddress = { name: clientName, phone: clientPhone, street, number, neighborhood, city, cep, reference };
+            }
+
+
             const saleDate = new Date();
             const newSale = {
                 orderId: `order-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+                clientId: loggedInClient.id,
+                clientName: clientName, // Pode ser do cadastro ou do form de delivery
+                clientPhone: clientPhone, // Pode ser do cadastro ou do form de delivery
                 date: saleDate,
                 items: cart.map(item => ({
                     productId: item.id,
@@ -1496,11 +1818,14 @@
                     priceAtSale: item.price, 
                     totalValue: item.price * item.quantity
                 })),
-                totalAmount: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+                totalAmount: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                deliveryMethod: deliveryOption,
+                shippingAddress: shippingAddress, // Nulo se for pickup
+                status: deliveryOption === 'pickup' ? 'awaiting_pickup' : 'payment_confirmed', // Status inicial
+                allowReview: false // Só permite review após conclusão
             };
             salesRecords.push(newSale);
-            // console.log("Nova Venda Registrada:", newSale);
-            // console.log("Todos os Registros de Venda:", salesRecords);
+            loggedInClient.orders.push(newSale.orderId); // Adiciona ID do pedido ao cliente
 
             cart.forEach(cartItem => {
                 const productInStore = products.find(p => p.id === cartItem.id);
@@ -1514,32 +1839,31 @@
             });
 
             showModal("Pagamento Confirmado!", 
-                      "Obrigado por sua compra! Seu pedido será processado em breve.", 
+                      "Obrigado por sua compra! Seu pedido foi registrado.", 
                       () => {
                             cart = []; 
                             updateCartDisplay();
                             updateCartViewDedicatedDisplay();
                             renderStoreProducts(); 
                             renderAdminProducts(); 
-                            if(adminPanel.classList.contains('hidden') === false) { // Se o painel admin estiver ativo
-                                renderCashRegisterDisplay(currentSalesFilterPeriod); // Atualiza o caixa
+                            if(adminPanel.classList.contains('hidden') === false) { 
+                                renderCashRegisterDisplay(currentSalesFilterPeriod); 
                             }
-                            showStoreView(); 
+                            setActiveView('store-view'); 
                       }, 
                       false); 
         });
 
-        // --- Sistema de Caixa ---
         function getStartOfWeek(date) {
             const d = new Date(date);
             const day = d.getDay();
-            const diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1); 
             return new Date(d.setDate(diff));
         }
 
         function filterSalesByPeriod(period) {
             const now = new Date();
-            let startDate, endDate = new Date(now); // endDate is generally now or end of today/week/month
+            let startDate, endDate = new Date(now); 
 
             switch (period) {
                 case 'today':
@@ -1549,20 +1873,13 @@
                 case 'week':
                     startDate = getStartOfWeek(now);
                     startDate.setHours(0, 0, 0, 0);
-                    // endDate is end of today, or could be end of week:
-                    // endDate = new Date(startDate);
-                    // endDate.setDate(startDate.getDate() + 6);
-                    // endDate.setHours(23,59,59,999);
                     break;
                 case 'month':
                     startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-                    // endDate is end of today, or could be end of month:
-                    // endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-                    // endDate.setHours(23,59,59,999);
                     break;
                 case 'all-time':
                 default:
-                    return salesRecords; // No date filtering needed
+                    return salesRecords; 
             }
             
             return salesRecords.filter(sale => {
@@ -1617,11 +1934,10 @@
                 }
             }
             
-            // Update active state for filter buttons
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-blue-500', 'text-white'));
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.add('bg-gray-200', 'text-gray-700'));
             
-            const activeBtn = document.getElementById(`filter-${period.replace('-', '')}`); // all-time to alltime
+            const activeBtn = document.getElementById(`filter-${period.replace('-', '')}`); 
             if (activeBtn) {
                 activeBtn.classList.add('active', 'bg-blue-500', 'text-white');
                 activeBtn.classList.remove('bg-gray-200', 'text-gray-700');
@@ -1633,6 +1949,92 @@
         filterMonthButton?.addEventListener('click', () => renderCashRegisterDisplay('month'));
         filterAllTimeButton?.addEventListener('click', () => renderCashRegisterDisplay('all-time'));
 
+        // --- LISTA DE DESEJOS ---
+        function toggleWishlistItem(productId, buttonElement) {
+            if (!loggedInClient) {
+                showModal("Login Necessário", "Faça login para adicionar produtos à sua lista de desejos.", null, false);
+                return;
+            }
+            const productIndexInWishlist = loggedInClient.wishlist.indexOf(productId);
+            if (productIndexInWishlist > -1) {
+                loggedInClient.wishlist.splice(productIndexInWishlist, 1); // Remove
+                if (buttonElement) buttonElement.classList.remove('active');
+            } else {
+                loggedInClient.wishlist.push(productId); // Adiciona
+                if (buttonElement) buttonElement.classList.add('active');
+            }
+            // Se estiver na view da wishlist, re-renderiza
+            if (wishlistView.classList.contains('hidden') === false) {
+                showWishlistView();
+            }
+            // Atualiza o botão na página de detalhes do produto, se visível
+            const detailWishlistButton = productDetailView.querySelector(`.wishlist-button[data-product-id="${productId}"]`);
+            if (detailWishlistButton) {
+                if (loggedInClient.wishlist.includes(productId)) {
+                    detailWishlistButton.classList.add('active');
+                } else {
+                    detailWishlistButton.classList.remove('active');
+                }
+            }
+        }
+
+        function createProductCard(product, isWishlistView = false) {
+            const card = document.createElement('div');
+            card.className = "product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center";
+            card.dataset.id = product.id;
+            const isOutOfStock = product.stock <= 0;
+            const mainImageUrl = product.imageUrls && product.imageUrls.length > 0 ? product.imageUrls[0] : 'https://placehold.co/300x200/cccccc/969696?text=Sem+Imagem';
+            const isInWishlist = loggedInClient && loggedInClient.wishlist.includes(product.id);
+
+            card.innerHTML = `
+                ${!isWishlistView ? `
+                <button class="wishlist-button ${isInWishlist ? 'active' : ''}" data-product-id="${product.id}" title="Adicionar à Lista de Desejos">
+                    <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                </button>` : ''}
+                <div class="relative w-full h-48 mb-4 product-image-container cursor-pointer" data-product-id="${product.id}">
+                    <img src="${mainImageUrl}" alt="${product.name}" class="w-full h-full object-cover rounded-md">
+                    ${isOutOfStock ? '<div class="out-of-stock-overlay">Fora de Estoque</div>' : ''}
+                </div>
+                <h3 class="text-lg font-medium text-gray-700 mb-1">${product.name}</h3>
+                <p class="text-xl font-bold text-blue-600 mb-3">R$ ${product.price.toFixed(2)}</p>
+                ${isWishlistView ? `
+                    <button class="mt-2 w-full bg-red-500 text-white py-2 px-3 rounded-md hover:bg-red-600 remove-from-wishlist-btn" data-product-id="${product.id}">Remover</button>
+                    <button class="mt-2 w-full bg-green-500 text-white py-2 px-3 rounded-md hover:bg-green-600 add-to-cart-from-wishlist-btn" data-product-id="${product.id}" ${isOutOfStock ? 'disabled' : ''}>
+                        ${isOutOfStock ? 'Fora de Estoque' : 'Add ao Carrinho'}
+                    </button>
+                ` : `
+                    <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 add-to-cart-button-list" ${isOutOfStock ? 'disabled' : ''}>
+                        ${isOutOfStock ? 'Fora de Estoque' : 'Adicionar ao Carrinho'}
+                    </button>
+                    <div class="add-to-cart-feedback hidden mt-2 text-sm w-full"></div>
+                `}
+            `;
+            
+            card.querySelector('.product-image-container')?.addEventListener('click', (e) => {
+                showProductDetailView(e.currentTarget.dataset.productId);
+            });
+
+            if (isWishlistView) {
+                card.querySelector('.remove-from-wishlist-btn').addEventListener('click', (e) => {
+                    toggleWishlistItem(e.target.dataset.productId, null); // null for buttonElement as it will be re-rendered
+                });
+                const addToCartBtn = card.querySelector('.add-to-cart-from-wishlist-btn');
+                if (addToCartBtn) {
+                    addToCartBtn.addEventListener('click', (e) => {
+                        const prod = products.find(p => p.id === e.target.dataset.productId);
+                        if (prod) handleAddToCart(prod, e.target);
+                    });
+                }
+            } else {
+                 card.querySelector('.wishlist-button')?.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleWishlistItem(e.currentTarget.dataset.productId, e.currentTarget);
+                });
+            }
+            return card;
+        }
 
         // --- MODAL GENÉRICO ---
         function showModal(title, message, onConfirm, showCancel = true) {
@@ -1641,7 +2043,7 @@
 
             const modalOverlay = document.createElement('div');
             modalOverlay.id = 'generic-modal-overlay';
-            modalOverlay.className = 'fixed inset-0 bg-black bg-opacity-50 z-[100] flex items-center justify-center p-4'; // Higher z-index
+            modalOverlay.className = 'fixed inset-0 bg-black bg-opacity-50 z-[100] flex items-center justify-center p-4'; 
             
             const modalContent = document.createElement('div');
             modalContent.id = 'generic-modal';
@@ -1676,37 +2078,240 @@
             });
         }
 
+        // --- GERENCIAMENTO DE PEDIDOS (ADMIN) ---
+        function renderAdminOrders() {
+            if (!adminOrdersListContainer) return;
+            adminOrdersListContainer.innerHTML = '';
 
-        document.getElementById('register-client-link')?.addEventListener('click', (e) => {
-            e.preventDefault(); showModal('Aviso', 'Funcionalidade "Criar minha conta" a ser implementada.', null, false); closeSideMenu();
-        });
-        document.getElementById('login-client-link')?.addEventListener('click', (e) => {
-            e.preventDefault(); showModal('Aviso', 'Funcionalidade "Fazer Login (Cliente)" a ser implementada.', null, false); closeSideMenu();
-        });
-        
-        sideMenu.querySelectorAll('nav a[data-order-status]')?.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const status = e.target.dataset.orderStatus;
-                showOrdersView(status);
+            if (salesRecords.length === 0) {
+                adminOrdersListContainer.innerHTML = '<p class="text-gray-500">Nenhum pedido para gerenciar.</p>';
+                return;
+            }
+
+            // Ordenar por data, mais recentes primeiro
+            const sortedSales = [...salesRecords].sort((a,b) => new Date(b.date) - new Date(a.date));
+
+            sortedSales.forEach(order => {
+                const orderDiv = document.createElement('div');
+                orderDiv.className = 'p-4 border rounded-md bg-white shadow-sm';
+                
+                let itemsHtml = order.items.map(item => `<li>${item.name} (Qtd: ${item.quantity}) - R$ ${item.totalValue.toFixed(2)}</li>`).join('');
+                let addressHtml = '';
+                if (order.deliveryMethod === 'delivery' && order.shippingAddress) {
+                    const addr = order.shippingAddress;
+                    addressHtml = `
+                        <p class="text-xs text-gray-600 mt-1"><b>Endereço:</b> ${addr.street}, ${addr.number} - ${addr.neighborhood}, ${addr.city} - CEP: ${addr.cep}</p>
+                        ${addr.reference ? `<p class="text-xs text-gray-600"><b>Ref:</b> ${addr.reference}</p>` : ''}
+                    `;
+                }
+
+                orderDiv.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Pedido ID: ${order.orderId.substring(order.orderId.length - 6)}</h4>
+                            <p class="text-xs text-gray-500">Data: ${new Date(order.date).toLocaleString('pt-BR')}</p>
+                            <p class="text-xs text-gray-500">Cliente: ${order.clientName || 'N/A'} (${order.clientPhone || 'N/A'})</p>
+                            <p class="text-xs text-gray-500">Modalidade: ${order.deliveryMethod === 'pickup' ? 'Retirada na Loja' : 'Entrega (Delivery)'}</p>
+                        </div>
+                        <p class="font-bold text-lg text-blue-600">R$ ${order.totalAmount.toFixed(2)}</p>
+                    </div>
+                    <details class="text-xs">
+                        <summary class="cursor-pointer text-blue-500 hover:underline">Ver Itens e Endereço</summary>
+                        <ul class="list-disc pl-5 mt-1 text-gray-600">${itemsHtml}</ul>
+                        ${addressHtml}
+                    </details>
+                    <div class="mt-3">
+                        <label for="status-${order.orderId}" class="block text-sm font-medium text-gray-600 mb-1">Status do Pedido:</label>
+                        <select id="status-${order.orderId}" data-order-id="${order.orderId}" class="admin-order-status-select w-full p-2 border border-gray-300 rounded-md text-sm">
+                            ${order.deliveryMethod === 'delivery' ? `
+                                <option value="payment_confirmed" ${order.status === 'payment_confirmed' ? 'selected' : ''}>Pagamento Confirmado</option>
+                                <option value="in_preparation" ${order.status === 'in_preparation' ? 'selected' : ''}>Em Preparação</option>
+                                <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>Enviado</option>
+                                <option value="completed" ${order.status === 'completed' ? 'selected' : ''}>Concluído (Entregue)</option>
+                            ` : `
+                                <option value="awaiting_pickup" ${order.status === 'awaiting_pickup' ? 'selected' : ''}>Aguardando Retirada</option>
+                                <option value="pickup_completed" ${order.status === 'pickup_completed' ? 'selected' : ''}>Retirada Finalizada</option>
+                            `}
+                             <option value="canceled" ${order.status === 'canceled' ? 'selected' : ''}>Cancelado</option>
+                        </select>
+                    </div>
+                `;
+                adminOrdersListContainer.appendChild(orderDiv);
             });
-        });
+
+            document.querySelectorAll('.admin-order-status-select').forEach(select => {
+                select.addEventListener('change', function() {
+                    const orderId = this.dataset.orderId;
+                    const newStatus = this.value;
+                    updateOrderStatus(orderId, newStatus);
+                });
+            });
+        }
+
+        function updateOrderStatus(orderId, newStatus) {
+            const order = salesRecords.find(o => o.orderId === orderId);
+            if (order) {
+                order.status = newStatus;
+                if (newStatus === 'completed' || newStatus === 'pickup_completed') {
+                    order.allowReview = true;
+                } else {
+                    order.allowReview = false; // Se reverter status, não permite mais review
+                }
+                // console.log(`Status do pedido ${orderId} atualizado para ${newStatus}`);
+                // Potencialmente re-renderizar a lista de pedidos do cliente se estiver visível
+                if (clientOrdersView.classList.contains('hidden') === false && loggedInClient && loggedInClient.orders.includes(orderId)) {
+                    renderClientOrders();
+                }
+                 showModal("Status Atualizado", `Status do pedido ${orderId.substring(orderId.length - 6)} alterado para ${newStatus}.`, null, false);
+            }
+        }
         
-        searchProductInput?.addEventListener('input', (e) => {
-            currentSearchTerm = e.target.value;
-            renderStoreProducts();
-        });
+        // --- AVALIAÇÕES DE PRODUTO (CLIENTE) ---
+        function renderClientOrders() {
+            if (!clientOrdersListContainer || !loggedInClient) return;
+            clientOrdersListContainer.innerHTML = '';
+            const clientOrderIds = loggedInClient.orders;
+
+            if (clientOrderIds.length === 0) {
+                noClientOrdersMessage.classList.remove('hidden');
+                return;
+            }
+            noClientOrdersMessage.classList.add('hidden');
+
+            const clientSales = salesRecords.filter(sale => clientOrderIds.includes(sale.orderId))
+                                         .sort((a,b) => new Date(b.date) - new Date(a.date));
+
+            clientSales.forEach(order => {
+                const orderDiv = document.createElement('div');
+                orderDiv.className = 'p-4 border rounded-md bg-white shadow';
+                let itemsHtml = order.items.map(item => `<li>${item.name} (Qtd: ${item.quantity})</li>`).join('');
+                
+                let statusText = order.status;
+                switch(order.status) {
+                    case 'payment_confirmed': statusText = 'Pagamento Confirmado'; break;
+                    case 'in_preparation': statusText = 'Em Preparação'; break;
+                    case 'shipped': statusText = 'Enviado'; break;
+                    case 'completed': statusText = 'Concluído (Entregue)'; break;
+                    case 'awaiting_pickup': statusText = 'Aguardando Retirada'; break;
+                    case 'pickup_completed': statusText = 'Retirada Finalizada'; break;
+                    case 'canceled': statusText = 'Cancelado'; break;
+                }
+
+                orderDiv.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Pedido ID: ${order.orderId.substring(order.orderId.length-6)}</h4>
+                            <p class="text-xs text-gray-500">Data: ${new Date(order.date).toLocaleDateString('pt-BR')}</p>
+                            <p class="text-sm text-gray-700">Status: <span class="font-medium">${statusText}</span></p>
+                        </div>
+                        <p class="font-bold text-lg text-blue-600">R$ ${order.totalAmount.toFixed(2)}</p>
+                    </div>
+                    <ul class="text-xs list-disc pl-5 mt-1 text-gray-600">${itemsHtml}</ul>
+                    ${order.allowReview ? `<div id="review-section-${order.orderId}" class="mt-3 pt-3 border-t"></div>` : ''}
+                `;
+                clientOrdersListContainer.appendChild(orderDiv);
+
+                if (order.allowReview) {
+                    renderReviewFormForOrder(order, `review-section-${order.orderId}`);
+                }
+            });
+        }
+
+        function renderReviewFormForOrder(order, containerId) {
+            const reviewSection = document.getElementById(containerId);
+            if (!reviewSection) return;
+            reviewSection.innerHTML = '<h5 class="text-sm font-semibold mb-2">Avalie os produtos deste pedido:</h5>';
+
+            order.items.forEach(item => {
+                const product = products.find(p => p.id === item.productId);
+                if (!product) return;
+
+                // Verifica se já existe uma avaliação do cliente para este produto neste pedido específico (ou apenas para o produto)
+                const existingReview = product.reviews.find(r => r.clientId === loggedInClient.id && r.orderId === order.orderId);
+
+                if (existingReview) {
+                    reviewSection.innerHTML += `
+                        <div class="mb-2 p-2 bg-gray-100 rounded">
+                            <p class="text-xs font-medium">${item.name}: <span class="text-yellow-500">${'★'.repeat(existingReview.rating)}${'☆'.repeat(5 - existingReview.rating)}</span> (Sua avaliação)</p>
+                            ${existingReview.comment ? `<p class="text-xs text-gray-600 italic">"${existingReview.comment}"</p>` : ''}
+                        </div>`;
+                } else {
+                    const formId = `review-form-${order.orderId}-${item.productId}`;
+                    reviewSection.innerHTML += `
+                        <form id="${formId}" data-product-id="${item.productId}" data-order-id="${order.orderId}" class="mb-3 p-2 border rounded">
+                            <p class="text-xs font-medium mb-1">${item.name}</p>
+                            <div class="star-rating mb-1" data-rating="0">
+                                <span data-value="1">★</span><span data-value="2">★</span><span data-value="3">★</span><span data-value="4">★</span><span data-value="5">★</span>
+                            </div>
+                            <textarea class="w-full p-1 border rounded text-xs" rows="2" placeholder="Seu comentário (opcional)"></textarea>
+                            <button type="submit" class="mt-1 bg-blue-500 text-white text-xs py-1 px-2 rounded hover:bg-blue-600">Enviar Avaliação</button>
+                        </form>
+                    `;
+                }
+            });
+            
+            // Adiciona event listeners para as estrelas e forms
+            document.querySelectorAll(`#${containerId} .star-rating span`).forEach(star => {
+                star.addEventListener('click', function() {
+                    const ratingContainer = this.parentElement;
+                    const rating = this.dataset.value;
+                    ratingContainer.dataset.rating = rating; // Armazena a avaliação
+                    Array.from(ratingContainer.children).forEach((s, i) => {
+                        s.classList.toggle('selected', i < rating);
+                    });
+                });
+            });
+            document.querySelectorAll(`#${containerId} form`).forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const productId = this.dataset.productId;
+                    const orderId = this.dataset.orderId;
+                    const rating = parseInt(this.querySelector('.star-rating').dataset.rating);
+                    const comment = this.querySelector('textarea').value.trim();
+
+                    if (rating === 0) {
+                        showModal("Avaliação Incompleta", "Por favor, selecione pelo menos uma estrela.", null, false);
+                        return;
+                    }
+                    submitProductReview(productId, orderId, rating, comment);
+                    // Re-render this specific order's review section or the whole list
+                    renderClientOrders(); 
+                });
+            });
+        }
+
+        function submitProductReview(productId, orderId, rating, comment) {
+            const product = products.find(p => p.id === productId);
+            if (product && loggedInClient) {
+                // Remove avaliação anterior do mesmo cliente para o mesmo produto no mesmo pedido, se houver
+                product.reviews = product.reviews.filter(r => !(r.clientId === loggedInClient.id && r.orderId === orderId));
+                
+                product.reviews.push({
+                    clientId: loggedInClient.id,
+                    clientName: loggedInClient.name, // Opcional, para exibir nome na avaliação
+                    orderId: orderId, // Para vincular a avaliação a uma compra específica
+                    rating: rating,
+                    comment: comment,
+                    date: new Date().toISOString()
+                });
+                showModal("Avaliação Enviada", "Obrigado pela sua avaliação!", null, false);
+            }
+        }
+
 
         // --- INICIALIZAÇÃO ---
-        showStoreView(); 
-        updateCartDisplay(); 
+        document.addEventListener('DOMContentLoaded', () => {
+            updateClientMenu(); // Garante que o menu do cliente esteja correto no load
+            showStoreView(); 
+            updateCartDisplay(); 
+        });
         
         document.getElementById('store-logo')?.addEventListener('click', (e) => {
             e.preventDefault();
             currentCategoryFilter = 'cat0'; 
             currentSearchTerm = ''; 
             if(searchProductInput) searchProductInput.value = '';
-            showStoreView();
+            setActiveView('store-view');
         });
         document.querySelector('#store-nav a[onclick="showStoreView()"]')?.addEventListener('click', (e) => { 
             if (e.target.textContent === "Início") {
@@ -1714,8 +2319,12 @@
                 currentCategoryFilter = 'cat0'; 
                 currentSearchTerm = ''; 
                 if(searchProductInput) searchProductInput.value = '';
-                showStoreView();
+                setActiveView('store-view');
             }
+        });
+        searchProductInput?.addEventListener('input', (e) => {
+            currentSearchTerm = e.target.value;
+            renderStoreProducts();
         });
 
     </script>
