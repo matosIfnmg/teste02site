@@ -93,9 +93,9 @@
             transition: opacity 0.3s ease-in-out;
         }
         .pix-qr-code {
-            width: 200px; /* Largura do QR Code */
-            height: 200px; /* Altura do QR Code */
-            border: 1px solid #e5e7eb; /* Borda cinza claro */
+            width: 200px; 
+            height: 200px; 
+            border: 1px solid #e5e7eb; 
         }
     </style>
 </head>
@@ -202,7 +202,7 @@
                             <span>Total:</span>
                             <span id="cart-total-value">R$ 0,00</span>
                         </div>
-                        <button id="checkout-button" class="w-full mt-4 bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300">Ir para Pagamento</button>
+                        <button id="checkout-button-sidebar" class="w-full mt-4 bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300">Ir para Pagamento</button>
                     </div>
                     <div id="cart-empty-message" class="text-center text-gray-500 mt-6">Seu carrinho está vazio.</div>
                 </aside>
@@ -271,10 +271,38 @@
                     <div id="admin-users-list" class="space-y-2"></div>
                 </section>
             </div>
+
              <div id="orders-view" class="hidden bg-white p-6 md:p-8 rounded-lg shadow-lg main-content-section">
                 <h2 class="text-3xl font-bold mb-8 text-center text-gray-700">Meus Pedidos</h2>
                 <p id="orders-status-message" class="text-center text-gray-600">Selecione um status de pedido no menu lateral.</p>
             </div>
+            
+            <div id="cart-view-dedicated" class="hidden bg-white p-6 md:p-8 rounded-lg shadow-lg main-content-section">
+                <div class="max-w-3xl mx-auto">
+                    <div class="flex justify-between items-center mb-8">
+                        <h2 class="text-3xl font-bold text-gray-800">Meu Carrinho</h2>
+                        <button id="continue-shopping-from-cart-view" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300">
+                            Continuar Comprando
+                        </button>
+                    </div>
+                    <div id="cart-items-list-dedicated" class="space-y-4 mb-8">
+                        </div>
+                    <div id="cart-empty-message-dedicated" class="text-center text-gray-500 py-8 hidden">
+                        <p class="text-xl mb-4">Seu carrinho está vazio.</p>
+                        <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                    <div id="cart-summary-dedicated" class="mt-6 pt-6 border-t border-gray-200">
+                        <div class="flex justify-between items-center text-xl font-semibold text-gray-700 mb-6">
+                            <span>Total:</span>
+                            <span id="cart-total-value-dedicated">R$ 0,00</span>
+                        </div>
+                        <button id="checkout-button-dedicated" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-md transition duration-300 text-lg">
+                            Ir para Pagamento
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <div id="checkout-view" class="hidden bg-white p-6 md:p-8 rounded-lg shadow-lg main-content-section">
                 <div class="max-w-2xl mx-auto">
                     <button id="back-to-cart-button" class="mb-6 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md transition duration-300 inline-flex items-center">
@@ -285,8 +313,7 @@
                     
                     <div id="checkout-summary" class="mb-8 p-4 border rounded-md bg-gray-50">
                         <h3 class="text-xl font-semibold text-gray-700 mb-3">Resumo do Pedido</h3>
-                        <div id="checkout-items-list" class="text-sm text-gray-600 space-y-1">
-                            </div>
+                        <div id="checkout-items-list" class="text-sm text-gray-600 space-y-1"></div>
                         <div class="mt-3 pt-3 border-t flex justify-between font-bold text-gray-700">
                             <span>Total do Pedido:</span>
                             <span id="checkout-total-value">R$ 0,00</span>
@@ -346,6 +373,7 @@
         const ordersView = document.getElementById('orders-view');
         const ordersStatusMessage = document.getElementById('orders-status-message');
         const checkoutView = document.getElementById('checkout-view');
+        const cartViewDedicated = document.getElementById('cart-view-dedicated');
 
 
         const backToStoreButtonAdmin = document.getElementById('back-to-store-button-admin');
@@ -369,6 +397,15 @@
         const paymentConfirmedButton = document.getElementById('payment-confirmed-button');
         const checkoutItemsList = document.getElementById('checkout-items-list');
         const checkoutTotalValue = document.getElementById('checkout-total-value');
+
+        // Dedicated Cart View Elements
+        const cartItemsListDedicated = document.getElementById('cart-items-list-dedicated');
+        const cartTotalValueDedicated = document.getElementById('cart-total-value-dedicated');
+        const cartEmptyMessageDedicated = document.getElementById('cart-empty-message-dedicated');
+        const checkoutButtonDedicated = document.getElementById('checkout-button-dedicated');
+        const continueShoppingFromCartViewButton = document.getElementById('continue-shopping-from-cart-view');
+        const cartSummaryDedicated = document.getElementById('cart-summary-dedicated');
+
 
 
         // --- ESTADO DA APLICAÇÃO ---
@@ -409,7 +446,7 @@
 
         // --- FUNÇÕES DE RENDERIZAÇÃO E CONTROLE DE VIEW ---
         function setActiveView(activeViewElement) {
-            [storeView, adminPanel, productDetailView, ordersView, checkoutView].forEach(view => { // Adicionado checkoutView
+            [storeView, adminPanel, productDetailView, ordersView, checkoutView, cartViewDedicated].forEach(view => { 
                 view?.classList.add('hidden');
             });
             activeViewElement?.classList.remove('hidden');
@@ -523,15 +560,12 @@
 
         function showCheckoutView() {
             if (cart.length === 0) {
-                alert("Seu carrinho está vazio. Adicione produtos antes de ir para o pagamento.");
-                showStoreView(); // Volta para a loja se o carrinho estiver vazio
+                // Em vez de alert, podemos redirecionar para a visualização de carrinho vazio
+                showCartViewDedicated(); 
                 return;
             }
             setActiveView(checkoutView);
-            // Gerar chave Pix aleatória (simulada)
             pixKeyTextElement.value = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-            
-            // Popular resumo do pedido
             checkoutItemsList.innerHTML = '';
             let total = 0;
             cart.forEach(item => {
@@ -542,7 +576,43 @@
                 total += item.price * item.quantity;
             });
             checkoutTotalValue.textContent = `R$ ${total.toFixed(2)}`;
+            closeSideMenu();
+        }
 
+        function showCartViewDedicated() {
+            setActiveView(cartViewDedicated);
+            cartItemsListDedicated.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                cartEmptyMessageDedicated.classList.remove('hidden');
+                cartSummaryDedicated.classList.add('hidden'); // Esconde o sumário e botão de pagamento
+            } else {
+                cartEmptyMessageDedicated.classList.add('hidden');
+                cartSummaryDedicated.classList.remove('hidden'); // Mostra o sumário e botão de pagamento
+                cart.forEach((item) => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'flex justify-between items-center p-4 border-b border-gray-200';
+                    itemElement.innerHTML = `
+                        <div class="flex items-center">
+                            <img src="${item.imageUrl || 'https://placehold.co/60x60/cccccc/969696?text=N/A'}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md mr-4">
+                            <div>
+                                <h4 class="font-semibold text-gray-700">${item.name}</h4>
+                                <p class="text-sm text-gray-500">Quantidade: ${item.quantity}</p>
+                                <p class="text-sm text-blue-600">Preço: R$ ${item.price.toFixed(2)}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-semibold text-gray-700">R$ ${(item.price * item.quantity).toFixed(2)}</p>
+                            <button class="text-red-500 hover:text-red-700 text-xs mt-1 remove-from-cart-button-dedicated" data-id="${item.id}">Remover</button>
+                        </div>
+                    `;
+                    cartItemsListDedicated.appendChild(itemElement);
+                    total += item.price * item.quantity;
+                });
+            }
+            cartTotalValueDedicated.textContent = `R$ ${total.toFixed(2)}`;
+            addEventListenersToRemoveFromCartButtonsDedicated();
             closeSideMenu();
         }
 
@@ -571,7 +641,9 @@
 
         adminLogoutButtonMenu?.addEventListener('click', () => { showStoreView(); });
         backToStoreButtonAdmin?.addEventListener('click', showStoreView);
-        backToCartButton?.addEventListener('click', showStoreView);
+        backToCartButton?.addEventListener('click', showCartViewDedicated); // Alterado para ir para a nova tela de carrinho
+        checkoutButtonDedicated?.addEventListener('click', showCheckoutView);
+        continueShoppingFromCartViewButton?.addEventListener('click', showStoreView);
 
 
         if (addProductForm) {
@@ -688,13 +760,13 @@
             });
         }
         
-        const cartItemsContainer = document.getElementById('cart-items-list');
-        const cartTotalValueElement = document.getElementById('cart-total-value');
-        const checkoutButton = document.getElementById('checkout-button');
-        const cartEmptyMessage = document.getElementById('cart-empty-message');
-        const cartTotalSection = document.getElementById('cart-total-section');
+        const cartItemsContainer = document.getElementById('cart-items-list'); // Sidebar cart
+        const cartTotalValueElement = document.getElementById('cart-total-value'); // Sidebar cart
+        const checkoutButtonSidebar = document.getElementById('checkout-button-sidebar'); // Sidebar cart
+        const cartEmptyMessage = document.getElementById('cart-empty-message'); // Sidebar cart
+        const cartTotalSection = document.getElementById('cart-total-section'); // Sidebar cart
 
-        checkoutButton?.addEventListener('click', showCheckoutView);
+        checkoutButtonSidebar?.addEventListener('click', showCartViewDedicated); // Botão do sidebar leva para a tela de carrinho dedicada
 
 
         function handleAddToCart(product, buttonElement) {
@@ -715,7 +787,8 @@
             } else {
                 cart.push({ ...product, quantity: 1 });
             }
-            updateCartDisplay();
+            updateCartDisplay(); // Atualiza o sidebar do carrinho
+            updateCartViewDedicatedDisplay(); // Atualiza a view dedicada do carrinho, se estiver visível
 
             if (buttonElement) {
                 const originalButtonText = buttonElement.textContent;
@@ -741,7 +814,7 @@
                         e.preventDefault(); e.stopPropagation();
                         clearTimeout(activeFeedbackTimeout);
                         revertButtonAndHide();
-                        document.getElementById('cart-sidebar')?.scrollIntoView({ behavior: 'smooth' });
+                        showCartViewDedicated(); // Alterado para mostrar a view dedicada
                     });
                     feedbackDiv.querySelector('.continue-shopping-link-feedback')?.addEventListener('click', (e) => {
                         e.preventDefault(); e.stopPropagation();
@@ -752,8 +825,8 @@
             }
         }
 
-        function updateCartDisplay() {
-            if (!cartItemsContainer || !cartTotalValueElement || !checkoutButton || !cartEmptyMessage || !cartTotalSection) return;
+        function updateCartDisplay() { // Atualiza o carrinho na sidebar
+            if (!cartItemsContainer || !cartTotalValueElement || !checkoutButtonSidebar || !cartEmptyMessage || !cartTotalSection) return;
             cartItemsContainer.innerHTML = '';
             let total = 0;
             if (cart.length === 0) {
@@ -779,6 +852,43 @@
             cartTotalValueElement.textContent = `R$ ${total.toFixed(2)}`;
             addEventListenersToRemoveFromCartButtons();
         }
+        
+        function updateCartViewDedicatedDisplay() { // Atualiza a view dedicada do carrinho
+            if (!cartItemsListDedicated || !cartTotalValueDedicated || !cartEmptyMessageDedicated || !cartSummaryDedicated) return;
+            cartItemsListDedicated.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                cartEmptyMessageDedicated.classList.remove('hidden');
+                cartSummaryDedicated.classList.add('hidden');
+            } else {
+                cartEmptyMessageDedicated.classList.add('hidden');
+                cartSummaryDedicated.classList.remove('hidden');
+                cart.forEach((item) => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'flex justify-between items-center p-4 border-b border-gray-200';
+                    itemElement.innerHTML = `
+                        <div class="flex items-center">
+                            <img src="${item.imageUrl || 'https://placehold.co/60x60/cccccc/969696?text=N/A'}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md mr-4">
+                            <div>
+                                <h4 class="font-semibold text-gray-700">${item.name}</h4>
+                                <p class="text-sm text-gray-500">Quantidade: ${item.quantity}</p>
+                                <p class="text-sm text-blue-600">Preço: R$ ${item.price.toFixed(2)}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-semibold text-gray-700">R$ ${(item.price * item.quantity).toFixed(2)}</p>
+                            <button class="text-red-500 hover:text-red-700 text-xs mt-1 remove-from-cart-button-dedicated" data-id="${item.id}">Remover</button>
+                        </div>
+                    `;
+                    cartItemsListDedicated.appendChild(itemElement);
+                    total += item.price * item.quantity;
+                });
+            }
+            cartTotalValueDedicated.textContent = `R$ ${total.toFixed(2)}`;
+            addEventListenersToRemoveFromCartButtonsDedicated();
+        }
+
 
         function addEventListenersToAddToCartButtons() {
             const addToCartListButtons = document.querySelectorAll('.add-to-cart-button-list');
@@ -795,7 +905,7 @@
             });
         }
         
-        function addEventListenersToRemoveFromCartButtons() {
+        function addEventListenersToRemoveFromCartButtons() { // Para a sidebar
             const removeButtons = cartItemsContainer.querySelectorAll('.remove-from-cart-button');
             removeButtons.forEach(button => {
                 const newButton = button.cloneNode(true);
@@ -804,6 +914,21 @@
                     const productIdToRemove = event.target.dataset.id;
                     cart = cart.filter(item => item.id !== productIdToRemove);
                     updateCartDisplay();
+                    updateCartViewDedicatedDisplay(); // Sincroniza a view dedicada
+                });
+            });
+        }
+
+        function addEventListenersToRemoveFromCartButtonsDedicated() { // Para a view dedicada do carrinho
+            const removeButtons = cartItemsListDedicated.querySelectorAll('.remove-from-cart-button-dedicated');
+            removeButtons.forEach(button => {
+                const newButton = button.cloneNode(true);
+                button.parentNode.replaceChild(newButton, button);
+                newButton.addEventListener('click', (event) => {
+                    const productIdToRemove = event.target.dataset.id;
+                    cart = cart.filter(item => item.id !== productIdToRemove);
+                    updateCartDisplay(); // Sincroniza a sidebar
+                    updateCartViewDedicatedDisplay();
                 });
             });
         }
@@ -812,7 +937,7 @@
         copyPixKeyButton?.addEventListener('click', () => {
             pixKeyTextElement.select();
             try {
-                document.execCommand('copy'); // Usar execCommand para compatibilidade com iframe
+                document.execCommand('copy'); 
                 copyFeedbackElement.textContent = "Chave Pix copiada!";
                 copyFeedbackElement.classList.remove('hidden');
                 setTimeout(() => {
@@ -827,11 +952,10 @@
                     copyFeedbackElement.classList.add('hidden');
                 }, 2000);
             }
-            window.getSelection().removeAllRanges(); // Limpar seleção
+            window.getSelection().removeAllRanges(); 
         });
 
         paymentConfirmedButton?.addEventListener('click', () => {
-            // Simulação de confirmação de pagamento
             const paymentFeedback = document.createElement('div');
             paymentFeedback.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg shadow-xl z-50 text-center';
             paymentFeedback.innerHTML = `
@@ -843,9 +967,10 @@
             
             document.getElementById('close-payment-feedback').addEventListener('click', () => {
                 paymentFeedback.remove();
-                cart = []; // Limpa o carrinho
+                cart = []; 
                 updateCartDisplay();
-                showStoreView(); // Volta para a loja
+                updateCartViewDedicatedDisplay();
+                showStoreView(); 
             });
         });
 
@@ -868,28 +993,22 @@
         showStoreView(); 
         updateCartDisplay(); 
 
-        document.getElementById('my-orders-link-topbar')?.addEventListener('click', (e) => {
-            e.preventDefault(); openSideMenu(); 
-        });
         document.getElementById('contact-us-link')?.addEventListener('click', (e) => {
             e.preventDefault(); alert('Funcionalidade "Fale Conosco (SAC)" a ser implementada.');
         });
         
-        // Adiciona evento de clique para o logo voltar para a loja
         document.getElementById('store-logo')?.addEventListener('click', (e) => {
             e.preventDefault();
             showStoreView();
         });
-        // Adiciona evento de clique para o link "Início" voltar para a loja
-        document.querySelector('#store-nav a[href="#"]')?.addEventListener('click', (e) => { // Seleciona o primeiro link "Início"
+        document.querySelector('#store-nav a[href="#"]')?.addEventListener('click', (e) => { 
              if (e.target.textContent === "Início") {
                 e.preventDefault();
                 showStoreView();
             }
         });
 
-
     </script>
 
 </body>
-</html>
+</ht
