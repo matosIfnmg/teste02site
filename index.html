@@ -38,6 +38,23 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
+        /* Estilo para mensagens de feedback (login) */
+        .feedback-message {
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+        }
+        .feedback-success {
+            background-color: #D1FAE5; /* green-100 */
+            color: #065F46; /* green-700 */
+            border: 1px solid #6EE7B7; /* green-300 */
+        }
+        .feedback-error {
+            background-color: #FEE2E2; /* red-100 */
+            color: #991B1B; /* red-700 */
+            border: 1px solid #FCA5A5; /* red-300 */
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
@@ -56,15 +73,15 @@
     <div class="flex flex-col md:flex-row container mx-auto mt-4 gap-4 px-2 md:px-0">
 
         <aside class="w-full md:w-1/5 bg-white p-6 rounded-lg shadow-lg sidebar order-2 md:order-1">
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">Login</h2>
-            <form>
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Login Administrador</h2>
+            <div id="login-feedback" class="hidden"></div> <form id="login-form">
                 <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-gray-600 mb-1">Email</label>
-                    <input type="email" id="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="seu@email.com">
+                    <input type="email" id="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="seu@email.com" required>
                 </div>
                 <div class="mb-4">
                     <label for="senha" class="block text-sm font-medium text-gray-600 mb-1">Senha</label>
-                    <input type="password" id="senha" name="senha" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="********">
+                    <input type="password" id="senha" name="senha" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="********" required>
                 </div>
                 <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Entrar</button>
                 <p class="text-xs text-gray-500 mt-3 text-center">Não tem uma conta? <a href="#" class="text-blue-500 hover:underline">Cadastre-se</a></p>
@@ -149,27 +166,29 @@
 
         <aside class="w-full md:w-1/5 bg-white p-6 rounded-lg shadow-lg sidebar order-3 md:order-3">
             <h2 class="text-xl font-semibold mb-4 text-gray-700">Carrinho</h2>
-            <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-200">
-                <div>
-                    <h4 class="font-medium text-gray-600">Produto X</h4>
-                    <p class="text-xs text-gray-500">1 x R$ 49,90</p>
+            <div id="cart-items-list">
+                <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-200">
+                    <div>
+                        <h4 class="font-medium text-gray-600">Produto X</h4>
+                        <p class="text-xs text-gray-500">1 x R$ 49,90</p>
+                    </div>
+                    <button class="text-red-500 hover:text-red-700 text-sm">Remover</button>
                 </div>
-                <button class="text-red-500 hover:text-red-700 text-sm">Remover</button>
-            </div>
-            <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-200">
-                <div>
-                    <h4 class="font-medium text-gray-600">Produto Y Longo Nome</h4>
-                    <p class="text-xs text-gray-500">2 x R$ 25,00</p>
+                <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-200">
+                    <div>
+                        <h4 class="font-medium text-gray-600">Produto Y Longo Nome</h4>
+                        <p class="text-xs text-gray-500">2 x R$ 25,00</p>
+                    </div>
+                    <button class="text-red-500 hover:text-red-700 text-sm">Remover</button>
                 </div>
-                <button class="text-red-500 hover:text-red-700 text-sm">Remover</button>
             </div>
 
-            <div class="mt-6 pt-4 border-t border-gray-300">
+            <div id="cart-total-section" class="mt-6 pt-4 border-t border-gray-300">
                 <div class="flex justify-between items-center font-semibold text-gray-700">
                     <span>Total:</span>
-                    <span>R$ 99,90</span>
+                    <span id="cart-total-value">R$ 99,90</span>
                 </div>
-                <button class="w-full mt-4 bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300">Finalizar Compra</button>
+                <button id="checkout-button" class="w-full mt-4 bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300">Finalizar Compra</button>
             </div>
             <div id="cart-empty-message" class="text-center text-gray-500 mt-6 hidden">
                 Seu carrinho está vazio.
@@ -182,44 +201,82 @@
     </footer>
 
     <script>
-        // Script simples para simular a adição ao carrinho e mostrar mensagem de carrinho vazio
-        // Em um projeto real, você usaria JavaScript mais robusto e, possivelmente, um framework.
+        // --- LÓGICA DE LOGIN DO ADMINISTRADOR ---
+        const loginForm = document.getElementById('login-form');
+        const loginFeedbackDiv = document.getElementById('login-feedback');
 
-        const cartItemsContainer = document.querySelector('aside.order-3 md\\:order-3 > div:not(.mt-6):not(#cart-empty-message)'); // Seleciona a div dos itens do carrinho
-        const cartTotalElement = document.querySelector('aside.order-3 md\\:order-3 .font-semibold.text-gray-700 span:last-child');
-        const finalizeButton = document.querySelector('aside.order-3 md\\:order-3 button.bg-orange-500');
+        if (loginForm) {
+            loginForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Previne o envio padrão do formulário
+
+                const emailInput = document.getElementById('email');
+                const passwordInput = document.getElementById('senha');
+                const email = emailInput.value;
+                const password = passwordInput.value;
+
+                // Credenciais do administrador
+                const adminEmail = "viniciusaraujomatos1@gmail.com";
+                const adminPassword = "Belohorizonte2020@";
+
+                loginFeedbackDiv.innerHTML = ''; // Limpa mensagens anteriores
+                loginFeedbackDiv.classList.remove('hidden', 'feedback-success', 'feedback-error');
+
+
+                if (email === adminEmail && password === adminPassword) {
+                    // Login bem-sucedido
+                    loginFeedbackDiv.textContent = "Login de administrador bem-sucedido! Redirecionando...";
+                    loginFeedbackDiv.classList.add('feedback-message', 'feedback-success');
+                    loginFeedbackDiv.classList.remove('hidden');
+                    // Aqui você pode redirecionar para a página de admin:
+                    // window.location.href = "/admin-dashboard.html"; // Exemplo
+                    console.log("Login de administrador bem-sucedido!");
+                    // Por enquanto, apenas limpamos o formulário e mantemos na página
+                    // loginForm.reset(); // Opcional: limpar campos após login
+                } else {
+                    // Falha no login
+                    loginFeedbackDiv.textContent = "Email ou senha inválidos.";
+                    loginFeedbackDiv.classList.add('feedback-message', 'feedback-error');
+                    loginFeedbackDiv.classList.remove('hidden');
+                    console.error("Falha no login do administrador.");
+                }
+            });
+        } else {
+            console.error("Formulário de login não encontrado.");
+        }
+
+        // --- LÓGICA DO CARRINHO DE COMPRAS ---
+        const cartItemsContainer = document.getElementById('cart-items-list');
+        const cartTotalValueElement = document.getElementById('cart-total-value');
+        const checkoutButton = document.getElementById('checkout-button');
         const cartEmptyMessage = document.getElementById('cart-empty-message');
+        const cartTotalSection = document.getElementById('cart-total-section');
         const addToCartButtons = document.querySelectorAll('main button.bg-green-500');
 
-        let cart = [];
+        let cart = []; // Array para armazenar os itens do carrinho
 
+        // Função para atualizar a exibição do carrinho
         function updateCartDisplay() {
-            if (!cartItemsContainer || !cartTotalElement || !finalizeButton || !cartEmptyMessage) {
-                console.error("Elementos do carrinho não encontrados no DOM.");
+            if (!cartItemsContainer || !cartTotalValueElement || !checkoutButton || !cartEmptyMessage || !cartTotalSection) {
+                console.error("Um ou mais elementos do carrinho não foram encontrados no DOM.");
                 return;
             }
 
-            cartItemsContainer.innerHTML = ''; // Limpa os itens atuais
+            cartItemsContainer.innerHTML = ''; // Limpa os itens atuais do display
             let total = 0;
 
             if (cart.length === 0) {
-                cartEmptyMessage.classList.remove('hidden');
-                finalizeButton.classList.add('hidden'); // Esconde o botão de finalizar se o carrinho estiver vazio
-                 if(cartTotalElement.parentElement) cartTotalElement.parentElement.classList.add('hidden');
-
-
+                cartEmptyMessage.classList.remove('hidden'); // Mostra mensagem de carrinho vazio
+                cartTotalSection.classList.add('hidden'); // Esconde seção de total e botão de finalizar
             } else {
-                cartEmptyMessage.classList.add('hidden');
-                finalizeButton.classList.remove('hidden');
-                if(cartTotalElement.parentElement) cartTotalElement.parentElement.classList.remove('hidden');
-
+                cartEmptyMessage.classList.add('hidden'); // Esconde mensagem de carrinho vazio
+                cartTotalSection.classList.remove('hidden'); // Mostra seção de total e botão de finalizar
 
                 cart.forEach((item, index) => {
                     const itemElement = document.createElement('div');
                     itemElement.className = 'flex justify-between items-center mb-4 pb-2 border-b border-gray-200';
                     itemElement.innerHTML = `
                         <div>
-                            <h4 class="font-medium text-gray-600">${item.name}</h4>
+                            <h4 class="font-medium text-gray-600 truncate w-32" title="${item.name}">${item.name}</h4>
                             <p class="text-xs text-gray-500">${item.quantity} x R$ ${item.price.toFixed(2)}</p>
                         </div>
                         <button class="text-red-500 hover:text-red-700 text-sm" data-index="${index}">Remover</button>
@@ -228,40 +285,48 @@
                     total += item.price * item.quantity;
                 });
             }
-            cartTotalElement.textContent = `R$ ${total.toFixed(2)}`;
-            addRemoveEventListeners();
+            cartTotalValueElement.textContent = `R$ ${total.toFixed(2)}`; // Atualiza o valor total
+            addRemoveEventListeners(); // Adiciona listeners aos novos botões "Remover"
         }
 
+        // Função para adicionar listeners aos botões "Remover"
         function addRemoveEventListeners() {
             const removeButtons = cartItemsContainer.querySelectorAll('button[data-index]');
             removeButtons.forEach(button => {
-                button.addEventListener('click', (event) => {
+                // Remove listener antigo para evitar duplicação, se houver
+                button.replaceWith(button.cloneNode(true));
+            });
+            // Adiciona novos listeners
+            cartItemsContainer.querySelectorAll('button[data-index]').forEach(button => {
+                 button.addEventListener('click', (event) => {
                     const indexToRemove = parseInt(event.target.dataset.index);
-                    cart.splice(indexToRemove, 1);
-                    updateCartDisplay();
+                    cart.splice(indexToRemove, 1); // Remove o item do array 'cart'
+                    updateCartDisplay(); // Atualiza a exibição do carrinho
                 });
             });
         }
 
-
+        // Adiciona listener de evento para os botões "Adicionar ao Carrinho"
         addToCartButtons.forEach(button => {
             button.addEventListener('click', (event) => {
                 const productCard = event.target.closest('.product-card');
                 const productName = productCard.querySelector('h3').textContent;
                 const productPriceText = productCard.querySelector('p.text-xl').textContent;
-                const productPrice = parseFloat(productPriceText.replace('R$', '').replace(',', '.').trim());
+                // Converte o preço para número (removendo "R$", espaços e trocando vírgula por ponto)
+                const productPrice = parseFloat(productPriceText.replace('R$', '').replace(/\s/g, '').replace(',', '.'));
 
                 const existingItem = cart.find(item => item.name === productName);
                 if (existingItem) {
-                    existingItem.quantity++;
+                    existingItem.quantity++; // Incrementa a quantidade se o item já existe
                 } else {
+                    // Adiciona novo item ao carrinho
                     cart.push({ name: productName, price: productPrice, quantity: 1 });
                 }
-                updateCartDisplay();
+                updateCartDisplay(); // Atualiza a exibição do carrinho
             });
         });
 
-        // Inicializa o carrinho (para mostrar a mensagem de vazio inicialmente)
+        // Inicializa a exibição do carrinho quando a página carrega
         updateCartDisplay();
 
     </script>
