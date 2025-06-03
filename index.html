@@ -25,7 +25,7 @@
             min-height: calc(100vh - 4rem); 
         }
         .main-content-section {
-            min-height: calc(100vh - 4rem); 
+            min-height: calc(100vh - 8rem); /* Ajustado para dar mais espaço */
         }
         .product-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -154,6 +154,18 @@
         .image-indicator-dot.active {
             background-color: white;
         }
+        .admin-nav-button.active {
+            background-color: #3B82F6; /* bg-blue-600 */
+            color: white;
+        }
+        .admin-nav-button {
+            background-color: #E5E7EB; /* bg-gray-200 */
+            color: #374151; /* text-gray-700 */
+        }
+        .filter-btn.active {
+            background-color: #3B82F6; /* bg-blue-600 */
+            color: white;
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
@@ -186,7 +198,8 @@
 
         <div id="admin-info-section-menu" class="hidden mt-4">
             <p class="text-sm text-gray-600 mb-2">Logado como: <span id="admin-email-display-menu" class="font-medium"></span></p>
-            <button id="admin-logout-button-menu" class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-300 text-sm">Logout Admin</button>
+            <button id="admin-logout-button-menu" class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-300 text-sm mb-2">Logout Admin</button>
+            <a href="#" id="admin-panel-link-side-menu" class="block text-sm text-center w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300">Painel Admin</a>
         </div>
         
         <div class="mt-6 pt-4 border-t">
@@ -262,7 +275,13 @@
                         Ver Loja
                     </button>
                 </div>
-                <section id="product-management" class="mb-10">
+
+                <div class="mb-6 border-b pb-3 flex gap-2">
+                    <button id="show-product-management-btn" class="admin-nav-button px-4 py-2 rounded-md text-sm font-medium">Gerenciar Produtos</button>
+                    <button id="show-cash-register-btn" class="admin-nav-button px-4 py-2 rounded-md text-sm font-medium">Caixa / Vendas</button>
+                </div>
+
+                <section id="product-management-section" class="mb-10">
                     <h3 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-3">Gerenciar Produtos</h3>
                     <form id="add-product-form" class="mb-4 p-6 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
                         <h4 id="form-product-title" class="text-xl font-medium mb-4 text-gray-700">Adicionar Novo Produto</h4>
@@ -327,7 +346,34 @@
                         <p id="no-admin-products" class="text-gray-500">Nenhum produto.</p>
                     </div>
                 </section>
-                <section id="admin-user-management" class="mb-10">
+
+                <section id="admin-cash-register-section" class="hidden mb-10">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-3">Caixa / Relatório de Vendas</h3>
+                    <div class="mb-4 flex flex-wrap gap-2">
+                        <button id="filter-today" class="filter-btn bg-gray-200 hover:bg-gray-300 text-gray-700 py-1 px-3 rounded-md text-sm">Hoje</button>
+                        <button id="filter-week" class="filter-btn bg-gray-200 hover:bg-gray-300 text-gray-700 py-1 px-3 rounded-md text-sm">Esta Semana</button>
+                        <button id="filter-month" class="filter-btn bg-gray-200 hover:bg-gray-300 text-gray-700 py-1 px-3 rounded-md text-sm">Este Mês</button>
+                        <button id="filter-all-time" class="filter-btn bg-blue-500 text-white py-1 px-3 rounded-md text-sm active">Todo o Período</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="bg-blue-100 p-4 rounded-lg shadow">
+                            <h4 class="text-blue-700 font-semibold">Total de Vendas (R$)</h4>
+                            <p id="sales-summary-total" class="text-2xl font-bold text-blue-800">R$ 0,00</p>
+                        </div>
+                        <div class="bg-green-100 p-4 rounded-lg shadow">
+                            <h4 class="text-green-700 font-semibold">Produtos Vendidos (Qtd.)</h4>
+                            <p id="sales-summary-quantity" class="text-2xl font-bold text-green-800">0</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-medium mb-3 text-gray-700">Vendas por Produto</h4>
+                        <div id="sales-product-breakdown" class="space-y-3">
+                            <p class="text-gray-500">Nenhuma venda no período selecionado.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="admin-user-management-section" class="hidden mb-10">
                     <h3 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-3">Gerenciar Administradores</h3>
                     <form id="add-admin-form" class="mb-8 p-6 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
                         <h4 class="text-xl font-medium mb-4 text-gray-700">Adicionar Novo Admin</h4>
@@ -440,6 +486,7 @@
         const adminInfoSectionMenu = document.getElementById('admin-info-section-menu');
         const adminEmailDisplayMenu = document.getElementById('admin-email-display-menu');
         const adminLogoutButtonMenu = document.getElementById('admin-logout-button-menu');
+        const adminPanelLinkSideMenu = document.getElementById('admin-panel-link-side-menu');
         
         const dynamicContentArea = document.getElementById('dynamic-content-area');
         const storeView = document.getElementById('store-view');
@@ -450,8 +497,17 @@
         const checkoutView = document.getElementById('checkout-view');
         const cartViewDedicated = document.getElementById('cart-view-dedicated');
 
-
         const backToStoreButtonAdmin = document.getElementById('back-to-store-button-admin');
+
+        // Admin Panel Sections
+        const productManagementSection = document.getElementById('product-management-section');
+        const adminCashRegisterSection = document.getElementById('admin-cash-register-section');
+        const adminUserManagementSection = document.getElementById('admin-user-management-section'); // Assuming you might want this later
+
+        // Admin Panel Navigation
+        const showProductManagementBtn = document.getElementById('show-product-management-btn');
+        const showCashRegisterBtn = document.getElementById('show-cash-register-btn');
+        // const showUserManagementBtn = document.getElementById('show-user-management-btn'); // If you add this button
 
         const addProductForm = document.getElementById('add-product-form');
         const adminProductListContainer = document.getElementById('admin-product-list');
@@ -467,7 +523,6 @@
         const adminAddAnotherProductButton = document.getElementById('admin-add-another-product-button');
         const adminViewStoreAfterAddButton = document.getElementById('admin-view-store-after-add-button');
 
-        // Campos do formulário de produto para estoque e múltiplas imagens
         const productStockInput = document.getElementById('product-stock');
         const productImageMainUrlInput = document.getElementById('product-image-url');
         const productAdditionalImageUrlsInput = document.getElementById('product-additional-image-urls');
@@ -477,7 +532,6 @@
         const imagePreview = document.getElementById('image-preview');
         let uploadedImageFile = null; 
 
-        // Checkout View Elements
         const backToCartButton = document.getElementById('back-to-cart-button');
         const pixKeyTextElement = document.getElementById('pix-key-text');
         const copyPixKeyButton = document.getElementById('copy-pix-key-button');
@@ -486,7 +540,6 @@
         const checkoutItemsList = document.getElementById('checkout-items-list');
         const checkoutTotalValue = document.getElementById('checkout-total-value');
 
-        // Dedicated Cart View Elements
         const cartItemsListDedicated = document.getElementById('cart-items-list-dedicated');
         const cartTotalValueDedicated = document.getElementById('cart-total-value-dedicated');
         const cartEmptyMessageDedicated = document.getElementById('cart-empty-message-dedicated');
@@ -494,7 +547,6 @@
         const continueShoppingFromCartViewButton = document.getElementById('continue-shopping-from-cart-view');
         const cartSummaryDedicated = document.getElementById('cart-summary-dedicated');
 
-        // Search and Filter elements
         const searchProductInput = document.getElementById('search-product-input');
         const categoryFiltersContainer = document.getElementById('category-filters-container');
         const storeSectionTitle = document.getElementById('store-section-title');
@@ -503,6 +555,15 @@
         const productCategorySelect = document.getElementById('product-category-select');
         const newProductCategoryInput = document.getElementById('new-product-category-input');
         const addNewCategoryButton = document.getElementById('add-new-category-button');
+
+        // Cash Register Elements
+        const filterTodayButton = document.getElementById('filter-today');
+        const filterWeekButton = document.getElementById('filter-week');
+        const filterMonthButton = document.getElementById('filter-month');
+        const filterAllTimeButton = document.getElementById('filter-all-time');
+        const salesSummaryTotalEl = document.getElementById('sales-summary-total');
+        const salesSummaryQuantityEl = document.getElementById('sales-summary-quantity');
+        const salesProductBreakdownEl = document.getElementById('sales-product-breakdown');
 
 
         // --- ESTADO DA APLICAÇÃO ---
@@ -513,17 +574,18 @@
             { id: 'cat3', name: 'Mais Vendidos' }
         ];
         let products = [ 
-            { id: 'prod1', name: "Produto Exemplo Alfa", categoryId: 'cat2', price: 99.90, imageUrls: ["https://placehold.co/400x300/E0E7FF/4F46E5?text=Produto+Alfa+1", "https://placehold.co/400x300/E0E7FF/4F46E5?text=Produto+Alfa+2"], description: "Descrição detalhada do Produto Exemplo Alfa. Este produto é feito com materiais de alta qualidade e oferece excelente durabilidade. Ideal para diversas aplicações e gostos.", stock: 10 },
-            { id: 'prod2', name: "Produto Exemplo Beta", categoryId: 'cat1', price: 129.50, imageUrls: ["https://placehold.co/400x300/DBEAFE/1D4ED8?text=Produto+Beta"], description: "O Produto Exemplo Beta combina design moderno com funcionalidade superior. Perfeito para quem busca inovação e estilo. Aproveite esta oferta especial.", stock: 5 },
-            { id: 'prod3', name: "Produto Exemplo Gama", categoryId: 'cat2', price: 75.00, imageUrls: ["https://placehold.co/400x300/BFDBFE/1E40AF?text=Produto+Gama"], description: "Conheça o Produto Exemplo Gama, uma solução prática e eficiente para o seu dia a dia. Com garantia estendida e suporte ao cliente.", stock: 0 }, // Exemplo fora de estoque
-            { id: 'prod4', name: "Produto Exemplo Delta", categoryId: 'cat3', price: 210.00, imageUrls: ["https://placehold.co/400x300/93C5FD/1C3FAA?text=Produto+Delta", "https://placehold.co/400x300/93C5FD/1C3FAA?text=Produto+Delta+Img2", "https://placehold.co/400x300/93C5FD/1C3FAA?text=Produto+Delta+Img3"], description: "Produto Exemplo Delta: robustez e tecnologia de ponta. Indicado para uso profissional e para os entusiastas mais exigentes.", stock: 20 },
-            { id: 'prod5', name: "Produto Exemplo Epsilon", categoryId: 'cat2', price: 45.99, imageUrls: ["https://placehold.co/400x300/60A5FA/1B3A9A?text=Produto+Epsilon"], description: "Leve e compacto, o Produto Exemplo Epsilon é seu companheiro ideal para todas as horas. Fácil de transportar e usar.", stock: 15 },
-            { id: 'prod6', name: "Produto Exemplo Zeta", categoryId: 'cat1', price: 88.80, imageUrls: ["https://placehold.co/400x300/3B82F6/1A358A?text=Produto+Zeta"], description: "O Produto Exemplo Zeta oferece um excelente custo-benefício sem abrir mão da qualidade. Satisfação garantida ou seu dinheiro de volta.", stock: 8 }
+            { id: 'prod1', name: "Produto Exemplo Alfa", categoryId: 'cat2', price: 99.90, imageUrls: ["https://placehold.co/400x300/E0E7FF/4F46E5?text=Produto+Alfa+1", "https://placehold.co/400x300/E0E7FF/4F46E5?text=Produto+Alfa+2"], description: "Descrição detalhada do Produto Exemplo Alfa.", stock: 10 },
+            { id: 'prod2', name: "Produto Exemplo Beta", categoryId: 'cat1', price: 129.50, imageUrls: ["https://placehold.co/400x300/DBEAFE/1D4ED8?text=Produto+Beta"], description: "O Produto Exemplo Beta combina design moderno com funcionalidade superior.", stock: 5 },
+            { id: 'prod3', name: "Produto Exemplo Gama", categoryId: 'cat2', price: 75.00, imageUrls: ["https://placehold.co/400x300/BFDBFE/1E40AF?text=Produto+Gama"], description: "Conheça o Produto Exemplo Gama.", stock: 0 },
+            { id: 'prod4', name: "Produto Exemplo Delta", categoryId: 'cat3', price: 210.00, imageUrls: ["https://placehold.co/400x300/93C5FD/1C3FAA?text=Produto+Delta", "https://placehold.co/400x300/93C5FD/1C3FAA?text=Produto+Delta+Img2"], description: "Produto Exemplo Delta: robustez e tecnologia.", stock: 20 },
+            { id: 'prod5', name: "Produto Exemplo Epsilon", categoryId: 'cat2', price: 45.99, imageUrls: ["https://placehold.co/400x300/60A5FA/1B3A9A?text=Produto+Epsilon"], description: "Leve e compacto, o Produto Exemplo Epsilon.", stock: 15 },
+            { id: 'prod6', name: "Produto Exemplo Zeta", categoryId: 'cat1', price: 88.80, imageUrls: ["https://placehold.co/400x300/3B82F6/1A358A?text=Produto+Zeta"], description: "O Produto Exemplo Zeta oferece um excelente custo-benefício.", stock: 8 }
         ];
         let adminUsers = [
             { email: "viniciusaraujomatos1@gmail.com", password: "Belohorizonte2020@" }
         ];
         let cart = [];
+        let salesRecords = []; // Para o sistema de caixa
         let isAdminLoggedIn = false;
         let currentAdminEmail = null;
         let activeFeedbackTimeout = null; 
@@ -531,6 +593,8 @@
         let currentSearchTerm = '';
         let isEditingProduct = false;
         let currentDetailImageIndex = 0;
+        let currentAdminPanelSection = 'product-management'; // 'product-management' ou 'cash-register'
+        let currentSalesFilterPeriod = 'all-time';
 
 
         // --- CONTROLE DO MENU LATERAL ---
@@ -551,6 +615,14 @@
         openMenuButton?.addEventListener('click', openSideMenu);
         closeMenuButton?.addEventListener('click', closeSideMenu);
         sideMenuOverlay?.addEventListener('click', closeSideMenu);
+        adminPanelLinkSideMenu?.addEventListener('click', (e) => {
+            e.preventDefault();
+            if(isAdminLoggedIn) {
+                showAdminView(currentAdminEmail, currentAdminPanelSection); // Mantém a seção atual ou vai para a padrão
+            }
+            closeSideMenu();
+        });
+
 
         // --- FUNÇÕES DE RENDERIZAÇÃO E CONTROLE DE VIEW ---
         function setActiveView(activeViewElement) {
@@ -648,13 +720,18 @@
             const indicatorsContainer = document.getElementById('product-detail-image-indicators');
             const carouselControls = document.getElementById('product-detail-carousel-controls');
 
-            if (!mainImageElement || !indicatorsContainer || !carouselControls) return;
-
+            if (!mainImageElement || !indicatorsContainer || !carouselControls || !product.imageUrls || product.imageUrls.length === 0) {
+                if(mainImageElement) mainImageElement.src = 'https://placehold.co/600x400/cccccc/969696?text=Sem+Imagem';
+                if(carouselControls) carouselControls.classList.add('hidden');
+                if(indicatorsContainer) indicatorsContainer.innerHTML = '';
+                return;
+            }
+            
             mainImageElement.src = product.imageUrls[currentDetailImageIndex] || 'https://placehold.co/600x400/cccccc/969696?text=Sem+Imagem';
             mainImageElement.alt = product.name + (product.imageUrls.length > 1 ? ` - Imagem ${currentDetailImageIndex + 1}` : '');
 
             indicatorsContainer.innerHTML = '';
-            if (product.imageUrls && product.imageUrls.length > 1) {
+            if (product.imageUrls.length > 1) {
                 carouselControls.classList.remove('hidden');
                 product.imageUrls.forEach((_, index) => {
                     const dot = document.createElement('button');
@@ -675,8 +752,9 @@
             const product = products.find(p => p.id === productId);
             if (!product || !productDetailView) return;
 
-            currentDetailImageIndex = 0; // Reset index when opening a new product
+            currentDetailImageIndex = 0; 
             const isOutOfStock = product.stock <= 0;
+            const firstImage = (product.imageUrls && product.imageUrls.length > 0) ? product.imageUrls[0] : 'https://placehold.co/600x400/cccccc/969696?text=Sem+Imagem';
 
             productDetailView.innerHTML = `
                 <button id="back-to-store-from-detail" class="mb-6 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md transition duration-300 inline-flex items-center">
@@ -685,14 +763,12 @@
                 </button>
                 <div class="flex flex-col md:flex-row gap-8">
                     <div class="md:w-1/2 product-detail-image-container">
-                        <img id="product-detail-main-image" src="${product.imageUrls[0] || 'https://placehold.co/600x400/cccccc/969696?text=Sem+Imagem'}" alt="${product.name}" class="product-detail-image">
+                        <img id="product-detail-main-image" src="${firstImage}" alt="${product.name}" class="product-detail-image">
                         <div id="product-detail-carousel-controls" class="absolute inset-0 flex items-center justify-between p-2 ${product.imageUrls && product.imageUrls.length > 1 ? '' : 'hidden'}">
                             <button id="prev-image-btn" class="carousel-button">&lt;</button>
                             <button id="next-image-btn" class="carousel-button">&gt;</button>
                         </div>
-                        <div id="product-detail-image-indicators" class="image-indicators">
-                            <!-- Indicadores serão gerados por JS -->
-                        </div>
+                        <div id="product-detail-image-indicators" class="image-indicators"></div>
                          ${isOutOfStock ? '<div class="out-of-stock-overlay">Fora de Estoque</div>' : ''}
                     </div>
                     <div class="md:w-1/2 flex flex-col">
@@ -708,15 +784,17 @@
                 </div>
             `;
             setActiveView(productDetailView);
-            updateProductDetailImageView(product); // Initial call to set up carousel
+            updateProductDetailImageView(product); 
 
             document.getElementById('back-to-store-from-detail')?.addEventListener('click', showStoreView);
             
             document.getElementById('prev-image-btn')?.addEventListener('click', () => {
+                if (!product.imageUrls || product.imageUrls.length === 0) return;
                 currentDetailImageIndex = (currentDetailImageIndex - 1 + product.imageUrls.length) % product.imageUrls.length;
                 updateProductDetailImageView(product);
             });
             document.getElementById('next-image-btn')?.addEventListener('click', () => {
+                 if (!product.imageUrls || product.imageUrls.length === 0) return;
                 currentDetailImageIndex = (currentDetailImageIndex + 1) % product.imageUrls.length;
                 updateProductDetailImageView(product);
             });
@@ -732,43 +810,69 @@
             closeSideMenu();
         }
         
-        function showAdminView(adminEmail) {
+        function showAdminPanelSection(sectionId) {
+            currentAdminPanelSection = sectionId;
+            [productManagementSection, adminCashRegisterSection, adminUserManagementSection].forEach(section => {
+                if (section) section.classList.add('hidden');
+            });
+            [showProductManagementBtn, showCashRegisterBtn].forEach(button => {
+                 if(button) button.classList.remove('active');
+            });
+
+            if (sectionId === 'product-management') {
+                if(productManagementSection) productManagementSection.classList.remove('hidden');
+                if(showProductManagementBtn) showProductManagementBtn.classList.add('active');
+            } else if (sectionId === 'cash-register') {
+                if(adminCashRegisterSection) adminCashRegisterSection.classList.remove('hidden');
+                if(showCashRegisterBtn) showCashRegisterBtn.classList.add('active');
+                renderCashRegisterDisplay(currentSalesFilterPeriod); // Renderiza o caixa ao mostrar a seção
+            } else if (sectionId === 'user-management') {
+                // if(adminUserManagementSection) adminUserManagementSection.classList.remove('hidden');
+                // if(showUserManagementBtn) showUserManagementBtn.classList.add('active');
+            }
+        }
+
+        showProductManagementBtn?.addEventListener('click', () => showAdminPanelSection('product-management'));
+        showCashRegisterBtn?.addEventListener('click', () => showAdminPanelSection('cash-register'));
+
+        function showAdminView(adminEmail, sectionToShow = 'product-management') {
             isAdminLoggedIn = true;
             currentAdminEmail = adminEmail;
             setActiveView(adminPanel);
+            
             loginSectionMenu.classList.add('hidden');
             adminInfoSectionMenu.classList.remove('hidden');
+            adminPanelLinkSideMenu.classList.remove('hidden');
             adminEmailDisplayMenu.textContent = adminEmail;
+            
             document.getElementById('store-logo').textContent = "Painel Admin";
             document.getElementById('store-nav').classList.add('hidden');
             openMenuButton.classList.add('lg:hidden'); 
+            
             populateCategoryDropdown();
             renderAdminProducts();
             renderAdminUsers();
+            showAdminPanelSection(sectionToShow);
             resetProductForm(); 
             closeSideMenu();
         }
 
         function showStoreView() {
-            // isAdminLoggedIn = false; // This was causing logout on navigating to store. Keep admin logged in.
-            // currentAdminEmail = null;
             setActiveView(storeView);
-            // Only show login if not admin
             if (!isAdminLoggedIn) {
                 loginSectionMenu.classList.remove('hidden'); 
                 adminInfoSectionMenu.classList.add('hidden'); 
+                adminPanelLinkSideMenu.classList.add('hidden');
                 document.getElementById('store-logo').textContent = "LogoLoja";
-                document.getElementById('store-nav').classList.remove('hidden'); 
-                openMenuButton.classList.remove('lg:hidden'); 
             } else {
-                // If admin is logged in and viewing store, keep admin context in menu
                 loginSectionMenu.classList.add('hidden');
                 adminInfoSectionMenu.classList.remove('hidden');
+                adminPanelLinkSideMenu.classList.remove('hidden');
                 adminEmailDisplayMenu.textContent = currentAdminEmail;
-                document.getElementById('store-logo').textContent = "LogoLoja (Admin)"; // Indicate admin is viewing store
-                document.getElementById('store-nav').classList.remove('hidden');
-                openMenuButton.classList.remove('lg:hidden');
+                document.getElementById('store-logo').textContent = "LogoLoja (Admin)";
             }
+            document.getElementById('store-nav').classList.remove('hidden'); 
+            openMenuButton.classList.remove('lg:hidden'); 
             renderCategoryFilters();
             renderStoreProducts(); 
             closeSideMenu();
@@ -851,7 +955,7 @@
                     loginFeedbackMenu.textContent = "Login bem-sucedido! Carregando painel...";
                     loginFeedbackMenu.classList.add('feedback-message', 'feedback-success');
                     setTimeout(() => {
-                        showAdminView(admin.email);
+                        showAdminView(admin.email, 'product-management'); // Default to product management
                         loginFeedbackMenu.classList.add('hidden'); 
                     }, 500); 
                 } else {
@@ -862,7 +966,7 @@
         }
 
         adminLogoutButtonMenu?.addEventListener('click', () => {
-            isAdminLoggedIn = false; // Explicitly log out admin
+            isAdminLoggedIn = false; 
             currentAdminEmail = null;
             showStoreView(); 
         });
@@ -871,7 +975,6 @@
         checkoutButtonDedicated?.addEventListener('click', showCheckoutView);
         continueShoppingFromCartViewButton?.addEventListener('click', showStoreView);
 
-        // --- GERENCIAMENTO DE PRODUTOS (ADMIN) ---
         function resetProductForm() {
             addProductForm.reset();
             formProductTitle.textContent = "Adicionar Novo Produto";
@@ -883,7 +986,7 @@
             imagePreview.classList.add('hidden');
             imagePreview.src = '';
             uploadedImageFile = null;
-            productAdditionalImageUrlsInput.value = ''; // Limpa URLs adicionais
+            productAdditionalImageUrlsInput.value = ''; 
             adminAddProductFeedbackContainer.classList.add('hidden');
             isEditingProduct = false;
         }
@@ -912,11 +1015,8 @@
                 const editingId = editingProductIdInput.value;
 
                 let imageUrls = [];
-                if (uploadedImageFile) {
-                    // Se uma nova imagem foi carregada, ela se torna a principal.
-                    // A URL será um blob local, para aplicações reais, seria um upload para servidor.
-                    // Por simplicidade, vamos usar o URL.createObjectURL que já está sendo feito.
-                    imageUrls.push(imagePreview.src); // Usa o src da preview que é o blob URL
+                if (uploadedImageFile && imagePreview.src) { // Check if imagePreview.src is valid
+                    imageUrls.push(imagePreview.src); 
                 } else if (mainImageUrl) {
                     imageUrls.push(mainImageUrl);
                 }
@@ -926,7 +1026,7 @@
                     imageUrls.push(...urls);
                 }
                 
-                if (imageUrls.length === 0) { // Se nem upload nem URL principal foram fornecidos
+                if (imageUrls.length === 0) { 
                     imageUrls.push('https://placehold.co/300x200/cccccc/969696?text=Sem+Imagem');
                 }
 
@@ -937,22 +1037,14 @@
                         if (productIndex > -1) {
                             products[productIndex] = { 
                                 ...products[productIndex], 
-                                name, 
-                                price, 
-                                categoryId, 
-                                imageUrls, // Atualiza com o novo array de URLs
-                                description,
-                                stock 
+                                name, price, categoryId, imageUrls, description, stock 
                             };
                             adminAddProductFeedbackMessage.textContent = "Produto atualizado com sucesso!";
                         }
                     } else {
                         const newProduct = {
                             id: 'prod' + (products.length + 1) + Date.now(), 
-                            name, price, categoryId,
-                            imageUrls, // Usa o novo array de URLs
-                            description,
-                            stock
+                            name, price, categoryId, imageUrls, description, stock
                         };
                         products.push(newProduct);
                         adminAddProductFeedbackMessage.textContent = "Produto adicionado com sucesso!";
@@ -988,7 +1080,6 @@
             document.getElementById('product-description').value = product.description;
             document.getElementById('product-category-select').value = product.categoryId;
             
-            // Lidar com imagens
             productImageMainUrlInput.value = (product.imageUrls && product.imageUrls.length > 0) ? product.imageUrls[0] : '';
             if (product.imageUrls && product.imageUrls.length > 0 && product.imageUrls[0]) {
                 imagePreview.src = product.imageUrls[0];
@@ -1002,7 +1093,6 @@
             const additionalUrls = (product.imageUrls && product.imageUrls.length > 1) ? product.imageUrls.slice(1).join(', ') : '';
             productAdditionalImageUrlsInput.value = additionalUrls;
 
-
             formProductTitle.textContent = "Editar Produto";
             submitProductFormButton.textContent = "Salvar Alterações";
             submitProductFormButton.classList.remove('bg-green-600', 'hover:bg-green-700');
@@ -1011,7 +1101,6 @@
             adminAddProductFeedbackContainer.classList.add('hidden'); 
             addProductForm.scrollIntoView({ behavior: 'smooth' });
         }
-
 
         addNewCategoryButton?.addEventListener('click', () => {
             const newCategoryName = newProductCategoryInput.value.trim();
@@ -1023,13 +1112,11 @@
                 productCategorySelect.value = newCategoryId; 
                 newProductCategoryInput.value = '';
             } else if (newCategoryName) {
-                // Simple modal for feedback
                 showModal("Erro", "Essa categoria já existe.");
             } else {
                  showModal("Erro", "Por favor, insira um nome para a nova categoria.");
             }
         });
-
 
         function addEventListenersToRemoveProductButtons() {
             adminProductListContainer.querySelectorAll('.remove-product-button').forEach(button => {
@@ -1037,7 +1124,6 @@
                 button.parentNode.replaceChild(newButton, button);
                 newButton.addEventListener('click', function() {
                     const productId = this.dataset.id;
-                    // Custom confirm dialog
                     showModal("Confirmar Remoção", "Tem certeza que deseja remover este produto?", () => {
                         products = products.filter(p => p.id !== productId);
                         renderAdminProducts(); 
@@ -1083,7 +1169,7 @@
                 reader.onload = (e) => {
                     imagePreview.src = e.target.result;
                     imagePreview.classList.remove('hidden');
-                    productImageMainUrlInput.value = ''; // Limpa o campo URL se uma imagem for carregada
+                    productImageMainUrlInput.value = ''; 
                 }
                 reader.readAsDataURL(file);
             } else {
@@ -1135,7 +1221,6 @@
 
         checkoutButtonSidebar?.addEventListener('click', showCartViewDedicated); 
 
-
         function handleAddToCart(productData, buttonElement) {
             if (isAdminLoggedIn) {
                 showModal("Aviso", "Funcionalidade de adicionar ao carrinho desabilitada no modo administrador.");
@@ -1161,16 +1246,15 @@
                     return;
                 }
             } else {
-                // Adiciona uma cópia do produto ao carrinho, incluindo suas URLs de imagem e estoque atual para referência
                 cart.push({ ...productInStore, quantity: 1 });
             }
             updateCartDisplay(); 
             updateCartViewDedicatedDisplay(); 
 
             if (buttonElement) {
-                const originalButtonText = buttonElement.textContent; // Might be "Adicionar ao Carrinho" or already "Adicionado!" from a previous click
+                const originalButtonText = "Adicionar ao Carrinho";
                 buttonElement.textContent = "Adicionado!";
-                buttonElement.disabled = true; // Disable briefly
+                buttonElement.disabled = true; 
                 
                 const feedbackDiv = buttonElement.nextElementSibling; 
                 if (feedbackDiv && feedbackDiv.classList.contains('add-to-cart-feedback')) {
@@ -1182,10 +1266,9 @@
                     feedbackDiv.classList.remove('hidden');
                     if(activeFeedbackTimeout) clearTimeout(activeFeedbackTimeout); 
                     const revertButtonAndHide = () => {
-                        // Re-enable button only if product is still in stock
                         const currentProductStatus = products.find(p => p.id === productData.id);
                         if (currentProductStatus && currentProductStatus.stock > 0) {
-                           buttonElement.textContent = "Adicionar ao Carrinho"; // Reset to original if needed
+                           buttonElement.textContent = originalButtonText; 
                            buttonElement.disabled = false;
                         } else {
                            buttonElement.textContent = "Fora de Estoque";
@@ -1206,11 +1289,11 @@
                         clearTimeout(activeFeedbackTimeout);
                         revertButtonAndHide();
                     });
-                } else { // Fallback if feedback div isn't structured as expected, re-enable after short delay
+                } else { 
                      setTimeout(() => {
                         const currentProductStatus = products.find(p => p.id === productData.id);
                         if (currentProductStatus && currentProductStatus.stock > 0) {
-                           buttonElement.textContent = "Adicionar ao Carrinho";
+                           buttonElement.textContent = originalButtonText;
                            buttonElement.disabled = false;
                         } else {
                            buttonElement.textContent = "Fora de Estoque";
@@ -1285,7 +1368,6 @@
             cartTotalValueDedicated.textContent = `R$ ${total.toFixed(2)}`;
             addEventListenersToRemoveFromCartButtonsDedicated();
         }
-
 
         function addEventListenersToAddToCartButtons() {
             const addToCartListButtons = document.querySelectorAll('.add-to-cart-button-list');
@@ -1380,7 +1462,6 @@
             }
         }
 
-
         copyPixKeyButton?.addEventListener('click', () => {
             pixKeyTextElement.select();
             try {
@@ -1404,43 +1485,163 @@
         });
 
         paymentConfirmedButton?.addEventListener('click', () => {
-            // Decrement stock for each item in cart
+            const saleDate = new Date();
+            const newSale = {
+                orderId: `order-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+                date: saleDate,
+                items: cart.map(item => ({
+                    productId: item.id,
+                    name: item.name,
+                    quantity: item.quantity,
+                    priceAtSale: item.price, 
+                    totalValue: item.price * item.quantity
+                })),
+                totalAmount: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+            };
+            salesRecords.push(newSale);
+            // console.log("Nova Venda Registrada:", newSale);
+            // console.log("Todos os Registros de Venda:", salesRecords);
+
             cart.forEach(cartItem => {
                 const productInStore = products.find(p => p.id === cartItem.id);
                 if (productInStore) {
                     if (productInStore.stock >= cartItem.quantity) {
                         productInStore.stock -= cartItem.quantity;
                     } else {
-                        // Not enough stock, sell what's available (or handle error)
-                        console.warn(`Estoque insuficiente para ${productInStore.name} no momento da compra. Vendendo ${productInStore.stock} unidades.`);
                         productInStore.stock = 0; 
                     }
                 }
             });
 
-            // Show confirmation modal
             showModal("Pagamento Confirmado!", 
                       "Obrigado por sua compra! Seu pedido será processado em breve.", 
                       () => {
                             cart = []; 
                             updateCartDisplay();
                             updateCartViewDedicatedDisplay();
-                            renderStoreProducts(); // Update store view to reflect new stock
-                            renderAdminProducts(); // Update admin panel if visible
+                            renderStoreProducts(); 
+                            renderAdminProducts(); 
+                            if(adminPanel.classList.contains('hidden') === false) { // Se o painel admin estiver ativo
+                                renderCashRegisterDisplay(currentSalesFilterPeriod); // Atualiza o caixa
+                            }
                             showStoreView(); 
                       }, 
-                      false); // No cancel button for this modal
+                      false); 
         });
+
+        // --- Sistema de Caixa ---
+        function getStartOfWeek(date) {
+            const d = new Date(date);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+            return new Date(d.setDate(diff));
+        }
+
+        function filterSalesByPeriod(period) {
+            const now = new Date();
+            let startDate, endDate = new Date(now); // endDate is generally now or end of today/week/month
+
+            switch (period) {
+                case 'today':
+                    startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                    endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+                    break;
+                case 'week':
+                    startDate = getStartOfWeek(now);
+                    startDate.setHours(0, 0, 0, 0);
+                    // endDate is end of today, or could be end of week:
+                    // endDate = new Date(startDate);
+                    // endDate.setDate(startDate.getDate() + 6);
+                    // endDate.setHours(23,59,59,999);
+                    break;
+                case 'month':
+                    startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                    // endDate is end of today, or could be end of month:
+                    // endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+                    // endDate.setHours(23,59,59,999);
+                    break;
+                case 'all-time':
+                default:
+                    return salesRecords; // No date filtering needed
+            }
+            
+            return salesRecords.filter(sale => {
+                const saleDate = new Date(sale.date);
+                return saleDate >= startDate && saleDate <= endDate;
+            });
+        }
+
+        function renderCashRegisterDisplay(period) {
+            currentSalesFilterPeriod = period;
+            const filteredSales = filterSalesByPeriod(period);
+
+            let totalSalesValue = 0;
+            let totalProductsSold = 0;
+            const productBreakdown = {};
+
+            filteredSales.forEach(sale => {
+                totalSalesValue += sale.totalAmount;
+                sale.items.forEach(item => {
+                    totalProductsSold += item.quantity;
+                    if (!productBreakdown[item.productId]) {
+                        productBreakdown[item.productId] = {
+                            name: item.name,
+                            quantity: 0,
+                            totalValue: 0
+                        };
+                    }
+                    productBreakdown[item.productId].quantity += item.quantity;
+                    productBreakdown[item.productId].totalValue += item.totalValue;
+                });
+            });
+
+            salesSummaryTotalEl.textContent = `R$ ${totalSalesValue.toFixed(2)}`;
+            salesSummaryQuantityEl.textContent = totalProductsSold;
+
+            salesProductBreakdownEl.innerHTML = '';
+            if (Object.keys(productBreakdown).length === 0) {
+                salesProductBreakdownEl.innerHTML = '<p class="text-gray-500">Nenhuma venda no período selecionado.</p>';
+            } else {
+                for (const productId in productBreakdown) {
+                    const item = productBreakdown[productId];
+                    const breakdownItemDiv = document.createElement('div');
+                    breakdownItemDiv.className = 'p-3 border rounded-md bg-gray-50 flex justify-between items-center';
+                    breakdownItemDiv.innerHTML = `
+                        <div>
+                            <h5 class="font-medium text-gray-700">${item.name}</h5>
+                            <p class="text-sm text-gray-500">Quantidade Vendida: ${item.quantity}</p>
+                        </div>
+                        <p class="text-lg font-semibold text-green-600">R$ ${item.totalValue.toFixed(2)}</p>
+                    `;
+                    salesProductBreakdownEl.appendChild(breakdownItemDiv);
+                }
+            }
+            
+            // Update active state for filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-blue-500', 'text-white'));
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.add('bg-gray-200', 'text-gray-700'));
+            
+            const activeBtn = document.getElementById(`filter-${period.replace('-', '')}`); // all-time to alltime
+            if (activeBtn) {
+                activeBtn.classList.add('active', 'bg-blue-500', 'text-white');
+                activeBtn.classList.remove('bg-gray-200', 'text-gray-700');
+            }
+        }
+
+        filterTodayButton?.addEventListener('click', () => renderCashRegisterDisplay('today'));
+        filterWeekButton?.addEventListener('click', () => renderCashRegisterDisplay('week'));
+        filterMonthButton?.addEventListener('click', () => renderCashRegisterDisplay('month'));
+        filterAllTimeButton?.addEventListener('click', () => renderCashRegisterDisplay('all-time'));
+
 
         // --- MODAL GENÉRICO ---
         function showModal(title, message, onConfirm, showCancel = true) {
-            // Remove qualquer modal existente
-            const existingModal = document.getElementById('generic-modal');
-            if (existingModal) existingModal.remove();
+            const existingModalOverlay = document.getElementById('generic-modal-overlay');
+            if (existingModalOverlay) existingModalOverlay.remove();
 
             const modalOverlay = document.createElement('div');
             modalOverlay.id = 'generic-modal-overlay';
-            modalOverlay.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+            modalOverlay.className = 'fixed inset-0 bg-black bg-opacity-50 z-[100] flex items-center justify-center p-4'; // Higher z-index
             
             const modalContent = document.createElement('div');
             modalContent.id = 'generic-modal';
@@ -1468,7 +1669,6 @@
             if (showCancel) {
                 document.getElementById('modal-cancel-button').addEventListener('click', closeModal);
             }
-            // Close on overlay click
             modalOverlay.addEventListener('click', (e) => {
                 if (e.target === modalOverlay) {
                     closeModal();
@@ -1497,14 +1697,9 @@
             renderStoreProducts();
         });
 
-
+        // --- INICIALIZAÇÃO ---
         showStoreView(); 
         updateCartDisplay(); 
-
-        // Removido o alert do Fale Conosco, pois o link agora vai para o WhatsApp
-        // document.getElementById('contact-us-link-mainnav')?.addEventListener('click', (e) => {
-        // e.preventDefault(); alert('Funcionalidade "Fale Conosco (SAC)" a ser implementada.');
-        // });
         
         document.getElementById('store-logo')?.addEventListener('click', (e) => {
             e.preventDefault();
