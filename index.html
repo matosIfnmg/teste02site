@@ -22,10 +22,10 @@
             overflow-x: hidden; 
         }
         .main-content-area {
-             min-height: calc(100vh - 4rem); /* Ajustado para a remoção da top-bar */
+             min-height: calc(100vh - 4rem); 
         }
         .main-content-section {
-            min-height: calc(100vh - 4rem); /* Ajustado */
+            min-height: calc(100vh - 4rem); 
         }
         .product-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -94,6 +94,15 @@
         .category-filter-button.active {
             background-color: #3B82F6; /* bg-blue-600 */
             color: white;
+        }
+        /* Estilo para feedback de adição de produto no admin */
+        #admin-add-product-feedback-container {
+            padding: 1rem;
+            border: 1px solid #6EE7B7; /* green-300 */
+            background-color: #D1FAE5; /* green-100 */
+            color: #065F46; /* green-700 */
+            border-radius: 0.375rem; /* rounded-md */
+            margin-top: 1rem;
         }
     </style>
 </head>
@@ -175,11 +184,9 @@
                     <div class="mb-6">
                         <input type="search" id="search-product-input" placeholder="Buscar produtos..." class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     </div>
-                    <div id="category-filters-container" class="mb-6 flex flex-wrap gap-2">
-                        </div>
+                    <div id="category-filters-container" class="mb-6 flex flex-wrap gap-2"></div>
                     <h1 id="store-section-title" class="text-3xl font-bold mb-8 text-center text-gray-700">Nossos Produtos</h1>
-                    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        </div>
+                    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                     <p id="no-products-found" class="text-center text-gray-500 hidden">Nenhum produto encontrado.</p>
                 </main>
                 <aside id="cart-sidebar" class="w-full lg:w-1/4 bg-white p-6 rounded-lg shadow-lg lg:sticky lg:top-20 main-content-section" style="max-height: calc(100vh - 6rem); overflow-y: auto;">
@@ -207,9 +214,9 @@
                 </div>
                 <section id="product-management" class="mb-10">
                     <h3 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-3">Gerenciar Produtos</h3>
-                    <form id="add-product-form" class="mb-8 p-6 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
-                        <h4 class="text-xl font-medium mb-4 text-gray-700">Adicionar Novo Produto</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <form id="add-product-form" class="mb-4 p-6 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
+                        <h4 id="form-product-title" class="text-xl font-medium mb-4 text-gray-700">Adicionar Novo Produto</h4>
+                        <input type="hidden" id="editing-product-id"> <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div>
                                 <label for="product-name" class="block text-sm font-medium text-gray-600 mb-1">Nome</label>
                                 <input type="text" id="product-name" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
@@ -221,8 +228,7 @@
                         </div>
                          <div class="mb-4">
                             <label for="product-category-select" class="block text-sm font-medium text-gray-600 mb-1">Categoria</label>
-                            <select id="product-category-select" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                </select>
+                            <select id="product-category-select" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"></select>
                         </div>
                         <div class="mb-4">
                             <label for="new-product-category-input" class="block text-sm font-medium text-gray-600 mb-1">Ou Nova Categoria</label>
@@ -244,9 +250,20 @@
                             <label for="product-description" class="block text-sm font-medium text-gray-600 mb-1">Descrição</label>
                             <textarea id="product-description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"></textarea>
                         </div>
-                        <button type="submit" class="w-full md:w-auto bg-green-600 text-white py-2 px-6 rounded-md hover:bg-green-700">Adicionar Produto</button>
+                        <div class="flex gap-3">
+                            <button type="submit" id="submit-product-form-button" class="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-md">Adicionar Produto</button>
+                            <button type="button" id="cancel-edit-product-button" class="hidden bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-md">Cancelar Edição</button>
+                        </div>
                     </form>
-                    <h4 class="text-xl font-medium mb-4 text-gray-700">Produtos Cadastrados</h4>
+                    <div id="admin-add-product-feedback-container" class="hidden">
+                        <p id="admin-add-product-feedback-message" class="font-semibold"></p>
+                        <div class="mt-2">
+                            <button id="admin-add-another-product-button" class="bg-blue-500 hover:bg-blue-600 text-white text-sm py-1 px-3 rounded-md mr-2">Adicionar outro produto?</button>
+                            <button id="admin-view-store-after-add-button" class="bg-gray-500 hover:bg-gray-600 text-white text-sm py-1 px-3 rounded-md">Ver Loja</button>
+                        </div>
+                    </div>
+
+                    <h4 class="text-xl font-medium mb-4 mt-8 text-gray-700">Produtos Cadastrados</h4>
                     <div id="admin-product-list" class="space-y-4">
                         <p id="no-admin-products" class="text-gray-500">Nenhum produto.</p>
                     </div>
@@ -382,6 +399,15 @@
         const noAdminProductsMessage = document.getElementById('no-admin-products');
         const addAdminForm = document.getElementById('add-admin-form');
         const adminUsersListContainer = document.getElementById('admin-users-list');
+        const formProductTitle = document.getElementById('form-product-title');
+        const submitProductFormButton = document.getElementById('submit-product-form-button');
+        const cancelEditProductButton = document.getElementById('cancel-edit-product-button');
+        const editingProductIdInput = document.getElementById('editing-product-id');
+        const adminAddProductFeedbackContainer = document.getElementById('admin-add-product-feedback-container');
+        const adminAddProductFeedbackMessage = document.getElementById('admin-add-product-feedback-message');
+        const adminAddAnotherProductButton = document.getElementById('admin-add-another-product-button');
+        const adminViewStoreAfterAddButton = document.getElementById('admin-view-store-after-add-button');
+
         
         const imageDropZone = document.getElementById('image-drop-zone');
         const productImageFileInput = document.getElementById('product-image-file');
@@ -418,7 +444,7 @@
 
         // --- ESTADO DA APLICAÇÃO ---
         let categories = [
-            { id: 'cat0', name: 'Todas as Categorias' }, // Special category for showing all
+            { id: 'cat0', name: 'Todas as Categorias' }, 
             { id: 'cat1', name: 'Destaques da Semana' },
             { id: 'cat2', name: 'Novidades' },
             { id: 'cat3', name: 'Mais Vendidos' }
@@ -438,8 +464,9 @@
         let isAdminLoggedIn = false;
         let currentAdminEmail = null;
         let activeFeedbackTimeout = null; 
-        let currentCategoryFilter = 'cat0'; // Default to "Todas as Categorias"
+        let currentCategoryFilter = 'cat0'; 
         let currentSearchTerm = '';
+        let isEditingProduct = false;
 
 
         // --- CONTROLE DO MENU LATERAL ---
@@ -471,17 +498,12 @@
         
         function renderStoreProducts() {
             if (!productGrid || !noProductsFoundMessage || !storeSectionTitle) return;
-            
             productGrid.innerHTML = '';
-            
             let filteredProducts = products;
 
-            // Aplicar filtro de categoria (exceto se for "Todas as Categorias")
             if (currentCategoryFilter !== 'cat0') {
                 filteredProducts = filteredProducts.filter(p => p.categoryId === currentCategoryFilter);
             }
-
-            // Aplicar filtro de busca
             if (currentSearchTerm) {
                 const searchTermLower = currentSearchTerm.toLowerCase();
                 filteredProducts = filteredProducts.filter(p => 
@@ -492,7 +514,6 @@
             
             const selectedCategory = categories.find(c => c.id === currentCategoryFilter);
             storeSectionTitle.textContent = selectedCategory ? selectedCategory.name : "Nossos Produtos";
-
 
             if (filteredProducts.length === 0) {
                 noProductsFoundMessage.classList.remove('hidden');
@@ -531,7 +552,7 @@
                 button.dataset.categoryId = category.id;
                 button.addEventListener('click', () => {
                     currentCategoryFilter = category.id;
-                    renderCategoryFilters(); // Re-render para atualizar o botão ativo
+                    renderCategoryFilters(); 
                     renderStoreProducts();
                 });
                 categoryFiltersContainer.appendChild(button);
@@ -541,7 +562,7 @@
         function populateCategoryDropdown() {
             if (!productCategorySelect) return;
             productCategorySelect.innerHTML = '';
-            categories.filter(c => c.id !== 'cat0').forEach(category => { // Não incluir "Todas as Categorias" no admin
+            categories.filter(c => c.id !== 'cat0').forEach(category => { 
                 const option = document.createElement('option');
                 option.value = category.id;
                 option.textContent = category.name;
@@ -601,6 +622,7 @@
             populateCategoryDropdown();
             renderAdminProducts();
             renderAdminUsers();
+            resetProductForm(); // Garante que o formulário esteja limpo ao entrar no painel
             closeSideMenu();
         }
 
@@ -710,6 +732,32 @@
         checkoutButtonDedicated?.addEventListener('click', showCheckoutView);
         continueShoppingFromCartViewButton?.addEventListener('click', showStoreView);
 
+        // --- GERENCIAMENTO DE PRODUTOS (ADMIN) ---
+        function resetProductForm() {
+            addProductForm.reset();
+            formProductTitle.textContent = "Adicionar Novo Produto";
+            submitProductFormButton.textContent = "Adicionar Produto";
+            submitProductFormButton.classList.remove('bg-yellow-500', 'hover:bg-yellow-600');
+            submitProductFormButton.classList.add('bg-green-600', 'hover:bg-green-700');
+            cancelEditProductButton.classList.add('hidden');
+            editingProductIdInput.value = '';
+            imagePreview.classList.add('hidden');
+            imagePreview.src = '';
+            uploadedImageFile = null;
+            adminAddProductFeedbackContainer.classList.add('hidden');
+            isEditingProduct = false;
+        }
+
+        cancelEditProductButton?.addEventListener('click', resetProductForm);
+        adminAddAnotherProductButton?.addEventListener('click', () => {
+            adminAddProductFeedbackContainer.classList.add('hidden');
+            resetProductForm();
+        });
+        adminViewStoreAfterAddButton?.addEventListener('click', () => {
+            adminAddProductFeedbackContainer.classList.add('hidden');
+            showStoreView();
+        });
+
 
         if (addProductForm) {
             addProductForm.addEventListener('submit', function(event) {
@@ -719,24 +767,41 @@
                 let imageUrl = document.getElementById('product-image-url').value;
                 const description = document.getElementById('product-description').value;
                 const categoryId = productCategorySelect.value;
+                const editingId = editingProductIdInput.value;
 
                 if (uploadedImageFile) {
                     if (!imageUrl) imageUrl = URL.createObjectURL(uploadedImageFile);
                 }
+
                 if (name && price > 0 && categoryId) {
-                    const newProduct = {
-                        id: 'prod' + (products.length + 1) + Date.now(), 
-                        name, price, categoryId,
-                        imageUrl: imageUrl || 'https://placehold.co/300x200/cccccc/969696?text=Nova+Imagem',
-                        description
-                    };
-                    products.push(newProduct);
-                    renderAdminProducts(); renderStoreProducts(); renderCategoryFilters();
-                    addProductForm.reset();
-                    imagePreview.classList.add('hidden'); imagePreview.src = '';
-                    uploadedImageFile = null;
-                    document.getElementById('product-image-url').value = ''; 
+                    if (isEditingProduct && editingId) {
+                        // Editando produto existente
+                        const productIndex = products.findIndex(p => p.id === editingId);
+                        if (productIndex > -1) {
+                            products[productIndex] = { ...products[productIndex], name, price, categoryId, imageUrl: imageUrl || products[productIndex].imageUrl, description };
+                            adminAddProductFeedbackMessage.textContent = "Produto atualizado com sucesso!";
+                        }
+                    } else {
+                        // Adicionando novo produto
+                        const newProduct = {
+                            id: 'prod' + (products.length + 1) + Date.now(), 
+                            name, price, categoryId,
+                            imageUrl: imageUrl || 'https://placehold.co/300x200/cccccc/969696?text=Nova+Imagem',
+                            description
+                        };
+                        products.push(newProduct);
+                        adminAddProductFeedbackMessage.textContent = "Produto adicionado com sucesso!";
+                    }
+                    
+                    adminAddProductFeedbackContainer.classList.remove('hidden');
+                    renderAdminProducts(); 
+                    renderStoreProducts(); 
+                    renderCategoryFilters();
+                    resetProductForm(); // Limpa o formulário para adicionar ou após editar
                 } else {
+                    const tempFeedback = addProductForm.querySelector('.product-add-feedback');
+                    if(tempFeedback) tempFeedback.remove();
+
                     const feedback = document.createElement('p');
                     feedback.textContent = "Por favor, preencha nome, preço e selecione uma categoria.";
                     feedback.className = "text-red-500 text-sm mt-2 product-add-feedback";
@@ -746,14 +811,45 @@
             });
         }
         
+        function populateEditForm(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            isEditingProduct = true;
+            editingProductIdInput.value = product.id;
+            document.getElementById('product-name').value = product.name;
+            document.getElementById('product-price').value = product.price;
+            document.getElementById('product-description').value = product.description;
+            document.getElementById('product-category-select').value = product.categoryId;
+            document.getElementById('product-image-url').value = product.imageUrl || '';
+            
+            if (product.imageUrl) {
+                imagePreview.src = product.imageUrl;
+                imagePreview.classList.remove('hidden');
+            } else {
+                imagePreview.classList.add('hidden');
+                imagePreview.src = '';
+            }
+            uploadedImageFile = null; // Reseta se houver arquivo carregado anteriormente
+
+            formProductTitle.textContent = "Editar Produto";
+            submitProductFormButton.textContent = "Salvar Alterações";
+            submitProductFormButton.classList.remove('bg-green-600', 'hover:bg-green-700');
+            submitProductFormButton.classList.add('bg-yellow-500', 'hover:bg-yellow-600');
+            cancelEditProductButton.classList.remove('hidden');
+            adminAddProductFeedbackContainer.classList.add('hidden'); // Esconde feedback de adição
+            addProductForm.scrollIntoView({ behavior: 'smooth' });
+        }
+
+
         addNewCategoryButton?.addEventListener('click', () => {
             const newCategoryName = newProductCategoryInput.value.trim();
             if (newCategoryName && !categories.find(c => c.name.toLowerCase() === newCategoryName.toLowerCase())) {
                 const newCategoryId = 'cat' + Date.now();
                 categories.push({ id: newCategoryId, name: newCategoryName });
                 populateCategoryDropdown();
-                renderCategoryFilters(); // Atualiza os filtros na loja
-                productCategorySelect.value = newCategoryId; // Seleciona a nova categoria
+                renderCategoryFilters(); 
+                productCategorySelect.value = newCategoryId; 
                 newProductCategoryInput.value = '';
             } else if (newCategoryName) {
                 alert('Essa categoria já existe.');
@@ -764,14 +860,28 @@
 
 
         function addEventListenersToRemoveProductButtons() {
-            const removeButtons = adminProductListContainer.querySelectorAll('.remove-product-button');
-            removeButtons.forEach(button => {
+            adminProductListContainer.querySelectorAll('.remove-product-button').forEach(button => {
                 const newButton = button.cloneNode(true);
                 button.parentNode.replaceChild(newButton, button);
                 newButton.addEventListener('click', function() {
                     const productId = this.dataset.id;
-                    products = products.filter(p => p.id !== productId);
-                    renderAdminProducts(); renderStoreProducts(); 
+                    if (confirm('Tem certeza que deseja remover este produto?')) {
+                        products = products.filter(p => p.id !== productId);
+                        renderAdminProducts(); 
+                        renderStoreProducts(); 
+                        if (editingProductIdInput.value === productId) { // Se estiver editando o produto removido
+                            resetProductForm();
+                        }
+                    }
+                });
+            });
+
+            adminProductListContainer.querySelectorAll('.edit-product-button').forEach(button => {
+                const newButton = button.cloneNode(true);
+                button.parentNode.replaceChild(newButton, button);
+                newButton.addEventListener('click', function() {
+                    const productId = this.dataset.id;
+                    populateEditForm(productId);
                 });
             });
         }
@@ -1016,6 +1126,40 @@
                 });
             });
         }
+        
+        function renderAdminProducts() { // Atualizada para incluir botão de Editar
+            if (!adminProductListContainer || !noAdminProductsMessage) return;
+            adminProductListContainer.innerHTML = ''; 
+
+            if (products.length === 0) {
+                noAdminProductsMessage.classList.remove('hidden');
+            } else {
+                noAdminProductsMessage.classList.add('hidden');
+                products.forEach(product => {
+                    const categoryName = categories.find(c => c.id === product.categoryId)?.name || 'Sem Categoria';
+                    const productDiv = document.createElement('div');
+                    productDiv.className = 'flex justify-between items-center p-3 border border-gray-200 rounded-md bg-white shadow-sm';
+                    productDiv.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <img src="${product.imageUrl || 'https://placehold.co/60x40/cccccc/969696?text=N/A'}" alt="${product.name}" class="w-16 h-10 object-cover rounded-sm">
+                            <div>
+                                <h5 class="font-medium text-gray-700">${product.name}</h5>
+                                <p class="text-xs text-gray-500">Categoria: ${categoryName}</p>
+                                <p class="text-sm text-blue-500">R$ ${product.price.toFixed(2)}</p>
+                                <p class="text-xs text-gray-500 truncate w-64" title="${product.description}">${product.description || 'Sem descrição'}</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button data-id="${product.id}" class="edit-product-button text-blue-500 hover:text-blue-700 font-medium py-1 px-3 rounded-md hover:bg-blue-100 transition-colors text-xs">Editar</button>
+                            <button data-id="${product.id}" class="remove-product-button text-red-500 hover:text-red-700 font-medium py-1 px-3 rounded-md hover:bg-red-100 transition-colors text-xs">Remover</button>
+                        </div>
+                    `;
+                    adminProductListContainer.appendChild(productDiv);
+                });
+            }
+            addEventListenersToRemoveProductButtons(); // Também adiciona listeners para os botões de editar
+        }
+
 
         copyPixKeyButton?.addEventListener('click', () => {
             pixKeyTextElement.select();
@@ -1088,16 +1232,16 @@
         
         document.getElementById('store-logo')?.addEventListener('click', (e) => {
             e.preventDefault();
-            currentCategoryFilter = 'cat0'; // Reset category filter
-            currentSearchTerm = ''; // Reset search term
+            currentCategoryFilter = 'cat0'; 
+            currentSearchTerm = ''; 
             if(searchProductInput) searchProductInput.value = '';
             showStoreView();
         });
         document.querySelector('#store-nav a[onclick="showStoreView()"]')?.addEventListener('click', (e) => { 
              if (e.target.textContent === "Início") {
                 e.preventDefault();
-                currentCategoryFilter = 'cat0'; // Reset category filter
-                currentSearchTerm = ''; // Reset search term
+                currentCategoryFilter = 'cat0'; 
+                currentSearchTerm = ''; 
                 if(searchProductInput) searchProductInput.value = '';
                 showStoreView();
             }
