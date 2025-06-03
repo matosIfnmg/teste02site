@@ -1822,7 +1822,8 @@
                 deliveryMethod: deliveryOption,
                 shippingAddress: shippingAddress, // Nulo se for pickup
                 status: deliveryOption === 'pickup' ? 'awaiting_pickup' : 'payment_confirmed', // Status inicial
-                allowReview: false // Só permite review após conclusão
+                allowReview: false, // Só permite review após conclusão
+                clientConfirmedDelivery: false // Nova flag
             };
             salesRecords.push(newSale);
             loggedInClient.orders.push(newSale.orderId); // Adiciona ID do pedido ao cliente
@@ -2152,13 +2153,25 @@
             const order = salesRecords.find(o => o.orderId === orderId);
             if (order) {
                 order.status = newStatus;
-                if (newStatus === 'completed' || newStatus === 'pickup_completed') {
+                // Se o admin marcar como concluído, também confirma a entrega pelo cliente (para liberar review)
+                if (newStatus === 'completed' && order.deliveryMethod === 'delivery') {
+                    order.clientConfirmedDelivery = true;
                     order.allowReview = true;
+                } else if (newStatus === 'pickup_completed') {
+                     order.allowReview = true;
+                } else if (newStatus !== 'shipped' && order.deliveryMethod === 'delivery') { 
+                    // Se não for 'shipped' (e for delivery), e não for 'completed', reseta a confirmação do cliente
+                    // Isso é para o caso do admin reverter um status 'completed'
+                    order.clientConfirmedDelivery = false;
+                    order.allowReview = false;
+                } else if (order.deliveryMethod === 'delivery' && newStatus === 'shipped') {
+                    // Se for 'shipped', não mexe no allowReview ainda, espera confirmação do cliente
+                    order.clientConfirmedDelivery = false; // Garante que está falso
+                    order.allowReview = false;
                 } else {
-                    order.allowReview = false; // Se reverter status, não permite mais review
+                     order.allowReview = false;
                 }
-                // console.log(`Status do pedido ${orderId} atualizado para ${newStatus}`);
-                // Potencialmente re-renderizar a lista de pedidos do cliente se estiver visível
+
                 if (clientOrdersView.classList.contains('hidden') === false && loggedInClient && loggedInClient.orders.includes(orderId)) {
                     renderClientOrders();
                 }
@@ -2187,15 +2200,23 @@
                 let itemsHtml = order.items.map(item => `<li>${item.name} (Qtd: ${item.quantity})</li>`).join('');
                 
                 let statusText = order.status;
-                switch(order.status) {
-                    case 'payment_confirmed': statusText = 'Pagamento Confirmado'; break;
-                    case 'in_preparation': statusText = 'Em Preparação'; break;
-                    case 'shipped': statusText = 'Enviado'; break;
-                    case 'completed': statusText = 'Concluído (Entregue)'; break;
-                    case 'awaiting_pickup': statusText = 'Aguardando Retirada'; break;
-                    case 'pickup_completed': statusText = 'Retirada Finalizada'; break;
-                    case 'canceled': statusText = 'Cancelado'; break;
+                // Mapeamento de status para texto amigável
+                const statusMap = {
+                    'payment_confirmed': 'Pagamento Confirmado',
+                    'in_preparation': 'Em Preparação',
+                    'shipped': 'Enviado',
+                    'completed': 'Concluído (Entregue)',
+                    'awaiting_pickup': 'Aguardando Retirada',
+                    'pickup_completed': 'Retirada Finalizada',
+                    'canceled': 'Cancelado'
+                };
+                statusText = statusMap[order.status] || order.status;
+
+                let confirmDeliveryButtonHtml = '';
+                if (order.deliveryMethod === 'delivery' && order.status === 'shipped' && !order.clientConfirmedDelivery) {
+                    confirmDeliveryButtonHtml = `<button class="confirm-delivery-btn mt-2 bg-teal-500 hover:bg-teal-600 text-white text-xs py-1 px-2 rounded" data-order-id="${order.orderId}">Confirmar Entrega</button>`;
                 }
+
 
                 orderDiv.innerHTML = `
                     <div class="flex justify-between items-start mb-2">
@@ -2207,6 +2228,7 @@
                         <p class="font-bold text-lg text-blue-600">R$ ${order.totalAmount.toFixed(2)}</p>
                     </div>
                     <ul class="text-xs list-disc pl-5 mt-1 text-gray-600">${itemsHtml}</ul>
+                    ${confirmDeliveryButtonHtml}
                     ${order.allowReview ? `<div id="review-section-${order.orderId}" class="mt-3 pt-3 border-t"></div>` : ''}
                 `;
                 clientOrdersListContainer.appendChild(orderDiv);
@@ -2215,7 +2237,27 @@
                     renderReviewFormForOrder(order, `review-section-${order.orderId}`);
                 }
             });
+
+            // Adiciona event listeners para os botões de confirmar entrega
+            document.querySelectorAll('.confirm-delivery-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const orderId = this.dataset.orderId;
+                    handleClientConfirmDelivery(orderId);
+                });
+            });
         }
+        
+        function handleClientConfirmDelivery(orderId) {
+            const order = salesRecords.find(o => o.orderId === orderId);
+            if (order && order.deliveryMethod === 'delivery' && order.status === 'shipped') {
+                order.clientConfirmedDelivery = true;
+                order.allowReview = true; // Libera avaliação após confirmação
+                order.status = 'completed'; // Opcional: Mudar status para 'completed' aqui também
+                renderClientOrders(); // Re-renderiza a lista de pedidos do cliente
+                showModal("Entrega Confirmada", "Obrigado por confirmar o recebimento do seu pedido! Agora você pode avaliar os produtos.", null, false);
+            }
+        }
+
 
         function renderReviewFormForOrder(order, containerId) {
             const reviewSection = document.getElementById(containerId);
@@ -2226,7 +2268,6 @@
                 const product = products.find(p => p.id === item.productId);
                 if (!product) return;
 
-                // Verifica se já existe uma avaliação do cliente para este produto neste pedido específico (ou apenas para o produto)
                 const existingReview = product.reviews.find(r => r.clientId === loggedInClient.id && r.orderId === order.orderId);
 
                 if (existingReview) {
@@ -2250,12 +2291,11 @@
                 }
             });
             
-            // Adiciona event listeners para as estrelas e forms
             document.querySelectorAll(`#${containerId} .star-rating span`).forEach(star => {
                 star.addEventListener('click', function() {
                     const ratingContainer = this.parentElement;
                     const rating = this.dataset.value;
-                    ratingContainer.dataset.rating = rating; // Armazena a avaliação
+                    ratingContainer.dataset.rating = rating; 
                     Array.from(ratingContainer.children).forEach((s, i) => {
                         s.classList.toggle('selected', i < rating);
                     });
@@ -2274,7 +2314,6 @@
                         return;
                     }
                     submitProductReview(productId, orderId, rating, comment);
-                    // Re-render this specific order's review section or the whole list
                     renderClientOrders(); 
                 });
             });
@@ -2283,13 +2322,12 @@
         function submitProductReview(productId, orderId, rating, comment) {
             const product = products.find(p => p.id === productId);
             if (product && loggedInClient) {
-                // Remove avaliação anterior do mesmo cliente para o mesmo produto no mesmo pedido, se houver
                 product.reviews = product.reviews.filter(r => !(r.clientId === loggedInClient.id && r.orderId === orderId));
                 
                 product.reviews.push({
                     clientId: loggedInClient.id,
-                    clientName: loggedInClient.name, // Opcional, para exibir nome na avaliação
-                    orderId: orderId, // Para vincular a avaliação a uma compra específica
+                    clientName: loggedInClient.name, 
+                    orderId: orderId, 
                     rating: rating,
                     comment: comment,
                     date: new Date().toISOString()
@@ -2301,7 +2339,7 @@
 
         // --- INICIALIZAÇÃO ---
         document.addEventListener('DOMContentLoaded', () => {
-            updateClientMenu(); // Garante que o menu do cliente esteja correto no load
+            updateClientMenu(); 
             showStoreView(); 
             updateCartDisplay(); 
         });
