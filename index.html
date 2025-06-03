@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Loja Virtual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Para garantir que as sidebars tenham uma altura mínima em telas menores e rolagem se necessário */
+        .sidebar {
+            min-height: calc(100vh - 4rem); /* Altura da viewport menos a altura do header */
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+        }
+        .main-content {
+             min-height: calc(100vh - 4rem);
+        }
+
+        /* Melhorias visuais para os cards de produto */
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-blue-600">LogoLoja</a>
+            <nav>
+                <a href="#" class="px-4 text-gray-600 hover:text-blue-500">Início</a>
+                <a href="#" class="px-4 text-gray-600 hover:text-blue-500">Produtos</a>
+                <a href="#" class="px-4 text-gray-600 hover:text-blue-500">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="flex flex-col md:flex-row container mx-auto mt-4 gap-4 px-2 md:px-0">
+
+        <aside class="w-full md:w-1/5 bg-white p-6 rounded-lg shadow-lg sidebar order-2 md:order-1">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Login</h2>
+            <form>
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-600 mb-1">Email</label>
+                    <input type="email" id="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="seu@email.com">
+                </div>
+                <div class="mb-4">
+                    <label for="senha" class="block text-sm font-medium text-gray-600 mb-1">Senha</label>
+                    <input type="password" id="senha" name="senha" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="********">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Entrar</button>
+                <p class="text-xs text-gray-500 mt-3 text-center">Não tem uma conta? <a href="#" class="text-blue-500 hover:underline">Cadastre-se</a></p>
+            </form>
+        </aside>
+
+        <main class="w-full md:w-3/5 bg-white p-6 rounded-lg shadow-lg main-content order-1 md:order-2">
+            <h1 class="text-3xl font-bold mb-8 text-center text-gray-700">Nossos Produtos</h1>
+
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-2">Destaques da Semana</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
+                        <img src="https://placehold.co/300x200/E0E7FF/4F46E5?text=Produto+1" alt="Imagem do Produto 1" class="w-full h-48 object-cover rounded-md mb-4">
+                        <h3 class="text-lg font-medium text-gray-700 mb-1">Nome do Produto A</h3>
+                        <p class="text-xl font-bold text-blue-600 mb-3">R$ 99,90</p>
+                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Adicionar ao Carrinho</button>
+                    </div>
+                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
+                        <img src="https://placehold.co/300x200/DBEAFE/1D4ED8?text=Produto+2" alt="Imagem do Produto 2" class="w-full h-48 object-cover rounded-md mb-4">
+                        <h3 class="text-lg font-medium text-gray-700 mb-1">Nome do Produto B</h3>
+                        <p class="text-xl font-bold text-blue-600 mb-3">R$ 129,50</p>
+                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Adicionar ao Carrinho</button>
+                    </div>
+                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
+                        <img src="https://placehold.co/300x200/BFDBFE/1E40AF?text=Produto+3" alt="Imagem do Produto 3" class="w-full h-48 object-cover rounded-md mb-4">
+                        <h3 class="text-lg font-medium text-gray-700 mb-1">Nome do Produto C</h3>
+                        <p class="text-xl font-bold text-blue-600 mb-3">R$ 75,00</p>
+                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-2">Novidades</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
+                        <img src="https://placehold.co/300x200/93C5FD/1C3FAA?text=Produto+4" alt="Imagem do Produto 4" class="w-full h-48 object-cover rounded-md mb-4">
+                        <h3 class="text-lg font-medium text-gray-700 mb-1">Nome do Produto D</h3>
+                        <p class="text-xl font-bold text-blue-600 mb-3">R$ 210,00</p>
+                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Adicionar ao Carrinho</button>
+                    </div>
+                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
+                        <img src="https://placehold.co/300x200/60A5FA/1B3A9A?text=Produto+5" alt="Imagem do Produto 5" class="w-full h-48 object-cover rounded-md mb-4">
+                        <h3 class="text-lg font-medium text-gray-700 mb-1">Nome do Produto E</h3>
+                        <p class="text-xl font-bold text-blue-600 mb-3">R$ 45,99</p>
+                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Adicionar ao Carrinho</button>
+                    </div>
+                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
+                        <img src="https://placehold.co/300x200/3B82F6/1A358A?text=Produto+6" alt="Imagem do Produto 6" class="w-full h-48 object-cover rounded-md mb-4">
+                        <h3 class="text-lg font-medium text-gray-700 mb-1">Nome do Produto F</h3>
+                        <p class="text-xl font-bold text-blue-600 mb-3">R$ 88,80</p>
+                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-2">Mais Vendidos</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
+                        <img src="https://placehold.co/300x200/2563EB/EFF6FF?text=Produto+7" alt="Imagem do Produto 7" class="w-full h-48 object-cover rounded-md mb-4">
+                        <h3 class="text-lg font-medium text-gray-700 mb-1">Nome do Produto G</h3>
+                        <p class="text-xl font-bold text-blue-600 mb-3">R$ 150,00</p>
+                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Adicionar ao Carrinho</button>
+                    </div>
+                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
+                        <img src="https://placehold.co/300x200/1D4ED8/DBEAFE?text=Produto+8" alt="Imagem do Produto 8" class="w-full h-48 object-cover rounded-md mb-4">
+                        <h3 class="text-lg font-medium text-gray-700 mb-1">Nome do Produto H</h3>
+                        <p class="text-xl font-bold text-blue-600 mb-3">R$ 199,90</p>
+                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Adicionar ao Carrinho</button>
+                    </div>
+                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
+                        <img src="https://placehold.co/300x200/1E40AF/BFDBFE?text=Produto+9" alt="Imagem do Produto 9" class="w-full h-48 object-cover rounded-md mb-4">
+                        <h3 class="text-lg font-medium text-gray-700 mb-1">Nome do Produto I</h3>
+                        <p class="text-xl font-bold text-blue-600 mb-3">R$ 55,25</p>
+                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <aside class="w-full md:w-1/5 bg-white p-6 rounded-lg shadow-lg sidebar order-3 md:order-3">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Carrinho</h2>
+            <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-200">
+                <div>
+                    <h4 class="font-medium text-gray-600">Produto X</h4>
+                    <p class="text-xs text-gray-500">1 x R$ 49,90</p>
+                </div>
+                <button class="text-red-500 hover:text-red-700 text-sm">Remover</button>
+            </div>
+            <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-200">
+                <div>
+                    <h4 class="font-medium text-gray-600">Produto Y Longo Nome</h4>
+                    <p class="text-xs text-gray-500">2 x R$ 25,00</p>
+                </div>
+                <button class="text-red-500 hover:text-red-700 text-sm">Remover</button>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-gray-300">
+                <div class="flex justify-between items-center font-semibold text-gray-700">
+                    <span>Total:</span>
+                    <span>R$ 99,90</span>
+                </div>
+                <button class="w-full mt-4 bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300">Finalizar Compra</button>
+            </div>
+            <div id="cart-empty-message" class="text-center text-gray-500 mt-6 hidden">
+                Seu carrinho está vazio.
+            </div>
+        </aside>
+    </div>
+
+    <footer class="bg-gray-800 text-white text-center p-6 mt-12">
+        <p>&copy; 2024 Minha Loja Virtual. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        // Script simples para simular a adição ao carrinho e mostrar mensagem de carrinho vazio
+        // Em um projeto real, você usaria JavaScript mais robusto e, possivelmente, um framework.
+
+        const cartItemsContainer = document.querySelector('aside.order-3 md\\:order-3 > div:not(.mt-6):not(#cart-empty-message)'); // Seleciona a div dos itens do carrinho
+        const cartTotalElement = document.querySelector('aside.order-3 md\\:order-3 .font-semibold.text-gray-700 span:last-child');
+        const finalizeButton = document.querySelector('aside.order-3 md\\:order-3 button.bg-orange-500');
+        const cartEmptyMessage = document.getElementById('cart-empty-message');
+        const addToCartButtons = document.querySelectorAll('main button.bg-green-500');
+
+        let cart = [];
+
+        function updateCartDisplay() {
+            if (!cartItemsContainer || !cartTotalElement || !finalizeButton || !cartEmptyMessage) {
+                console.error("Elementos do carrinho não encontrados no DOM.");
+                return;
+            }
+
+            cartItemsContainer.innerHTML = ''; // Limpa os itens atuais
+            let total = 0;
+
+            if (cart.length === 0) {
+                cartEmptyMessage.classList.remove('hidden');
+                finalizeButton.classList.add('hidden'); // Esconde o botão de finalizar se o carrinho estiver vazio
+                 if(cartTotalElement.parentElement) cartTotalElement.parentElement.classList.add('hidden');
+
+
+            } else {
+                cartEmptyMessage.classList.add('hidden');
+                finalizeButton.classList.remove('hidden');
+                if(cartTotalElement.parentElement) cartTotalElement.parentElement.classList.remove('hidden');
+
+
+                cart.forEach((item, index) => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'flex justify-between items-center mb-4 pb-2 border-b border-gray-200';
+                    itemElement.innerHTML = `
+                        <div>
+                            <h4 class="font-medium text-gray-600">${item.name}</h4>
+                            <p class="text-xs text-gray-500">${item.quantity} x R$ ${item.price.toFixed(2)}</p>
+                        </div>
+                        <button class="text-red-500 hover:text-red-700 text-sm" data-index="${index}">Remover</button>
+                    `;
+                    cartItemsContainer.appendChild(itemElement);
+                    total += item.price * item.quantity;
+                });
+            }
+            cartTotalElement.textContent = `R$ ${total.toFixed(2)}`;
+            addRemoveEventListeners();
+        }
+
+        function addRemoveEventListeners() {
+            const removeButtons = cartItemsContainer.querySelectorAll('button[data-index]');
+            removeButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const indexToRemove = parseInt(event.target.dataset.index);
+                    cart.splice(indexToRemove, 1);
+                    updateCartDisplay();
+                });
+            });
+        }
+
+
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const productCard = event.target.closest('.product-card');
+                const productName = productCard.querySelector('h3').textContent;
+                const productPriceText = productCard.querySelector('p.text-xl').textContent;
+                const productPrice = parseFloat(productPriceText.replace('R$', '').replace(',', '.').trim());
+
+                const existingItem = cart.find(item => item.name === productName);
+                if (existingItem) {
+                    existingItem.quantity++;
+                } else {
+                    cart.push({ name: productName, price: productPrice, quantity: 1 });
+                }
+                updateCartDisplay();
+            });
+        });
+
+        // Inicializa o carrinho (para mostrar a mensagem de vazio inicialmente)
+        updateCartDisplay();
+
+    </script>
+
+</body>
+</html>
