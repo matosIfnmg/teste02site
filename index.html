@@ -22,7 +22,7 @@
             overflow-x: hidden; 
         }
         .main-content-area {
-             min-height: calc(100vh - 4rem); 
+            min-height: calc(100vh - 4rem); 
         }
         .main-content-section {
             min-height: calc(100vh - 4rem); 
@@ -79,9 +79,16 @@
         #side-menu-overlay {
             transition: opacity 0.3s ease-in-out;
         }
-         .product-detail-image {
+        .product-detail-image-container {
             max-height: 400px; 
+            position: relative;
+        }
+        .product-detail-image {
+            width: 100%;
+            height: 100%;
+            max-height: 400px;
             object-fit: contain; 
+            border-radius: 0.5rem; /* rounded-lg */
         }
         .add-to-cart-feedback {
             transition: opacity 0.3s ease-in-out;
@@ -95,7 +102,6 @@
             background-color: #3B82F6; /* bg-blue-600 */
             color: white;
         }
-        /* Estilo para feedback de adição de produto no admin */
         #admin-add-product-feedback-container {
             padding: 1rem;
             border: 1px solid #6EE7B7; /* green-300 */
@@ -103,6 +109,50 @@
             color: #065F46; /* green-700 */
             border-radius: 0.375rem; /* rounded-md */
             margin-top: 1rem;
+        }
+        .out-of-stock-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.125rem; /* text-lg */
+            border-radius: 0.375rem; /* rounded-md */
+            text-align: center;
+            padding: 0.5rem;
+        }
+        .carousel-button {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 9999px; /* rounded-full */
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .carousel-button:hover {
+            background-color: rgba(0, 0, 0, 0.75);
+        }
+        .image-indicators {
+            position: absolute;
+            bottom: 0.5rem; /* bottom-2 */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem; /* space-x-2 */
+        }
+        .image-indicator-dot {
+            width: 0.5rem; /* w-2 */
+            height: 0.5rem; /* h-2 */
+            border-radius: 9999px; /* rounded-full */
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+        }
+        .image-indicator-dot.active {
+            background-color: white;
         }
     </style>
 </head>
@@ -135,8 +185,8 @@
         </div>
 
         <div id="admin-info-section-menu" class="hidden mt-4">
-             <p class="text-sm text-gray-600 mb-2">Logado como: <span id="admin-email-display-menu" class="font-medium"></span></p>
-             <button id="admin-logout-button-menu" class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-300 text-sm">Logout Admin</button>
+            <p class="text-sm text-gray-600 mb-2">Logado como: <span id="admin-email-display-menu" class="font-medium"></span></p>
+            <button id="admin-logout-button-menu" class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-300 text-sm">Logout Admin</button>
         </div>
         
         <div class="mt-6 pt-4 border-t">
@@ -163,11 +213,11 @@
             <a href="#" id="store-logo" class="text-base font-bold text-blue-600" onclick="showStoreView()">LogoLoja</a>
             <nav id="store-nav" class="hidden lg:flex items-center space-x-4"> 
                 <a href="#" class="text-gray-600 hover:text-blue-500" onclick="showStoreView()">Início</a>
-                <a href="https://wa.me/5511914505059" target="_blank" class="text-gray-600 hover:text-blue-500 flex items-center">
+                <a href="https://wa.me/5531982684415" target="_blank" class="text-gray-600 hover:text-blue-500 flex items-center">
                     <svg class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.33 3.42 16.79L2.05 22L7.31 20.62C8.75 21.38 10.36 21.82 12.04 21.82C17.5 21.82 21.95 17.37 21.95 11.91C21.95 6.45 17.5 2 12.04 2ZM12.04 20.13C10.56 20.13 9.15 19.74 7.96 19.03L7.62 18.83L4.39 19.69L5.29 16.52L5.07 16.17C4.32 14.91 3.82 13.46 3.82 11.91C3.82 7.39 7.52 3.69 12.04 3.69C16.56 3.69 20.26 7.39 20.26 11.91C20.26 16.43 16.56 20.13 12.04 20.13ZM17.46 14.47C17.24 14.36 16.05 13.79 15.86 13.73C15.67 13.66 15.53 13.62 15.38 13.84C15.24 14.06 14.81 14.59 14.67 14.73C14.53 14.87 14.39 14.91 14.17 14.8C13.94 14.69 13.01 14.35 11.92 13.38C11.07 12.61 10.53 11.7 10.36 11.41C10.18 11.12 10.31 11 10.43 10.88C10.54 10.77 10.67 10.59 10.81 10.43C10.96 10.27 11 10.16 11.07 10.02C11.14 9.88 11.09 9.74 11.04 9.63C10.98 9.52 10.55 8.46 10.38 8.06C10.21 7.66 10.03 7.71 9.89 7.7C9.77 7.7 9.61 7.7 9.46 7.7C9.31 7.7 9.06 7.77 8.84 7.99C8.62 8.21 8.05 8.74 8.05 9.88C8.05 11.02 8.88 12.1 9.02 12.24C9.16 12.38 10.55 14.52 12.68 15.43C13.64 15.84 14.3 16.08 14.79 16.26C15.51 16.52 15.99 16.49 16.35 16.43C16.75 16.36 17.64 15.79 17.83 15.29C18.02 14.8 18.02 14.39 17.97 14.29C17.92 14.18 17.68 14.07 17.46 14.47Z"></path></svg>
                     WhatsApp
                 </a>
-                <a href="#" id="contact-us-link-mainnav" class="text-gray-600 hover:text-blue-500 flex items-center">
+                <a href="https://wa.me/5531982684415" target="_blank" id="contact-us-link-mainnav" class="text-gray-600 hover:text-blue-500 flex items-center">
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                     Fale Conosco (SAC)
                 </a>
@@ -216,7 +266,8 @@
                     <h3 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-3">Gerenciar Produtos</h3>
                     <form id="add-product-form" class="mb-4 p-6 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
                         <h4 id="form-product-title" class="text-xl font-medium mb-4 text-gray-700">Adicionar Novo Produto</h4>
-                        <input type="hidden" id="editing-product-id"> <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <input type="hidden" id="editing-product-id"> 
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div>
                                 <label for="product-name" class="block text-sm font-medium text-gray-600 mb-1">Nome</label>
                                 <input type="text" id="product-name" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
@@ -225,8 +276,12 @@
                                 <label for="product-price" class="block text-sm font-medium text-gray-600 mb-1">Preço (R$)</label>
                                 <input type="number" step="0.01" id="product-price" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
                             </div>
+                            <div>
+                                <label for="product-stock" class="block text-sm font-medium text-gray-600 mb-1">Estoque</label>
+                                <input type="number" id="product-stock" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required min="0">
+                            </div>
                         </div>
-                         <div class="mb-4">
+                        <div class="mb-4">
                             <label for="product-category-select" class="block text-sm font-medium text-gray-600 mb-1">Categoria</label>
                             <select id="product-category-select" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"></select>
                         </div>
@@ -238,13 +293,17 @@
                             </div>
                         </div>
                         <div class="mb-4">
-                            <label for="product-image-url" class="block text-sm font-medium text-gray-600 mb-1">URL da Imagem</label>
-                            <input type="url" id="product-image-url" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="https://exemplo.com/imagem.jpg">
-                             <div id="image-drop-zone" class="mt-2 drop-zone">
-                                <p>Arraste e solte uma imagem aqui, ou clique para selecionar.</p>
+                            <label for="product-image-url" class="block text-sm font-medium text-gray-600 mb-1">URL da Imagem Principal</label>
+                            <input type="url" id="product-image-url" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="https://exemplo.com/imagem_principal.jpg">
+                            <div id="image-drop-zone" class="mt-2 drop-zone">
+                                <p>Arraste e solte a imagem principal aqui, ou clique para selecionar.</p>
                                 <input type="file" id="product-image-file" class="hidden" accept="image/*">
-                                <img id="image-preview" class="hidden product-image-preview" alt="Pré-visualização"/>
+                                <img id="image-preview" class="hidden product-image-preview" alt="Pré-visualização Imagem Principal"/>
                             </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="product-additional-image-urls" class="block text-sm font-medium text-gray-600 mb-1">URLs de Imagens Adicionais (separadas por vírgula)</label>
+                            <textarea id="product-additional-image-urls" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="https://exemplo.com/img2.jpg, https://exemplo.com/img3.jpg"></textarea>
                         </div>
                         <div class="mb-6">
                             <label for="product-description" class="block text-sm font-medium text-gray-600 mb-1">Descrição</label>
@@ -284,12 +343,12 @@
                         </div>
                         <button type="submit" class="w-full md:w-auto bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700">Adicionar Admin</button>
                     </form>
-                     <h4 class="text-xl font-medium mb-4 text-gray-700">Admins Cadastrados</h4>
+                    <h4 class="text-xl font-medium mb-4 text-gray-700">Admins Cadastrados</h4>
                     <div id="admin-users-list" class="space-y-2"></div>
                 </section>
             </div>
 
-             <div id="orders-view" class="hidden bg-white p-6 md:p-8 rounded-lg shadow-lg main-content-section">
+            <div id="orders-view" class="hidden bg-white p-6 md:p-8 rounded-lg shadow-lg main-content-section">
                 <h2 class="text-3xl font-bold mb-8 text-center text-gray-700">Meus Pedidos</h2>
                 <p id="orders-status-message" class="text-center text-gray-600">Selecione um status de pedido no menu lateral.</p>
             </div>
@@ -408,6 +467,10 @@
         const adminAddAnotherProductButton = document.getElementById('admin-add-another-product-button');
         const adminViewStoreAfterAddButton = document.getElementById('admin-view-store-after-add-button');
 
+        // Campos do formulário de produto para estoque e múltiplas imagens
+        const productStockInput = document.getElementById('product-stock');
+        const productImageMainUrlInput = document.getElementById('product-image-url');
+        const productAdditionalImageUrlsInput = document.getElementById('product-additional-image-urls');
         
         const imageDropZone = document.getElementById('image-drop-zone');
         const productImageFileInput = document.getElementById('product-image-file');
@@ -443,19 +506,19 @@
 
 
         // --- ESTADO DA APLICAÇÃO ---
-        let categories = [
+        let categories = [ 
             { id: 'cat0', name: 'Todas as Categorias' }, 
             { id: 'cat1', name: 'Destaques da Semana' },
             { id: 'cat2', name: 'Novidades' },
             { id: 'cat3', name: 'Mais Vendidos' }
         ];
         let products = [ 
-            { id: 'prod1', name: "Produto Exemplo Alfa", categoryId: 'cat2', price: 99.90, imageUrl: "https://placehold.co/400x300/E0E7FF/4F46E5?text=Produto+Alfa", description: "Descrição detalhada do Produto Exemplo Alfa. Este produto é feito com materiais de alta qualidade e oferece excelente durabilidade. Ideal para diversas aplicações e gostos." },
-            { id: 'prod2', name: "Produto Exemplo Beta", categoryId: 'cat1', price: 129.50, imageUrl: "https://placehold.co/400x300/DBEAFE/1D4ED8?text=Produto+Beta", description: "O Produto Exemplo Beta combina design moderno com funcionalidade superior. Perfeito para quem busca inovação e estilo. Aproveite esta oferta especial." },
-            { id: 'prod3', name: "Produto Exemplo Gama", categoryId: 'cat2', price: 75.00, imageUrl: "https://placehold.co/400x300/BFDBFE/1E40AF?text=Produto+Gama", description: "Conheça o Produto Exemplo Gama, uma solução prática e eficiente para o seu dia a dia. Com garantia estendida e suporte ao cliente." },
-            { id: 'prod4', name: "Produto Exemplo Delta", categoryId: 'cat3', price: 210.00, imageUrl: "https://placehold.co/400x300/93C5FD/1C3FAA?text=Produto+Delta", description: "Produto Exemplo Delta: robustez e tecnologia de ponta. Indicado para uso profissional e para os entusiastas mais exigentes." },
-            { id: 'prod5', name: "Produto Exemplo Epsilon", categoryId: 'cat2', price: 45.99, imageUrl: "https://placehold.co/400x300/60A5FA/1B3A9A?text=Produto+Epsilon", description: "Leve e compacto, o Produto Exemplo Epsilon é seu companheiro ideal para todas as horas. Fácil de transportar e usar." },
-            { id: 'prod6', name: "Produto Exemplo Zeta", categoryId: 'cat1', price: 88.80, imageUrl: "https://placehold.co/400x300/3B82F6/1A358A?text=Produto+Zeta", description: "O Produto Exemplo Zeta oferece um excelente custo-benefício sem abrir mão da qualidade. Satisfação garantida ou seu dinheiro de volta." }
+            { id: 'prod1', name: "Produto Exemplo Alfa", categoryId: 'cat2', price: 99.90, imageUrls: ["https://placehold.co/400x300/E0E7FF/4F46E5?text=Produto+Alfa+1", "https://placehold.co/400x300/E0E7FF/4F46E5?text=Produto+Alfa+2"], description: "Descrição detalhada do Produto Exemplo Alfa. Este produto é feito com materiais de alta qualidade e oferece excelente durabilidade. Ideal para diversas aplicações e gostos.", stock: 10 },
+            { id: 'prod2', name: "Produto Exemplo Beta", categoryId: 'cat1', price: 129.50, imageUrls: ["https://placehold.co/400x300/DBEAFE/1D4ED8?text=Produto+Beta"], description: "O Produto Exemplo Beta combina design moderno com funcionalidade superior. Perfeito para quem busca inovação e estilo. Aproveite esta oferta especial.", stock: 5 },
+            { id: 'prod3', name: "Produto Exemplo Gama", categoryId: 'cat2', price: 75.00, imageUrls: ["https://placehold.co/400x300/BFDBFE/1E40AF?text=Produto+Gama"], description: "Conheça o Produto Exemplo Gama, uma solução prática e eficiente para o seu dia a dia. Com garantia estendida e suporte ao cliente.", stock: 0 }, // Exemplo fora de estoque
+            { id: 'prod4', name: "Produto Exemplo Delta", categoryId: 'cat3', price: 210.00, imageUrls: ["https://placehold.co/400x300/93C5FD/1C3FAA?text=Produto+Delta", "https://placehold.co/400x300/93C5FD/1C3FAA?text=Produto+Delta+Img2", "https://placehold.co/400x300/93C5FD/1C3FAA?text=Produto+Delta+Img3"], description: "Produto Exemplo Delta: robustez e tecnologia de ponta. Indicado para uso profissional e para os entusiastas mais exigentes.", stock: 20 },
+            { id: 'prod5', name: "Produto Exemplo Epsilon", categoryId: 'cat2', price: 45.99, imageUrls: ["https://placehold.co/400x300/60A5FA/1B3A9A?text=Produto+Epsilon"], description: "Leve e compacto, o Produto Exemplo Epsilon é seu companheiro ideal para todas as horas. Fácil de transportar e usar.", stock: 15 },
+            { id: 'prod6', name: "Produto Exemplo Zeta", categoryId: 'cat1', price: 88.80, imageUrls: ["https://placehold.co/400x300/3B82F6/1A358A?text=Produto+Zeta"], description: "O Produto Exemplo Zeta oferece um excelente custo-benefício sem abrir mão da qualidade. Satisfação garantida ou seu dinheiro de volta.", stock: 8 }
         ];
         let adminUsers = [
             { email: "viniciusaraujomatos1@gmail.com", password: "Belohorizonte2020@" }
@@ -467,6 +530,7 @@
         let currentCategoryFilter = 'cat0'; 
         let currentSearchTerm = '';
         let isEditingProduct = false;
+        let currentDetailImageIndex = 0;
 
 
         // --- CONTROLE DO MENU LATERAL ---
@@ -523,17 +587,26 @@
                     const productCard = document.createElement('div');
                     productCard.className = "product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center";
                     productCard.dataset.id = product.id;
+                    
+                    const isOutOfStock = product.stock <= 0;
+                    const mainImageUrl = product.imageUrls && product.imageUrls.length > 0 ? product.imageUrls[0] : 'https://placehold.co/300x200/cccccc/969696?text=Sem+Imagem';
+
                     productCard.innerHTML = `
-                        <img src="${product.imageUrl || 'https://placehold.co/300x200/cccccc/969696?text=Sem+Imagem'}" alt="Imagem de ${product.name}" class="w-full h-48 object-cover rounded-md mb-4 product-image">
+                        <div class="relative w-full h-48 mb-4">
+                            <img src="${mainImageUrl}" alt="Imagem de ${product.name}" class="w-full h-full object-cover rounded-md product-image">
+                            ${isOutOfStock ? '<div class="out-of-stock-overlay">Fora de Estoque</div>' : ''}
+                        </div>
                         <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">${product.name}</h3>
                         <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ ${product.price.toFixed(2)}</p>
-                        <p class="text-xs text-gray-500 mb-2 product-description h-10 overflow-hidden" title="${product.description || ''}">${product.description.substring(0,50) + "..." || 'Sem descrição detalhada.'}</p>
-                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button-list">Adicionar ao Carrinho</button>
+                        <p class="text-xs text-gray-500 mb-2 product-description h-10 overflow-hidden" title="${product.description || ''}">${(product.description || 'Sem descrição detalhada.').substring(0,50)}...</p>
+                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button-list" ${isOutOfStock ? 'disabled' : ''}>
+                            ${isOutOfStock ? 'Fora de Estoque' : 'Adicionar ao Carrinho'}
+                        </button>
                         <div class="add-to-cart-feedback hidden mt-2 text-sm w-full"></div>
                     `;
                     productCard.addEventListener('click', (e) => {
                         if (!e.target.classList.contains('add-to-cart-button-list') && !e.target.closest('.add-to-cart-feedback')) { 
-                             showProductDetailView(product.id);
+                            showProductDetailView(product.id);
                         }
                     });
                     productGrid.appendChild(productCard);
@@ -570,10 +643,40 @@
             });
         }
 
+        function updateProductDetailImageView(product) {
+            const mainImageElement = document.getElementById('product-detail-main-image');
+            const indicatorsContainer = document.getElementById('product-detail-image-indicators');
+            const carouselControls = document.getElementById('product-detail-carousel-controls');
+
+            if (!mainImageElement || !indicatorsContainer || !carouselControls) return;
+
+            mainImageElement.src = product.imageUrls[currentDetailImageIndex] || 'https://placehold.co/600x400/cccccc/969696?text=Sem+Imagem';
+            mainImageElement.alt = product.name + (product.imageUrls.length > 1 ? ` - Imagem ${currentDetailImageIndex + 1}` : '');
+
+            indicatorsContainer.innerHTML = '';
+            if (product.imageUrls && product.imageUrls.length > 1) {
+                carouselControls.classList.remove('hidden');
+                product.imageUrls.forEach((_, index) => {
+                    const dot = document.createElement('button');
+                    dot.className = `image-indicator-dot ${index === currentDetailImageIndex ? 'active' : ''}`;
+                    dot.addEventListener('click', () => {
+                        currentDetailImageIndex = index;
+                        updateProductDetailImageView(product);
+                    });
+                    indicatorsContainer.appendChild(dot);
+                });
+            } else {
+                carouselControls.classList.add('hidden');
+            }
+        }
+
 
         function showProductDetailView(productId) {
             const product = products.find(p => p.id === productId);
             if (!product || !productDetailView) return;
+
+            currentDetailImageIndex = 0; // Reset index when opening a new product
+            const isOutOfStock = product.stock <= 0;
 
             productDetailView.innerHTML = `
                 <button id="back-to-store-from-detail" class="mb-6 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md transition duration-300 inline-flex items-center">
@@ -581,23 +684,43 @@
                     Voltar para Loja
                 </button>
                 <div class="flex flex-col md:flex-row gap-8">
-                    <div class="md:w-1/2">
-                        <img src="${product.imageUrl || 'https://placehold.co/600x400/cccccc/969696?text=Sem+Imagem'}" alt="${product.name}" class="w-full rounded-lg shadow-lg product-detail-image">
+                    <div class="md:w-1/2 product-detail-image-container">
+                        <img id="product-detail-main-image" src="${product.imageUrls[0] || 'https://placehold.co/600x400/cccccc/969696?text=Sem+Imagem'}" alt="${product.name}" class="product-detail-image">
+                        <div id="product-detail-carousel-controls" class="absolute inset-0 flex items-center justify-between p-2 ${product.imageUrls && product.imageUrls.length > 1 ? '' : 'hidden'}">
+                            <button id="prev-image-btn" class="carousel-button">&lt;</button>
+                            <button id="next-image-btn" class="carousel-button">&gt;</button>
+                        </div>
+                        <div id="product-detail-image-indicators" class="image-indicators">
+                            <!-- Indicadores serão gerados por JS -->
+                        </div>
+                         ${isOutOfStock ? '<div class="out-of-stock-overlay">Fora de Estoque</div>' : ''}
                     </div>
                     <div class="md:w-1/2 flex flex-col">
                         <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">${product.name}</h1>
                         <p class="text-2xl font-semibold text-blue-600 mb-5">R$ ${product.price.toFixed(2)}</p>
                         <p class="text-gray-600 mb-6 leading-relaxed">${product.description}</p>
-                        <button data-id="${product.id}" class="mt-auto w-full md:w-auto bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-md transition duration-300 text-lg add-to-cart-button-detail">
-                            Adicionar ao Carrinho
+                        ${isOutOfStock ? '<p class="text-red-500 font-bold text-lg mt-auto mb-3">Produto Indisponível</p>' : ''}
+                        <button data-id="${product.id}" class="mt-auto w-full md:w-auto bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-md transition duration-300 text-lg add-to-cart-button-detail" ${isOutOfStock ? 'disabled' : ''}>
+                            ${isOutOfStock ? 'Fora de Estoque' : 'Adicionar ao Carrinho'}
                         </button>
                         <div class="add-to-cart-feedback hidden mt-2 text-sm"></div>
                     </div>
                 </div>
             `;
             setActiveView(productDetailView);
+            updateProductDetailImageView(product); // Initial call to set up carousel
+
             document.getElementById('back-to-store-from-detail')?.addEventListener('click', showStoreView);
             
+            document.getElementById('prev-image-btn')?.addEventListener('click', () => {
+                currentDetailImageIndex = (currentDetailImageIndex - 1 + product.imageUrls.length) % product.imageUrls.length;
+                updateProductDetailImageView(product);
+            });
+            document.getElementById('next-image-btn')?.addEventListener('click', () => {
+                currentDetailImageIndex = (currentDetailImageIndex + 1) % product.imageUrls.length;
+                updateProductDetailImageView(product);
+            });
+
             const addToCartDetailButton = productDetailView.querySelector('.add-to-cart-button-detail');
             addToCartDetailButton?.addEventListener('click', function() {
                 const prodId = this.dataset.id;
@@ -622,19 +745,30 @@
             populateCategoryDropdown();
             renderAdminProducts();
             renderAdminUsers();
-            resetProductForm(); // Garante que o formulário esteja limpo ao entrar no painel
+            resetProductForm(); 
             closeSideMenu();
         }
 
         function showStoreView() {
-            isAdminLoggedIn = false;
-            currentAdminEmail = null;
+            // isAdminLoggedIn = false; // This was causing logout on navigating to store. Keep admin logged in.
+            // currentAdminEmail = null;
             setActiveView(storeView);
-            loginSectionMenu.classList.remove('hidden'); 
-            adminInfoSectionMenu.classList.add('hidden'); 
-            document.getElementById('store-logo').textContent = "LogoLoja";
-            document.getElementById('store-nav').classList.remove('hidden'); 
-            openMenuButton.classList.remove('lg:hidden'); 
+            // Only show login if not admin
+            if (!isAdminLoggedIn) {
+                loginSectionMenu.classList.remove('hidden'); 
+                adminInfoSectionMenu.classList.add('hidden'); 
+                document.getElementById('store-logo').textContent = "LogoLoja";
+                document.getElementById('store-nav').classList.remove('hidden'); 
+                openMenuButton.classList.remove('lg:hidden'); 
+            } else {
+                // If admin is logged in and viewing store, keep admin context in menu
+                loginSectionMenu.classList.add('hidden');
+                adminInfoSectionMenu.classList.remove('hidden');
+                adminEmailDisplayMenu.textContent = currentAdminEmail;
+                document.getElementById('store-logo').textContent = "LogoLoja (Admin)"; // Indicate admin is viewing store
+                document.getElementById('store-nav').classList.remove('hidden');
+                openMenuButton.classList.remove('lg:hidden');
+            }
             renderCategoryFilters();
             renderStoreProducts(); 
             closeSideMenu();
@@ -680,9 +814,10 @@
                 cart.forEach((item) => {
                     const itemElement = document.createElement('div');
                     itemElement.className = 'flex justify-between items-center p-4 border-b border-gray-200';
+                    const mainImageUrl = item.imageUrls && item.imageUrls.length > 0 ? item.imageUrls[0] : 'https://placehold.co/60x60/cccccc/969696?text=N/A';
                     itemElement.innerHTML = `
                         <div class="flex items-center">
-                            <img src="${item.imageUrl || 'https://placehold.co/60x60/cccccc/969696?text=N/A'}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md mr-4">
+                            <img src="${mainImageUrl}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md mr-4">
                             <div>
                                 <h4 class="font-semibold text-gray-700">${item.name}</h4>
                                 <p class="text-sm text-gray-500">Quantidade: ${item.quantity}</p>
@@ -716,8 +851,8 @@
                     loginFeedbackMenu.textContent = "Login bem-sucedido! Carregando painel...";
                     loginFeedbackMenu.classList.add('feedback-message', 'feedback-success');
                     setTimeout(() => {
-                       showAdminView(admin.email);
-                       loginFeedbackMenu.classList.add('hidden'); 
+                        showAdminView(admin.email);
+                        loginFeedbackMenu.classList.add('hidden'); 
                     }, 500); 
                 } else {
                     loginFeedbackMenu.textContent = "Email ou senha inválidos.";
@@ -726,7 +861,11 @@
             });
         }
 
-        adminLogoutButtonMenu?.addEventListener('click', () => { showStoreView(); });
+        adminLogoutButtonMenu?.addEventListener('click', () => {
+            isAdminLoggedIn = false; // Explicitly log out admin
+            currentAdminEmail = null;
+            showStoreView(); 
+        });
         backToStoreButtonAdmin?.addEventListener('click', showStoreView);
         backToCartButton?.addEventListener('click', showCartViewDedicated); 
         checkoutButtonDedicated?.addEventListener('click', showCheckoutView);
@@ -744,6 +883,7 @@
             imagePreview.classList.add('hidden');
             imagePreview.src = '';
             uploadedImageFile = null;
+            productAdditionalImageUrlsInput.value = ''; // Limpa URLs adicionais
             adminAddProductFeedbackContainer.classList.add('hidden');
             isEditingProduct = false;
         }
@@ -764,30 +904,55 @@
                 event.preventDefault();
                 const name = document.getElementById('product-name').value;
                 const price = parseFloat(document.getElementById('product-price').value);
-                let imageUrl = document.getElementById('product-image-url').value;
+                const stock = parseInt(productStockInput.value, 10);
+                let mainImageUrl = productImageMainUrlInput.value.trim();
+                const additionalUrlsString = productAdditionalImageUrlsInput.value.trim();
                 const description = document.getElementById('product-description').value;
                 const categoryId = productCategorySelect.value;
                 const editingId = editingProductIdInput.value;
 
+                let imageUrls = [];
                 if (uploadedImageFile) {
-                    if (!imageUrl) imageUrl = URL.createObjectURL(uploadedImageFile);
+                    // Se uma nova imagem foi carregada, ela se torna a principal.
+                    // A URL será um blob local, para aplicações reais, seria um upload para servidor.
+                    // Por simplicidade, vamos usar o URL.createObjectURL que já está sendo feito.
+                    imageUrls.push(imagePreview.src); // Usa o src da preview que é o blob URL
+                } else if (mainImageUrl) {
+                    imageUrls.push(mainImageUrl);
                 }
 
-                if (name && price > 0 && categoryId) {
+                if (additionalUrlsString) {
+                    const urls = additionalUrlsString.split(',').map(url => url.trim()).filter(url => url);
+                    imageUrls.push(...urls);
+                }
+                
+                if (imageUrls.length === 0) { // Se nem upload nem URL principal foram fornecidos
+                    imageUrls.push('https://placehold.co/300x200/cccccc/969696?text=Sem+Imagem');
+                }
+
+
+                if (name && price > 0 && categoryId && stock >= 0) {
                     if (isEditingProduct && editingId) {
-                        // Editando produto existente
                         const productIndex = products.findIndex(p => p.id === editingId);
                         if (productIndex > -1) {
-                            products[productIndex] = { ...products[productIndex], name, price, categoryId, imageUrl: imageUrl || products[productIndex].imageUrl, description };
+                            products[productIndex] = { 
+                                ...products[productIndex], 
+                                name, 
+                                price, 
+                                categoryId, 
+                                imageUrls, // Atualiza com o novo array de URLs
+                                description,
+                                stock 
+                            };
                             adminAddProductFeedbackMessage.textContent = "Produto atualizado com sucesso!";
                         }
                     } else {
-                        // Adicionando novo produto
                         const newProduct = {
                             id: 'prod' + (products.length + 1) + Date.now(), 
                             name, price, categoryId,
-                            imageUrl: imageUrl || 'https://placehold.co/300x200/cccccc/969696?text=Nova+Imagem',
-                            description
+                            imageUrls, // Usa o novo array de URLs
+                            description,
+                            stock
                         };
                         products.push(newProduct);
                         adminAddProductFeedbackMessage.textContent = "Produto adicionado com sucesso!";
@@ -797,13 +962,13 @@
                     renderAdminProducts(); 
                     renderStoreProducts(); 
                     renderCategoryFilters();
-                    resetProductForm(); // Limpa o formulário para adicionar ou após editar
+                    resetProductForm(); 
                 } else {
                     const tempFeedback = addProductForm.querySelector('.product-add-feedback');
                     if(tempFeedback) tempFeedback.remove();
 
                     const feedback = document.createElement('p');
-                    feedback.textContent = "Por favor, preencha nome, preço e selecione uma categoria.";
+                    feedback.textContent = "Por favor, preencha nome, preço, estoque (mínimo 0) e selecione uma categoria.";
                     feedback.className = "text-red-500 text-sm mt-2 product-add-feedback";
                     addProductForm.querySelector('button[type="submit"]').insertAdjacentElement('afterend', feedback);
                     setTimeout(() => feedback.remove(), 3000);
@@ -819,25 +984,31 @@
             editingProductIdInput.value = product.id;
             document.getElementById('product-name').value = product.name;
             document.getElementById('product-price').value = product.price;
+            productStockInput.value = product.stock;
             document.getElementById('product-description').value = product.description;
             document.getElementById('product-category-select').value = product.categoryId;
-            document.getElementById('product-image-url').value = product.imageUrl || '';
             
-            if (product.imageUrl) {
-                imagePreview.src = product.imageUrl;
+            // Lidar com imagens
+            productImageMainUrlInput.value = (product.imageUrls && product.imageUrls.length > 0) ? product.imageUrls[0] : '';
+            if (product.imageUrls && product.imageUrls.length > 0 && product.imageUrls[0]) {
+                imagePreview.src = product.imageUrls[0];
                 imagePreview.classList.remove('hidden');
             } else {
                 imagePreview.classList.add('hidden');
                 imagePreview.src = '';
             }
-            uploadedImageFile = null; // Reseta se houver arquivo carregado anteriormente
+            uploadedImageFile = null; 
+
+            const additionalUrls = (product.imageUrls && product.imageUrls.length > 1) ? product.imageUrls.slice(1).join(', ') : '';
+            productAdditionalImageUrlsInput.value = additionalUrls;
+
 
             formProductTitle.textContent = "Editar Produto";
             submitProductFormButton.textContent = "Salvar Alterações";
             submitProductFormButton.classList.remove('bg-green-600', 'hover:bg-green-700');
             submitProductFormButton.classList.add('bg-yellow-500', 'hover:bg-yellow-600');
             cancelEditProductButton.classList.remove('hidden');
-            adminAddProductFeedbackContainer.classList.add('hidden'); // Esconde feedback de adição
+            adminAddProductFeedbackContainer.classList.add('hidden'); 
             addProductForm.scrollIntoView({ behavior: 'smooth' });
         }
 
@@ -852,9 +1023,10 @@
                 productCategorySelect.value = newCategoryId; 
                 newProductCategoryInput.value = '';
             } else if (newCategoryName) {
-                alert('Essa categoria já existe.');
+                // Simple modal for feedback
+                showModal("Erro", "Essa categoria já existe.");
             } else {
-                alert('Por favor, insira um nome para a nova categoria.');
+                 showModal("Erro", "Por favor, insira um nome para a nova categoria.");
             }
         });
 
@@ -865,14 +1037,15 @@
                 button.parentNode.replaceChild(newButton, button);
                 newButton.addEventListener('click', function() {
                     const productId = this.dataset.id;
-                    if (confirm('Tem certeza que deseja remover este produto?')) {
+                    // Custom confirm dialog
+                    showModal("Confirmar Remoção", "Tem certeza que deseja remover este produto?", () => {
                         products = products.filter(p => p.id !== productId);
                         renderAdminProducts(); 
                         renderStoreProducts(); 
-                        if (editingProductIdInput.value === productId) { // Se estiver editando o produto removido
+                        if (editingProductIdInput.value === productId) { 
                             resetProductForm();
                         }
-                    }
+                    });
                 });
             });
 
@@ -910,7 +1083,7 @@
                 reader.onload = (e) => {
                     imagePreview.src = e.target.result;
                     imagePreview.classList.remove('hidden');
-                    document.getElementById('product-image-url').value = ''; 
+                    productImageMainUrlInput.value = ''; // Limpa o campo URL se uma imagem for carregada
                 }
                 reader.readAsDataURL(file);
             } else {
@@ -963,31 +1136,42 @@
         checkoutButtonSidebar?.addEventListener('click', showCartViewDedicated); 
 
 
-        function handleAddToCart(product, buttonElement) {
+        function handleAddToCart(productData, buttonElement) {
             if (isAdminLoggedIn) {
-                const feedbackDiv = document.getElementById('admin-action-feedback');
-                if (feedbackDiv) feedbackDiv.remove();
-                const feedback = document.createElement('p');
-                feedback.id = 'admin-action-feedback';
-                feedback.textContent = "Funcionalidade de adicionar ao carrinho desabilitada no modo administrador.";
-                feedback.className = "fixed bottom-4 right-4 bg-yellow-400 text-yellow-800 p-3 rounded-md shadow-lg z-50";
-                document.body.appendChild(feedback);
-                setTimeout(() => feedback.remove(), 3000);
+                showModal("Aviso", "Funcionalidade de adicionar ao carrinho desabilitada no modo administrador.");
                 return;
             }
-            const existingItem = cart.find(item => item.id === product.id);
+
+            const productInStore = products.find(p => p.id === productData.id);
+            if (!productInStore || productInStore.stock <= 0) {
+                if (buttonElement) {
+                    buttonElement.textContent = "Fora de Estoque";
+                    buttonElement.disabled = true;
+                }
+                showModal("Produto Indisponível", `${productData.name} está fora de estoque.`);
+                return;
+            }
+
+            const existingItem = cart.find(item => item.id === productData.id);
             if (existingItem) {
-                existingItem.quantity++;
+                if (productInStore.stock > existingItem.quantity) {
+                    existingItem.quantity++;
+                } else {
+                    showModal("Estoque Insuficiente", `Não há mais estoque disponível para adicionar outra unidade de ${productData.name}.`);
+                    return;
+                }
             } else {
-                cart.push({ ...product, quantity: 1 });
+                // Adiciona uma cópia do produto ao carrinho, incluindo suas URLs de imagem e estoque atual para referência
+                cart.push({ ...productInStore, quantity: 1 });
             }
             updateCartDisplay(); 
             updateCartViewDedicatedDisplay(); 
 
             if (buttonElement) {
-                const originalButtonText = buttonElement.textContent;
+                const originalButtonText = buttonElement.textContent; // Might be "Adicionar ao Carrinho" or already "Adicionado!" from a previous click
                 buttonElement.textContent = "Adicionado!";
-                buttonElement.disabled = true;
+                buttonElement.disabled = true; // Disable briefly
+                
                 const feedbackDiv = buttonElement.nextElementSibling; 
                 if (feedbackDiv && feedbackDiv.classList.contains('add-to-cart-feedback')) {
                     feedbackDiv.innerHTML = `
@@ -998,8 +1182,15 @@
                     feedbackDiv.classList.remove('hidden');
                     if(activeFeedbackTimeout) clearTimeout(activeFeedbackTimeout); 
                     const revertButtonAndHide = () => {
-                        buttonElement.textContent = originalButtonText;
-                        buttonElement.disabled = false;
+                        // Re-enable button only if product is still in stock
+                        const currentProductStatus = products.find(p => p.id === productData.id);
+                        if (currentProductStatus && currentProductStatus.stock > 0) {
+                           buttonElement.textContent = "Adicionar ao Carrinho"; // Reset to original if needed
+                           buttonElement.disabled = false;
+                        } else {
+                           buttonElement.textContent = "Fora de Estoque";
+                           buttonElement.disabled = true;
+                        }
                         feedbackDiv.classList.add('hidden');
                         feedbackDiv.innerHTML = '';
                     };
@@ -1015,6 +1206,17 @@
                         clearTimeout(activeFeedbackTimeout);
                         revertButtonAndHide();
                     });
+                } else { // Fallback if feedback div isn't structured as expected, re-enable after short delay
+                     setTimeout(() => {
+                        const currentProductStatus = products.find(p => p.id === productData.id);
+                        if (currentProductStatus && currentProductStatus.stock > 0) {
+                           buttonElement.textContent = "Adicionar ao Carrinho";
+                           buttonElement.disabled = false;
+                        } else {
+                           buttonElement.textContent = "Fora de Estoque";
+                           buttonElement.disabled = true;
+                        }
+                    }, 1500);
                 }
             }
         }
@@ -1061,9 +1263,10 @@
                 cart.forEach((item) => {
                     const itemElement = document.createElement('div');
                     itemElement.className = 'flex justify-between items-center p-4 border-b border-gray-200';
+                    const mainImageUrl = item.imageUrls && item.imageUrls.length > 0 ? item.imageUrls[0] : 'https://placehold.co/60x60/cccccc/969696?text=N/A';
                     itemElement.innerHTML = `
                         <div class="flex items-center">
-                            <img src="${item.imageUrl || 'https://placehold.co/60x60/cccccc/969696?text=N/A'}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md mr-4">
+                            <img src="${mainImageUrl}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md mr-4">
                             <div>
                                 <h4 class="font-semibold text-gray-700">${item.name}</h4>
                                 <p class="text-sm text-gray-500">Quantidade: ${item.quantity}</p>
@@ -1127,7 +1330,7 @@
             });
         }
         
-        function renderAdminProducts() { // Atualizada para incluir botão de Editar
+        function renderAdminProducts() { 
             if (!adminProductListContainer || !noAdminProductsMessage) return;
             adminProductListContainer.innerHTML = ''; 
 
@@ -1139,13 +1342,15 @@
                     const categoryName = categories.find(c => c.id === product.categoryId)?.name || 'Sem Categoria';
                     const productDiv = document.createElement('div');
                     productDiv.className = 'flex justify-between items-center p-3 border border-gray-200 rounded-md bg-white shadow-sm';
+                    const mainImageUrl = product.imageUrls && product.imageUrls.length > 0 ? product.imageUrls[0] : 'https://placehold.co/60x40/cccccc/969696?text=N/A';
                     productDiv.innerHTML = `
                         <div class="flex items-center gap-3">
-                            <img src="${product.imageUrl || 'https://placehold.co/60x40/cccccc/969696?text=N/A'}" alt="${product.name}" class="w-16 h-10 object-cover rounded-sm">
+                            <img src="${mainImageUrl}" alt="${product.name}" class="w-16 h-10 object-cover rounded-sm">
                             <div>
                                 <h5 class="font-medium text-gray-700">${product.name}</h5>
                                 <p class="text-xs text-gray-500">Categoria: ${categoryName}</p>
                                 <p class="text-sm text-blue-500">R$ ${product.price.toFixed(2)}</p>
+                                <p class="text-xs text-gray-500">Estoque: ${product.stock}</p>
                                 <p class="text-xs text-gray-500 truncate w-64" title="${product.description}">${product.description || 'Sem descrição'}</p>
                             </div>
                         </div>
@@ -1157,7 +1362,22 @@
                     adminProductListContainer.appendChild(productDiv);
                 });
             }
-            addEventListenersToRemoveProductButtons(); // Também adiciona listeners para os botões de editar
+            addEventListenersToRemoveProductButtons(); 
+        }
+
+        function renderAdminUsers() {
+            if (!adminUsersListContainer) return;
+            adminUsersListContainer.innerHTML = '';
+            if (adminUsers.length === 0) {
+                adminUsersListContainer.innerHTML = '<p class="text-gray-500">Nenhum administrador cadastrado.</p>';
+            } else {
+                adminUsers.forEach(user => {
+                    const userDiv = document.createElement('div');
+                    userDiv.className = 'p-2 border rounded-md bg-gray-50 text-sm text-gray-700';
+                    userDiv.textContent = user.email;
+                    adminUsersListContainer.appendChild(userDiv);
+                });
+            }
         }
 
 
@@ -1166,7 +1386,8 @@
             try {
                 document.execCommand('copy'); 
                 copyFeedbackElement.textContent = "Chave Pix copiada!";
-                copyFeedbackElement.classList.remove('hidden');
+                copyFeedbackElement.classList.remove('hidden', 'text-red-600');
+                copyFeedbackElement.classList.add('text-green-600');
                 setTimeout(() => {
                     copyFeedbackElement.classList.add('hidden');
                 }, 2000);
@@ -1175,7 +1396,7 @@
                 copyFeedbackElement.textContent = "Erro ao copiar.";
                 copyFeedbackElement.classList.remove('hidden', 'text-green-600');
                 copyFeedbackElement.classList.add('text-red-600');
-                 setTimeout(() => {
+                setTimeout(() => {
                     copyFeedbackElement.classList.add('hidden');
                 }, 2000);
             }
@@ -1183,30 +1404,84 @@
         });
 
         paymentConfirmedButton?.addEventListener('click', () => {
-            const paymentFeedback = document.createElement('div');
-            paymentFeedback.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg shadow-xl z-50 text-center';
-            paymentFeedback.innerHTML = `
-                <h3 class="text-xl font-semibold mb-3">Pagamento Confirmado!</h3>
-                <p class="text-sm mb-4">Obrigado por sua compra! Seu pedido será processado em breve.</p>
-                <button id="close-payment-feedback" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md">Fechar</button>
-            `;
-            document.body.appendChild(paymentFeedback);
-            
-            document.getElementById('close-payment-feedback').addEventListener('click', () => {
-                paymentFeedback.remove();
-                cart = []; 
-                updateCartDisplay();
-                updateCartViewDedicatedDisplay();
-                showStoreView(); 
+            // Decrement stock for each item in cart
+            cart.forEach(cartItem => {
+                const productInStore = products.find(p => p.id === cartItem.id);
+                if (productInStore) {
+                    if (productInStore.stock >= cartItem.quantity) {
+                        productInStore.stock -= cartItem.quantity;
+                    } else {
+                        // Not enough stock, sell what's available (or handle error)
+                        console.warn(`Estoque insuficiente para ${productInStore.name} no momento da compra. Vendendo ${productInStore.stock} unidades.`);
+                        productInStore.stock = 0; 
+                    }
+                }
             });
+
+            // Show confirmation modal
+            showModal("Pagamento Confirmado!", 
+                      "Obrigado por sua compra! Seu pedido será processado em breve.", 
+                      () => {
+                            cart = []; 
+                            updateCartDisplay();
+                            updateCartViewDedicatedDisplay();
+                            renderStoreProducts(); // Update store view to reflect new stock
+                            renderAdminProducts(); // Update admin panel if visible
+                            showStoreView(); 
+                      }, 
+                      false); // No cancel button for this modal
         });
+
+        // --- MODAL GENÉRICO ---
+        function showModal(title, message, onConfirm, showCancel = true) {
+            // Remove qualquer modal existente
+            const existingModal = document.getElementById('generic-modal');
+            if (existingModal) existingModal.remove();
+
+            const modalOverlay = document.createElement('div');
+            modalOverlay.id = 'generic-modal-overlay';
+            modalOverlay.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+            
+            const modalContent = document.createElement('div');
+            modalContent.id = 'generic-modal';
+            modalContent.className = 'bg-white p-6 rounded-lg shadow-xl max-w-sm w-full';
+
+            modalContent.innerHTML = `
+                <h3 class="text-xl font-semibold mb-4 text-gray-800">${title}</h3>
+                <p class="text-gray-600 mb-6">${message}</p>
+                <div class="flex justify-end gap-3">
+                    ${showCancel ? '<button id="modal-cancel-button" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-md">Cancelar</button>' : ''}
+                    <button id="modal-confirm-button" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">${showCancel ? 'Confirmar' : 'OK'}</button>
+                </div>
+            `;
+            
+            modalOverlay.appendChild(modalContent);
+            document.body.appendChild(modalOverlay);
+
+            const closeModal = () => modalOverlay.remove();
+
+            document.getElementById('modal-confirm-button').addEventListener('click', () => {
+                if (onConfirm) onConfirm();
+                closeModal();
+            });
+
+            if (showCancel) {
+                document.getElementById('modal-cancel-button').addEventListener('click', closeModal);
+            }
+            // Close on overlay click
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) {
+                    closeModal();
+                }
+            });
+        }
 
 
         document.getElementById('register-client-link')?.addEventListener('click', (e) => {
-            e.preventDefault(); alert('Funcionalidade "Criar minha conta" a ser implementada.'); closeSideMenu();
+            e.preventDefault(); showModal('Aviso', 'Funcionalidade "Criar minha conta" a ser implementada.', null, false); closeSideMenu();
         });
         document.getElementById('login-client-link')?.addEventListener('click', (e) => {
-            e.preventDefault(); alert('Funcionalidade "Fazer Login (Cliente)" a ser implementada.'); closeSideMenu();
+            e.preventDefault(); showModal('Aviso', 'Funcionalidade "Fazer Login (Cliente)" a ser implementada.', null, false); closeSideMenu();
         });
         
         sideMenu.querySelectorAll('nav a[data-order-status]')?.forEach(link => {
@@ -1226,9 +1501,10 @@
         showStoreView(); 
         updateCartDisplay(); 
 
-        document.getElementById('contact-us-link-mainnav')?.addEventListener('click', (e) => {
-            e.preventDefault(); alert('Funcionalidade "Fale Conosco (SAC)" a ser implementada.');
-        });
+        // Removido o alert do Fale Conosco, pois o link agora vai para o WhatsApp
+        // document.getElementById('contact-us-link-mainnav')?.addEventListener('click', (e) => {
+        // e.preventDefault(); alert('Funcionalidade "Fale Conosco (SAC)" a ser implementada.');
+        // });
         
         document.getElementById('store-logo')?.addEventListener('click', (e) => {
             e.preventDefault();
@@ -1238,7 +1514,7 @@
             showStoreView();
         });
         document.querySelector('#store-nav a[onclick="showStoreView()"]')?.addEventListener('click', (e) => { 
-             if (e.target.textContent === "Início") {
+            if (e.target.textContent === "Início") {
                 e.preventDefault();
                 currentCategoryFilter = 'cat0'; 
                 currentSearchTerm = ''; 
