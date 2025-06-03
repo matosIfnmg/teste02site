@@ -19,17 +19,17 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            overflow-x: hidden; /* Prevenir scroll horizontal causado pelo menu lateral */
         }
-        .sidebar {
-            min-height: calc(100vh - 8rem); /* Ajustado para novo header */
-            max-height: calc(100vh - 8rem); /* Ajustado para novo header */
-            overflow-y: auto;
+        .main-content-area { /* Container para o conteúdo principal e sidebars */
+             min-height: calc(100vh - 8rem); 
         }
-        .main-content {
-             min-height: calc(100vh - 8rem); /* Ajustado para novo header */
+        .main-content-section { /* Seção principal que pode ser substituída */
+            min-height: calc(100vh - 8rem);
         }
         .product-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
         }
         .product-card:hover {
             transform: translateY(-5px);
@@ -74,11 +74,72 @@
             @apply text-xs text-gray-600 hover:text-blue-600 transition-colors duration-200 flex items-center;
         }
         .top-bar-icon {
-            @apply w-4 h-4 mr-1; /* Tamanho padrão para todos os ícones da barra superior */
+            @apply w-4 h-4 mr-1;
+        }
+        /* Estilos para o Menu Lateral (Hamburguer) */
+        #side-menu {
+            transition: transform 0.3s ease-in-out;
+        }
+        #side-menu.open {
+            transform: translateX(0);
+        }
+        #side-menu-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+         .product-detail-image {
+            max-height: 400px; /* Limita a altura da imagem de detalhe */
+            object-fit: contain; /* Garante que a imagem inteira seja visível */
         }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
+
+    <div id="side-menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+    <aside id="side-menu" class="fixed top-0 left-0 w-72 h-full bg-white shadow-xl z-50 transform -translate-x-full p-6 overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-semibold text-gray-700">Menu</h2>
+            <button id="close-menu-button" class="text-gray-600 hover:text-gray-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        
+        <div id="login-section-menu">
+            <h3 class="text-lg font-medium text-gray-700 mb-3 border-b pb-2">Acesso Restrito</h3>
+            <div id="login-feedback-menu" class="hidden"></div>
+            <form id="login-form-menu">
+                <div class="mb-3">
+                    <label for="email-menu" class="block text-sm font-medium text-gray-600 mb-1">Email Admin</label>
+                    <input type="email" id="email-menu" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="admin@email.com" required>
+                </div>
+                <div class="mb-3">
+                    <label for="senha-menu" class="block text-sm font-medium text-gray-600 mb-1">Senha</label>
+                    <input type="password" id="senha-menu" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="********" required>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300 text-sm">Entrar</button>
+            </form>
+        </div>
+
+        <div id="admin-info-section-menu" class="hidden mt-4">
+             <p class="text-sm text-gray-600 mb-2">Logado como: <span id="admin-email-display-menu" class="font-medium"></span></p>
+             <button id="admin-logout-button-menu" class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-300 text-sm">Logout Admin</button>
+        </div>
+        
+        <div class="mt-6 pt-4 border-t">
+            <h3 class="text-lg font-medium text-gray-700 mb-3">Cliente</h3>
+            <a href="#" id="register-client-link" class="block text-sm text-blue-600 hover:underline mb-2">Criar minha conta</a>
+            <a href="#" id="login-client-link" class="block text-sm text-blue-600 hover:underline">Fazer Login (Cliente)</a>
+        </div>
+
+        <div class="mt-6 pt-4 border-t">
+            <h3 class="text-lg font-medium text-gray-700 mb-3">Meus Pedidos</h3>
+            <nav class="space-y-1">
+                <a href="#" class="block text-sm text-gray-600 hover:bg-gray-100 p-2 rounded-md" data-order-status="open">Em Aberto / Aguardando Pagamento</a>
+                <a href="#" class="block text-sm text-gray-600 hover:bg-gray-100 p-2 rounded-md" data-order-status="paid">Pagos</a>
+                <a href="#" class="block text-sm text-gray-600 hover:bg-gray-100 p-2 rounded-md" data-order-status="completed">Concluídos / Recebidos</a>
+            </nav>
+        </div>
+    </aside>
 
     <div class="bg-gray-200 py-2 border-b border-gray-300">
         <div class="container mx-auto px-6 flex flex-wrap justify-between items-center text-sm">
@@ -88,7 +149,7 @@
                 </a>
             </div>
             <div class="flex items-center space-x-4">
-                <a href="#" id="my-orders-link" class="top-bar-link">
+                <a href="#" id="my-orders-link-topbar" class="top-bar-link">
                     <svg class="top-bar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                     Meus Pedidos
                 </a>
@@ -100,68 +161,40 @@
         </div>
     </div>
 
-    <header class="bg-white shadow-md sticky top-0 z-40"> 
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+    <header class="bg-white shadow-md sticky top-0 z-30"> <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <button id="open-menu-button" class="text-gray-600 hover:text-blue-600 lg:hidden"> <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
             <a href="#" id="store-logo" class="text-base font-bold text-blue-600">LogoLoja</a>
-            <nav id="store-nav">
-                <a href="#" class="px-4 text-gray-600 hover:text-blue-500">Início</a>
+            <nav id="store-nav" class="hidden lg:flex"> <a href="#" class="px-4 text-gray-600 hover:text-blue-500">Início</a>
                 <a href="#" class="px-4 text-gray-600 hover:text-blue-500">Produtos</a>
                 <a href="#" class="px-4 text-gray-600 hover:text-blue-500">Contato</a>
             </nav>
+            <div class="lg:hidden w-6"></div>
         </div>
     </header>
 
-    <div class="flex flex-col md:flex-row container mx-auto mt-4 gap-4 px-2 md:px-0">
-
-        <aside id="login-sidebar" class="w-full md:w-1/5 bg-white p-6 rounded-lg shadow-lg sidebar order-2 md:order-1">
-            <div id="login-section">
-                <h2 class="text-xl font-semibold mb-4 text-gray-700">Login Administrador</h2>
-                <div id="login-feedback" class="hidden"></div>
-                <form id="login-form">
-                    <div class="mb-4">
-                        <label for="email" class="block text-sm font-medium text-gray-600 mb-1">Email</label>
-                        <input type="email" id="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="seu@email.com" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="senha" class="block text-sm font-medium text-gray-600 mb-1">Senha</label>
-                        <input type="password" id="senha" name="senha" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="********" required>
-                    </div>
-                    <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Entrar</button>
-                    <p class="text-xs text-gray-500 mt-3 text-center">Não tem uma conta? <a href="#" class="text-blue-500 hover:underline">Cadastre-se</a></p>
-                </form>
-            </div>
-            <div id="admin-info-section" class="hidden">
-                 <h2 class="text-xl font-semibold mb-4 text-gray-700">Administrador</h2>
-                 <p class="text-sm text-gray-600 mb-4">Logado como: <span id="admin-email-display" class="font-medium"></span></p>
-                 <button id="admin-logout-button" class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-300">Logout</button>
-            </div>
-        </aside>
-
-        <div id="dynamic-content-area" class="w-full md:w-4/5 order-1 md:order-2">
+    <div class="main-content-area container mx-auto mt-4 gap-4 px-2 md:px-0">
+        <div id="dynamic-content-area" class="w-full">
             
             <div id="store-view" class="flex flex-col lg:flex-row gap-4">
-                <main id="main-product-list" class="w-full lg:w-3/4 bg-white p-6 rounded-lg shadow-lg main-content">
+                <main id="main-product-list" class="w-full lg:w-3/4 bg-white p-6 rounded-lg shadow-lg main-content-section">
                     <h1 class="text-3xl font-bold mb-8 text-center text-gray-700">Nossos Produtos</h1>
                     <section class="mb-12">
                         <h2 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-2">Destaques da Semana</h2>
-                        <div id="product-row-1" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            </div>
+                        <div id="product-row-1" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                     </section>
                      <section class="mb-12">
                         <h2 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-2">Novidades</h2>
-                        <div id="product-row-2" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            </div>
+                        <div id="product-row-2" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                     </section>
                     <section>
                         <h2 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-2">Mais Vendidos</h2>
-                        <div id="product-row-3" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            </div>
+                        <div id="product-row-3" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                     </section>
                 </main>
-                <aside id="cart-sidebar" class="w-full lg:w-1/4 bg-white p-6 rounded-lg shadow-lg sidebar">
+                <aside id="cart-sidebar" class="w-full lg:w-1/4 bg-white p-6 rounded-lg shadow-lg lg:sticky lg:top-20 main-content-section" style="max-height: calc(100vh - 10rem); overflow-y: auto;">
                     <h2 class="text-xl font-semibold mb-4 text-gray-700">Carrinho</h2>
-                    <div id="cart-items-list">
-                        </div>
+                    <div id="cart-items-list"></div>
                     <div id="cart-total-section" class="mt-6 pt-4 border-t border-gray-300">
                         <div class="flex justify-between items-center font-semibold text-gray-700">
                             <span>Total:</span>
@@ -169,77 +202,78 @@
                         </div>
                         <button id="checkout-button" class="w-full mt-4 bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300">Finalizar Compra</button>
                     </div>
-                    <div id="cart-empty-message" class="text-center text-gray-500 mt-6">
-                        Seu carrinho está vazio.
-                    </div>
+                    <div id="cart-empty-message" class="text-center text-gray-500 mt-6">Seu carrinho está vazio.</div>
                 </aside>
             </div>
 
-            <div id="admin-panel" class="hidden w-full bg-white p-6 rounded-lg shadow-lg main-content">
+            <div id="product-detail-view" class="hidden bg-white p-6 md:p-8 rounded-lg shadow-lg main-content-section">
+                </div>
+            
+            <div id="admin-panel" class="hidden w-full bg-white p-6 rounded-lg shadow-lg main-content-section">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-3xl font-bold text-gray-700">Painel do Administrador</h2>
-                    <button id="back-to-store-button" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300">
+                    <button id="back-to-store-button-admin" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300">
                         Ver Loja
                     </button>
                 </div>
-
                 <section id="product-management" class="mb-10">
                     <h3 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-3">Gerenciar Produtos</h3>
                     <form id="add-product-form" class="mb-8 p-6 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
                         <h4 class="text-xl font-medium mb-4 text-gray-700">Adicionar Novo Produto</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label for="product-name" class="block text-sm font-medium text-gray-600 mb-1">Nome do Produto</label>
-                                <input type="text" id="product-name" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                                <label for="product-name" class="block text-sm font-medium text-gray-600 mb-1">Nome</label>
+                                <input type="text" id="product-name" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
                             </div>
                             <div>
                                 <label for="product-price" class="block text-sm font-medium text-gray-600 mb-1">Preço (R$)</label>
-                                <input type="number" step="0.01" id="product-price" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                                <input type="number" step="0.01" id="product-price" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
                             </div>
                         </div>
                         <div class="mb-4">
                             <label for="product-image-url" class="block text-sm font-medium text-gray-600 mb-1">URL da Imagem</label>
-                            <input type="url" id="product-image-url" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="https://exemplo.com/imagem.jpg">
+                            <input type="url" id="product-image-url" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="https://exemplo.com/imagem.jpg">
                              <div id="image-drop-zone" class="mt-2 drop-zone">
                                 <p>Arraste e solte uma imagem aqui, ou clique para selecionar.</p>
                                 <input type="file" id="product-image-file" class="hidden" accept="image/*">
-                                <img id="image-preview" class="hidden product-image-preview" alt="Pré-visualização da imagem"/>
+                                <img id="image-preview" class="hidden product-image-preview" alt="Pré-visualização"/>
                             </div>
                         </div>
                         <div class="mb-6">
                             <label for="product-description" class="block text-sm font-medium text-gray-600 mb-1">Descrição</label>
-                            <textarea id="product-description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                            <textarea id="product-description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"></textarea>
                         </div>
-                        <button type="submit" class="w-full md:w-auto bg-green-600 text-white py-2 px-6 rounded-md hover:bg-green-700 transition duration-300">Adicionar Produto</button>
+                        <button type="submit" class="w-full md:w-auto bg-green-600 text-white py-2 px-6 rounded-md hover:bg-green-700">Adicionar Produto</button>
                     </form>
-
                     <h4 class="text-xl font-medium mb-4 text-gray-700">Produtos Cadastrados</h4>
                     <div id="admin-product-list" class="space-y-4">
-                        <p id="no-admin-products" class="text-gray-500">Nenhum produto cadastrado ainda.</p>
+                        <p id="no-admin-products" class="text-gray-500">Nenhum produto.</p>
                     </div>
                 </section>
-
                 <section id="admin-user-management" class="mb-10">
                     <h3 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-3">Gerenciar Administradores</h3>
                     <form id="add-admin-form" class="mb-8 p-6 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
-                        <h4 class="text-xl font-medium mb-4 text-gray-700">Adicionar Novo Administrador</h4>
+                        <h4 class="text-xl font-medium mb-4 text-gray-700">Adicionar Novo Admin</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label for="admin-new-email" class="block text-sm font-medium text-gray-600 mb-1">Email do Novo Admin</label>
-                                <input type="email" id="admin-new-email" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                                <label for="admin-new-email" class="block text-sm font-medium text-gray-600 mb-1">Email</label>
+                                <input type="email" id="admin-new-email" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
                             </div>
                             <div>
-                                <label for="admin-new-password" class="block text-sm font-medium text-gray-600 mb-1">Senha do Novo Admin</label>
-                                <input type="password" id="admin-new-password" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                                <label for="admin-new-password" class="block text-sm font-medium text-gray-600 mb-1">Senha</label>
+                                <input type="password" id="admin-new-password" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
                             </div>
                         </div>
-                        <button type="submit" class="w-full md:w-auto bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700 transition duration-300">Adicionar Administrador</button>
+                        <button type="submit" class="w-full md:w-auto bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700">Adicionar Admin</button>
                     </form>
-                     <h4 class="text-xl font-medium mb-4 text-gray-700">Administradores Cadastrados</h4>
-                    <div id="admin-users-list" class="space-y-2">
-                        </div>
+                     <h4 class="text-xl font-medium mb-4 text-gray-700">Admins Cadastrados</h4>
+                    <div id="admin-users-list" class="space-y-2"></div>
                 </section>
             </div>
+             <div id="orders-view" class="hidden bg-white p-6 md:p-8 rounded-lg shadow-lg main-content-section">
+                <h2 class="text-3xl font-bold mb-8 text-center text-gray-700">Meus Pedidos</h2>
+                <p id="orders-status-message" class="text-center text-gray-600">Selecione um status de pedido no menu lateral.</p>
+                </div>
         </div>
     </div>
 
@@ -249,23 +283,27 @@
 
     <script>
         // --- ELEMENTOS DO DOM ---
-        const loginForm = document.getElementById('login-form');
-        const loginFeedbackDiv = document.getElementById('login-feedback');
-        const loginSidebar = document.getElementById('login-sidebar');
-        const loginSection = document.getElementById('login-section');
-        const adminInfoSection = document.getElementById('admin-info-section');
-        const adminEmailDisplay = document.getElementById('admin-email-display');
-        const adminLogoutButton = document.getElementById('admin-logout-button');
+        const openMenuButton = document.getElementById('open-menu-button');
+        const closeMenuButton = document.getElementById('close-menu-button');
+        const sideMenu = document.getElementById('side-menu');
+        const sideMenuOverlay = document.getElementById('side-menu-overlay');
 
+        const loginFormMenu = document.getElementById('login-form-menu');
+        const loginFeedbackMenu = document.getElementById('login-feedback-menu');
+        const loginSectionMenu = document.getElementById('login-section-menu');
+        const adminInfoSectionMenu = document.getElementById('admin-info-section-menu');
+        const adminEmailDisplayMenu = document.getElementById('admin-email-display-menu');
+        const adminLogoutButtonMenu = document.getElementById('admin-logout-button-menu');
+        
         const dynamicContentArea = document.getElementById('dynamic-content-area');
         const storeView = document.getElementById('store-view');
         const adminPanel = document.getElementById('admin-panel');
-        const mainProductList = document.getElementById('main-product-list');
-        const cartSidebar = document.getElementById('cart-sidebar');
-        const backToStoreButton = document.getElementById('back-to-store-button');
+        const productDetailView = document.getElementById('product-detail-view');
+        const ordersView = document.getElementById('orders-view');
+        const ordersStatusMessage = document.getElementById('orders-status-message');
 
+        const backToStoreButtonAdmin = document.getElementById('back-to-store-button-admin');
 
-        // Elementos do Painel Admin
         const addProductForm = document.getElementById('add-product-form');
         const adminProductListContainer = document.getElementById('admin-product-list');
         const noAdminProductsMessage = document.getElementById('no-admin-products');
@@ -277,158 +315,195 @@
         const imagePreview = document.getElementById('image-preview');
         let uploadedImageFile = null; 
 
-
         // --- ESTADO DA APLICAÇÃO ---
         let products = [ 
-            { id: 'prod1', name: "Nome do Produto A", price: 99.90, imageUrl: "https://placehold.co/300x200/E0E7FF/4F46E5?text=Produto+1", description: "Descrição breve do produto A." },
-            { id: 'prod2', name: "Nome do Produto B", price: 129.50, imageUrl: "https://placehold.co/300x200/DBEAFE/1D4ED8?text=Produto+2", description: "Descrição breve do produto B." },
-            { id: 'prod3', name: "Nome do Produto C", price: 75.00, imageUrl: "https://placehold.co/300x200/BFDBFE/1E40AF?text=Produto+3", description: "Descrição breve do produto C." },
-            { id: 'prod4', name: "Nome do Produto D", price: 210.00, imageUrl: "https://placehold.co/300x200/93C5FD/1C3FAA?text=Produto+4", description: "Descrição breve do produto D." },
-            { id: 'prod5', name: "Nome do Produto E", price: 45.99, imageUrl: "https://placehold.co/300x200/60A5FA/1B3A9A?text=Produto+5", description: "Descrição breve do produto E." },
-            { id: 'prod6', name: "Nome do Produto F", price: 88.80, imageUrl: "https://placehold.co/300x200/3B82F6/1A358A?text=Produto+6", description: "Descrição breve do produto F." }
+            { id: 'prod1', name: "Produto Exemplo Alfa", price: 99.90, imageUrl: "https://placehold.co/400x300/E0E7FF/4F46E5?text=Produto+Alfa", description: "Descrição detalhada do Produto Exemplo Alfa. Este produto é feito com materiais de alta qualidade e oferece excelente durabilidade. Ideal para diversas aplicações e gostos." },
+            { id: 'prod2', name: "Produto Exemplo Beta", price: 129.50, imageUrl: "https://placehold.co/400x300/DBEAFE/1D4ED8?text=Produto+Beta", description: "O Produto Exemplo Beta combina design moderno com funcionalidade superior. Perfeito para quem busca inovação e estilo. Aproveite esta oferta especial." },
+            { id: 'prod3', name: "Produto Exemplo Gama", price: 75.00, imageUrl: "https://placehold.co/400x300/BFDBFE/1E40AF?text=Produto+Gama", description: "Conheça o Produto Exemplo Gama, uma solução prática e eficiente para o seu dia a dia. Com garantia estendida e suporte ao cliente." },
+            { id: 'prod4', name: "Produto Exemplo Delta", price: 210.00, imageUrl: "https://placehold.co/400x300/93C5FD/1C3FAA?text=Produto+Delta", description: "Produto Exemplo Delta: robustez e tecnologia de ponta. Indicado para uso profissional e para os entusiastas mais exigentes." },
+            { id: 'prod5', name: "Produto Exemplo Epsilon", price: 45.99, imageUrl: "https://placehold.co/400x300/60A5FA/1B3A9A?text=Produto+Epsilon", description: "Leve e compacto, o Produto Exemplo Epsilon é seu companheiro ideal para todas as horas. Fácil de transportar e usar." },
+            { id: 'prod6', name: "Produto Exemplo Zeta", price: 88.80, imageUrl: "https://placehold.co/400x300/3B82F6/1A358A?text=Produto+Zeta", description: "O Produto Exemplo Zeta oferece um excelente custo-benefício sem abrir mão da qualidade. Satisfação garantida ou seu dinheiro de volta." }
         ];
         let adminUsers = [
             { email: "viniciusaraujomatos1@gmail.com", password: "Belohorizonte2020@" }
         ];
         let cart = [];
         let isAdminLoggedIn = false;
+        let currentAdminEmail = null;
 
-        // --- FUNÇÕES DE RENDERIZAÇÃO ---
+        // --- CONTROLE DO MENU LATERAL ---
+        function openSideMenu() {
+            sideMenu.classList.add('open');
+            sideMenuOverlay.classList.remove('hidden');
+            sideMenuOverlay.style.opacity = '1';
+        }
+
+        function closeSideMenu() {
+            sideMenu.classList.remove('open');
+            sideMenuOverlay.style.opacity = '0';
+            setTimeout(() => {
+                sideMenuOverlay.classList.add('hidden');
+            }, 300); // Espera a transição de opacidade terminar
+        }
+
+        openMenuButton?.addEventListener('click', openSideMenu);
+        closeMenuButton?.addEventListener('click', closeSideMenu);
+        sideMenuOverlay?.addEventListener('click', closeSideMenu);
+
+        // --- FUNÇÕES DE RENDERIZAÇÃO E CONTROLE DE VIEW ---
+        function setActiveView(activeViewElement) {
+            [storeView, adminPanel, productDetailView, ordersView].forEach(view => {
+                view?.classList.add('hidden');
+            });
+            activeViewElement?.classList.remove('hidden');
+        }
+        
         function renderStoreProducts() {
             const productRow1 = document.getElementById('product-row-1');
             const productRow2 = document.getElementById('product-row-2');
             const productRow3 = document.getElementById('product-row-3'); 
 
-            if (!productRow1 || !productRow2 || !productRow3) {
-                console.error("Um ou mais containers de linha de produto não encontrados.");
-                return;
-            }
+            if (!productRow1 || !productRow2 || !productRow3) return;
             
-            productRow1.innerHTML = '';
-            productRow2.innerHTML = '';
-            productRow3.innerHTML = '';
+            productRow1.innerHTML = ''; productRow2.innerHTML = ''; productRow3.innerHTML = '';
 
             products.forEach((product, index) => {
-                const productHTML = `
-                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center" data-id="${product.id}">
-                        <img src="${product.imageUrl || 'https://placehold.co/300x200/cccccc/969696?text=Sem+Imagem'}" alt="Imagem de ${product.name}" class="w-full h-48 object-cover rounded-md mb-4 product-image">
-                        <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">${product.name}</h3>
-                        <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ ${product.price.toFixed(2)}</p>
-                        <p class="text-xs text-gray-500 mb-2 product-description h-10 overflow-hidden" title="${product.description || ''}">${product.description || 'Sem descrição detalhada.'}</p>
-                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button">Adicionar ao Carrinho</button>
-                    </div>
+                const productCard = document.createElement('div');
+                productCard.className = "product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center";
+                productCard.dataset.id = product.id;
+                productCard.innerHTML = `
+                    <img src="${product.imageUrl || 'https://placehold.co/300x200/cccccc/969696?text=Sem+Imagem'}" alt="Imagem de ${product.name}" class="w-full h-48 object-cover rounded-md mb-4 product-image">
+                    <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">${product.name}</h3>
+                    <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ ${product.price.toFixed(2)}</p>
+                    <p class="text-xs text-gray-500 mb-2 product-description h-10 overflow-hidden" title="${product.description || ''}">${product.description.substring(0,50) + "..." || 'Sem descrição detalhada.'}</p>
+                    <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button-list">Adicionar ao Carrinho</button>
                 `;
-                if (index < 3) productRow1.innerHTML += productHTML;
-                else if (index < 6) productRow2.innerHTML += productHTML;
-                else productRow3.innerHTML += productHTML; 
+                // Adiciona listener para mostrar detalhes do produto
+                productCard.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('add-to-cart-button-list')) { // Não ativa se clicar no botão de add carrinho
+                         showProductDetailView(product.id);
+                    }
+                });
+                
+                if (index < 3) productRow1.appendChild(productCard);
+                else if (index < 6) productRow2.appendChild(productCard);
+                else productRow3.appendChild(productCard); 
             });
             addEventListenersToAddToCartButtons();
         }
 
-        function renderAdminProducts() {
-            if (!adminProductListContainer || !noAdminProductsMessage) return;
-            adminProductListContainer.innerHTML = ''; 
+        function showProductDetailView(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product || !productDetailView) return;
 
-            if (products.length === 0) {
-                noAdminProductsMessage.classList.remove('hidden');
-            } else {
-                noAdminProductsMessage.classList.add('hidden');
-                products.forEach(product => {
-                    const productDiv = document.createElement('div');
-                    productDiv.className = 'flex justify-between items-center p-3 border border-gray-200 rounded-md bg-white shadow-sm';
-                    productDiv.innerHTML = `
-                        <div class="flex items-center gap-3">
-                            <img src="${product.imageUrl || 'https://placehold.co/60x40/cccccc/969696?text=N/A'}" alt="${product.name}" class="w-16 h-10 object-cover rounded-sm">
-                            <div>
-                                <h5 class="font-medium text-gray-700">${product.name}</h5>
-                                <p class="text-sm text-blue-500">R$ ${product.price.toFixed(2)}</p>
-                                <p class="text-xs text-gray-500 truncate w-64" title="${product.description}">${product.description || 'Sem descrição'}</p>
-                            </div>
-                        </div>
-                        <button data-id="${product.id}" class="remove-product-button text-red-500 hover:text-red-700 font-medium py-1 px-3 rounded-md hover:bg-red-100 transition-colors">Remover</button>
-                    `;
-                    adminProductListContainer.appendChild(productDiv);
-                });
-                addEventListenersToRemoveProductButtons();
-            }
+            productDetailView.innerHTML = `
+                <button id="back-to-store-from-detail" class="mb-6 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-md transition duration-300 inline-flex items-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Voltar para Loja
+                </button>
+                <div class="flex flex-col md:flex-row gap-8">
+                    <div class="md:w-1/2">
+                        <img src="${product.imageUrl || 'https://placehold.co/600x400/cccccc/969696?text=Sem+Imagem'}" alt="${product.name}" class="w-full rounded-lg shadow-lg product-detail-image">
+                    </div>
+                    <div class="md:w-1/2 flex flex-col">
+                        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">${product.name}</h1>
+                        <p class="text-2xl font-semibold text-blue-600 mb-5">R$ ${product.price.toFixed(2)}</p>
+                        <p class="text-gray-600 mb-6 leading-relaxed">${product.description}</p>
+                        <button data-id="${product.id}" class="mt-auto w-full md:w-auto bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-md transition duration-300 text-lg add-to-cart-button-detail">
+                            Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+            `;
+            setActiveView(productDetailView);
+            document.getElementById('back-to-store-from-detail')?.addEventListener('click', showStoreView);
+            
+            // Adiciona listener ao botão "Adicionar ao Carrinho" da página de detalhes
+            const addToCartDetailButton = productDetailView.querySelector('.add-to-cart-button-detail');
+            addToCartDetailButton?.addEventListener('click', function() {
+                const prodId = this.dataset.id;
+                const productToAdd = products.find(p => p.id === prodId);
+                if (productToAdd) {
+                    handleAddToCart(productToAdd);
+                }
+            });
+            closeSideMenu();
         }
         
-        function renderAdminUsers() {
-            if (!adminUsersListContainer) return;
-            adminUsersListContainer.innerHTML = '';
-            adminUsers.forEach(admin => {
-                const adminDiv = document.createElement('div');
-                adminDiv.className = 'p-2 border-b border-gray-200 text-sm text-gray-600';
-                adminDiv.textContent = admin.email;
-                adminUsersListContainer.appendChild(adminDiv);
-            });
-        }
-
-        // --- LÓGICA DE LOGIN E CONTROLE DE VISUALIZAÇÃO ---
         function showAdminView(adminEmail) {
             isAdminLoggedIn = true;
-            storeView.classList.add('hidden');
-            adminPanel.classList.remove('hidden');
-            loginSection.classList.add('hidden');
-            adminInfoSection.classList.remove('hidden');
-            adminEmailDisplay.textContent = adminEmail;
+            currentAdminEmail = adminEmail;
+            setActiveView(adminPanel);
+            
+            loginSectionMenu.classList.add('hidden');
+            adminInfoSectionMenu.classList.remove('hidden');
+            adminEmailDisplayMenu.textContent = adminEmail;
             
             document.getElementById('store-logo').textContent = "Painel Admin";
             document.getElementById('store-nav').classList.add('hidden');
+            openMenuButton.classList.add('lg:hidden'); // Garante que o hamburguer apareça no modo admin em telas menores
 
             renderAdminProducts();
             renderAdminUsers();
+            closeSideMenu();
         }
 
         function showStoreView() {
             isAdminLoggedIn = false;
-            adminPanel.classList.add('hidden');
-            storeView.classList.remove('hidden');
-            loginSection.classList.remove('hidden');
-            adminInfoSection.classList.add('hidden');
-            loginFeedbackDiv.classList.add('hidden');
-            if(loginForm) loginForm.reset();
+            currentAdminEmail = null;
+            setActiveView(storeView);
 
+            loginSectionMenu.classList.remove('hidden'); // Mostra login no menu lateral
+            adminInfoSectionMenu.classList.add('hidden'); // Esconde info do admin no menu lateral
+            
             document.getElementById('store-logo').textContent = "LogoLoja";
-            document.getElementById('store-nav').classList.remove('hidden');
+            document.getElementById('store-nav').classList.remove('hidden'); // Mostra navegação principal
+            openMenuButton.classList.remove('lg:hidden'); 
             
             renderStoreProducts(); 
+            closeSideMenu();
+        }
+        
+        function showOrdersView(status) {
+            setActiveView(ordersView);
+            ordersStatusMessage.textContent = `Visualizando pedidos: ${status}. (Funcionalidade a ser implementada).`;
+            closeSideMenu();
         }
 
-        if (loginForm) {
-            loginForm.addEventListener('submit', function(event) {
+        // --- LÓGICA DE LOGIN (NO MENU LATERAL) ---
+        if (loginFormMenu) {
+            loginFormMenu.addEventListener('submit', function(event) {
                 event.preventDefault();
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('senha').value;
-                
+                const email = document.getElementById('email-menu').value;
+                const password = document.getElementById('senha-menu').value;
                 const admin = adminUsers.find(user => user.email === email && user.password === password);
 
-                loginFeedbackDiv.innerHTML = '';
-                loginFeedbackDiv.classList.remove('hidden', 'feedback-success', 'feedback-error');
+                loginFeedbackMenu.innerHTML = '';
+                loginFeedbackMenu.classList.remove('hidden', 'feedback-success', 'feedback-error');
 
                 if (admin) {
-                    loginFeedbackDiv.textContent = "Login bem-sucedido! Carregando painel...";
-                    loginFeedbackDiv.classList.add('feedback-message', 'feedback-success');
+                    loginFeedbackMenu.textContent = "Login bem-sucedido! Carregando painel...";
+                    loginFeedbackMenu.classList.add('feedback-message', 'feedback-success');
                     setTimeout(() => {
                        showAdminView(admin.email);
+                       loginFeedbackMenu.classList.add('hidden'); // Esconde feedback após sucesso
                     }, 500); 
                 } else {
-                    loginFeedbackDiv.textContent = "Email ou senha inválidos.";
-                    loginFeedbackDiv.classList.add('feedback-message', 'feedback-error');
+                    loginFeedbackMenu.textContent = "Email ou senha inválidos.";
+                    loginFeedbackMenu.classList.add('feedback-message', 'feedback-error');
                 }
             });
         }
 
-        if (adminLogoutButton) {
-            adminLogoutButton.addEventListener('click', showStoreView);
-        }
+        adminLogoutButtonMenu?.addEventListener('click', () => {
+            showStoreView();
+        });
         
-        if (backToStoreButton) {
-            backToStoreButton.addEventListener('click', showStoreView);
-        }
+        backToStoreButtonAdmin?.addEventListener('click', showStoreView);
 
 
         // --- GERENCIAMENTO DE PRODUTOS (ADMIN) ---
+        // (Mesma lógica de antes, adaptada para os IDs corretos se necessário)
         if (addProductForm) {
             addProductForm.addEventListener('submit', function(event) {
                 event.preventDefault();
@@ -444,8 +519,7 @@
                 if (name && price > 0) {
                     const newProduct = {
                         id: 'prod' + (products.length + 1) + Date.now(), 
-                        name,
-                        price,
+                        name, price,
                         imageUrl: imageUrl || 'https://placehold.co/300x200/cccccc/969696?text=Nova+Imagem',
                         description
                     };
@@ -453,16 +527,14 @@
                     renderAdminProducts();
                     renderStoreProducts(); 
                     addProductForm.reset();
-                    imagePreview.classList.add('hidden');
-                    imagePreview.src = '';
+                    imagePreview.classList.add('hidden'); imagePreview.src = '';
                     uploadedImageFile = null;
                     document.getElementById('product-image-url').value = ''; 
                 } else {
-                    // Substituindo alert por mensagem no DOM
                     const feedback = document.createElement('p');
                     feedback.textContent = "Por favor, preencha nome e preço do produto.";
-                    feedback.className = "text-red-500 text-sm mt-2";
-                    addProductForm.appendChild(feedback);
+                    feedback.className = "text-red-500 text-sm mt-2 product-add-feedback";
+                    addProductForm.querySelector('button[type="submit"]').insertAdjacentElement('afterend', feedback);
                     setTimeout(() => feedback.remove(), 3000);
                 }
             });
@@ -471,7 +543,6 @@
         function addEventListenersToRemoveProductButtons() {
             const removeButtons = adminProductListContainer.querySelectorAll('.remove-product-button');
             removeButtons.forEach(button => {
-                // Clonar e substituir para evitar múltiplos listeners em re-renderizações
                 const newButton = button.cloneNode(true);
                 button.parentNode.replaceChild(newButton, button);
                 newButton.addEventListener('click', function() {
@@ -485,14 +556,10 @@
         
         if (imageDropZone) {
             imageDropZone.addEventListener('click', () => productImageFileInput.click());
-            imageDropZone.addEventListener('dragover', (event) => {
-                event.preventDefault();
-                imageDropZone.classList.add('dragover');
-            });
+            imageDropZone.addEventListener('dragover', (event) => { event.preventDefault(); imageDropZone.classList.add('dragover'); });
             imageDropZone.addEventListener('dragleave', () => imageDropZone.classList.remove('dragover'));
             imageDropZone.addEventListener('drop', (event) => {
-                event.preventDefault();
-                imageDropZone.classList.remove('dragover');
+                event.preventDefault(); imageDropZone.classList.remove('dragover');
                 const files = event.dataTransfer.files;
                 if (files.length > 0) handleImageFile(files[0]);
             });
@@ -504,7 +571,7 @@
 
         function handleImageFile(file) {
             const feedbackDiv = addProductForm.querySelector('.image-upload-feedback');
-            if (feedbackDiv) feedbackDiv.remove(); // Remove feedback anterior
+            if (feedbackDiv) feedbackDiv.remove(); 
 
             if (file && file.type.startsWith('image/')) {
                 uploadedImageFile = file; 
@@ -518,12 +585,9 @@
             } else {
                 const feedback = document.createElement('p');
                 feedback.textContent = "Por favor, selecione um arquivo de imagem válido.";
-                feedback.className = "text-red-500 text-sm mt-1 image-upload-feedback"; // Adiciona classe para remoção
+                feedback.className = "text-red-500 text-sm mt-1 image-upload-feedback"; 
                 imageDropZone.parentNode.insertBefore(feedback, imageDropZone.nextSibling);
-
-                uploadedImageFile = null;
-                imagePreview.classList.add('hidden');
-                imagePreview.src = '';
+                uploadedImageFile = null; imagePreview.classList.add('hidden'); imagePreview.src = '';
             }
         }
 
@@ -535,46 +599,62 @@
                 const feedbackDiv = addAdminForm.querySelector('.admin-add-feedback');
                 if (feedbackDiv) feedbackDiv.remove();
 
-
                 if (email && password) {
                     if (adminUsers.find(user => user.email === email)) {
                         const feedback = document.createElement('p');
                         feedback.textContent = "Este email de administrador já existe.";
                         feedback.className = "text-red-500 text-sm mt-2 admin-add-feedback";
-                        addAdminForm.appendChild(feedback);
-                        setTimeout(() => feedback.remove(), 3000);
-                        return;
+                        addAdminForm.querySelector('button[type="submit"]').insertAdjacentElement('afterend', feedback);
+                        setTimeout(() => feedback.remove(), 3000); return;
                     }
                     adminUsers.push({ email, password });
-                    console.log("Novo administrador adicionado (em memória):", { email, password });
-                    renderAdminUsers();
-                    addAdminForm.reset();
-                     const feedback = document.createElement('p');
+                    renderAdminUsers(); addAdminForm.reset();
+                    const feedback = document.createElement('p');
                     feedback.textContent = "Administrador adicionado com sucesso!";
                     feedback.className = "text-green-500 text-sm mt-2 admin-add-feedback";
-                    addAdminForm.appendChild(feedback);
+                    addAdminForm.querySelector('button[type="submit"]').insertAdjacentElement('afterend', feedback);
                     setTimeout(() => feedback.remove(), 3000);
                 } else {
                     const feedback = document.createElement('p');
-                    feedback.textContent = "Por favor, preencha email e senha para o novo administrador.";
+                    feedback.textContent = "Por favor, preencha email e senha.";
                     feedback.className = "text-red-500 text-sm mt-2 admin-add-feedback";
-                    addAdminForm.appendChild(feedback);
+                    addAdminForm.querySelector('button[type="submit"]').insertAdjacentElement('afterend', feedback);
                     setTimeout(() => feedback.remove(), 3000);
                 }
             });
         }
-
+        
+        // --- LÓGICA DO CARRINHO DE COMPRAS ---
         const cartItemsContainer = document.getElementById('cart-items-list');
         const cartTotalValueElement = document.getElementById('cart-total-value');
         const checkoutButton = document.getElementById('checkout-button');
         const cartEmptyMessage = document.getElementById('cart-empty-message');
         const cartTotalSection = document.getElementById('cart-total-section');
 
-        function updateCartDisplay() {
-            if (!cartItemsContainer || !cartTotalValueElement || !checkoutButton || !cartEmptyMessage || !cartTotalSection) {
-                console.error("Um ou mais elementos do carrinho não foram encontrados no DOM.");
+        function handleAddToCart(product) {
+            if (isAdminLoggedIn) {
+                const feedbackDiv = document.getElementById('admin-action-feedback');
+                if (feedbackDiv) feedbackDiv.remove();
+                const feedback = document.createElement('p');
+                feedback.id = 'admin-action-feedback';
+                feedback.textContent = "Funcionalidade de adicionar ao carrinho desabilitada no modo administrador.";
+                feedback.className = "fixed bottom-4 right-4 bg-yellow-400 text-yellow-800 p-3 rounded-md shadow-lg z-50";
+                document.body.appendChild(feedback);
+                setTimeout(() => feedback.remove(), 3000);
                 return;
             }
+            const existingItem = cart.find(item => item.id === product.id);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            updateCartDisplay();
+        }
+
+
+        function updateCartDisplay() {
+            if (!cartItemsContainer || !cartTotalValueElement || !checkoutButton || !cartEmptyMessage || !cartTotalSection) return;
             cartItemsContainer.innerHTML = '';
             let total = 0;
 
@@ -584,7 +664,7 @@
             } else {
                 cartEmptyMessage.classList.add('hidden');
                 cartTotalSection.classList.remove('hidden');
-                cart.forEach((item, index) => {
+                cart.forEach((item) => {
                     const itemElement = document.createElement('div');
                     itemElement.className = 'flex justify-between items-center mb-4 pb-2 border-b border-gray-200';
                     itemElement.innerHTML = `
@@ -603,36 +683,16 @@
         }
 
         function addEventListenersToAddToCartButtons() {
-            const addToCartButtons = document.querySelectorAll('.add-to-cart-button');
-            addToCartButtons.forEach(button => {
-                const newButton = button.cloneNode(true);
+            const addToCartListButtons = document.querySelectorAll('.add-to-cart-button-list');
+            addToCartListButtons.forEach(button => {
+                const newButton = button.cloneNode(true); // Evita listeners duplicados
                 button.parentNode.replaceChild(newButton, button);
                 newButton.addEventListener('click', (event) => {
-                    if (isAdminLoggedIn) {
-                        const feedbackDiv = document.getElementById('admin-action-feedback');
-                        if (feedbackDiv) feedbackDiv.remove();
-
-                        const feedback = document.createElement('p');
-                        feedback.id = 'admin-action-feedback';
-                        feedback.textContent = "Funcionalidade de adicionar ao carrinho desabilitada no modo administrador.";
-                        feedback.className = "fixed bottom-4 right-4 bg-yellow-400 text-yellow-800 p-3 rounded-md shadow-lg";
-                        document.body.appendChild(feedback);
-                        setTimeout(() => feedback.remove(), 3000);
-                        return;
-                    }
+                    event.stopPropagation(); // Impede que o clique no botão propague para o card (que abre os detalhes)
                     const productCard = event.target.closest('.product-card');
                     const productId = productCard.dataset.id;
                     const product = products.find(p => p.id === productId);
-
-                    if (product) {
-                        const existingItem = cart.find(item => item.id === productId);
-                        if (existingItem) {
-                            existingItem.quantity++;
-                        } else {
-                            cart.push({ ...product, quantity: 1 });
-                        }
-                        updateCartDisplay();
-                    }
+                    if (product) handleAddToCart(product);
                 });
             });
         }
@@ -650,18 +710,32 @@
             });
         }
 
+        // --- PLACEHOLDERS DO MENU LATERAL ---
+        document.getElementById('register-client-link')?.addEventListener('click', (e) => {
+            e.preventDefault(); alert('Funcionalidade "Criar minha conta" a ser implementada.'); closeSideMenu();
+        });
+        document.getElementById('login-client-link')?.addEventListener('click', (e) => {
+            e.preventDefault(); alert('Funcionalidade "Fazer Login (Cliente)" a ser implementada.'); closeSideMenu();
+        });
+        
+        sideMenu.querySelectorAll('nav a[data-order-status]')?.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const status = e.target.dataset.orderStatus;
+                showOrdersView(status);
+            });
+        });
+
+
         // --- INICIALIZAÇÃO ---
         showStoreView(); 
         updateCartDisplay(); 
 
-        // Links do topo (apenas placeholders por enquanto)
-        document.getElementById('my-orders-link')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            alert('Funcionalidade "Meus Pedidos" a ser implementada.');
+        document.getElementById('my-orders-link-topbar')?.addEventListener('click', (e) => {
+            e.preventDefault(); openSideMenu(); // Abre o menu lateral, onde os links de pedidos estão
         });
         document.getElementById('contact-us-link')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            alert('Funcionalidade "Fale Conosco" a ser implementada.');
+            e.preventDefault(); alert('Funcionalidade "Fale Conosco" a ser implementada.');
         });
 
     </script>
