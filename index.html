@@ -22,10 +22,10 @@
             overflow-x: hidden; 
         }
         .main-content-area {
-             min-height: calc(100vh - 8rem); 
+             min-height: calc(100vh - 4rem); /* Ajustado para a remoção da top-bar */
         }
         .main-content-section {
-            min-height: calc(100vh - 8rem);
+            min-height: calc(100vh - 4rem); /* Ajustado */
         }
         .product-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -70,12 +70,6 @@
             border-radius: 0.25rem;
             margin-top: 0.5rem;
         }
-        .top-bar-link {
-            @apply text-xs text-gray-600 hover:text-blue-600 transition-colors duration-200 flex items-center;
-        }
-        .top-bar-icon {
-            @apply w-4 h-4 mr-1;
-        }
         #side-menu {
             transition: transform 0.3s ease-in-out;
         }
@@ -96,6 +90,10 @@
             width: 200px; 
             height: 200px; 
             border: 1px solid #e5e7eb; 
+        }
+        .category-filter-button.active {
+            background-color: #3B82F6; /* bg-blue-600 */
+            color: white;
         }
     </style>
 </head>
@@ -148,31 +146,25 @@
         </div>
     </aside>
 
-    <div class="bg-gray-200 py-2 border-b border-gray-300">
-        <div class="container mx-auto px-6 flex flex-wrap justify-end items-center text-sm">
-            <div class="flex items-center space-x-4">
-                <a href="#" id="contact-us-link" class="top-bar-link">
-                    <svg class="top-bar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    Fale Conosco (SAC)
-                </a>
-            </div>
-        </div>
-    </div>
-
     <header class="bg-white shadow-md sticky top-0 z-30"> 
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <button id="open-menu-button" class="text-gray-600 hover:text-blue-600 lg:hidden"> 
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
             </button>
             <a href="#" id="store-logo" class="text-base font-bold text-blue-600" onclick="showStoreView()">LogoLoja</a>
-            <nav id="store-nav" class="hidden lg:flex items-center"> 
-                <a href="#" class="px-4 text-gray-600 hover:text-blue-500" onclick="showStoreView()">Início</a>
-                <a href="https://wa.me/5511914505059" target="_blank" class="px-4 text-gray-600 hover:text-blue-500 flex items-center">
+            <nav id="store-nav" class="hidden lg:flex items-center space-x-4"> 
+                <a href="#" class="text-gray-600 hover:text-blue-500" onclick="showStoreView()">Início</a>
+                <a href="https://wa.me/5511914505059" target="_blank" class="text-gray-600 hover:text-blue-500 flex items-center">
                     <svg class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.33 3.42 16.79L2.05 22L7.31 20.62C8.75 21.38 10.36 21.82 12.04 21.82C17.5 21.82 21.95 17.37 21.95 11.91C21.95 6.45 17.5 2 12.04 2ZM12.04 20.13C10.56 20.13 9.15 19.74 7.96 19.03L7.62 18.83L4.39 19.69L5.29 16.52L5.07 16.17C4.32 14.91 3.82 13.46 3.82 11.91C3.82 7.39 7.52 3.69 12.04 3.69C16.56 3.69 20.26 7.39 20.26 11.91C20.26 16.43 16.56 20.13 12.04 20.13ZM17.46 14.47C17.24 14.36 16.05 13.79 15.86 13.73C15.67 13.66 15.53 13.62 15.38 13.84C15.24 14.06 14.81 14.59 14.67 14.73C14.53 14.87 14.39 14.91 14.17 14.8C13.94 14.69 13.01 14.35 11.92 13.38C11.07 12.61 10.53 11.7 10.36 11.41C10.18 11.12 10.31 11 10.43 10.88C10.54 10.77 10.67 10.59 10.81 10.43C10.96 10.27 11 10.16 11.07 10.02C11.14 9.88 11.09 9.74 11.04 9.63C10.98 9.52 10.55 8.46 10.38 8.06C10.21 7.66 10.03 7.71 9.89 7.7C9.77 7.7 9.61 7.7 9.46 7.7C9.31 7.7 9.06 7.77 8.84 7.99C8.62 8.21 8.05 8.74 8.05 9.88C8.05 11.02 8.88 12.1 9.02 12.24C9.16 12.38 10.55 14.52 12.68 15.43C13.64 15.84 14.3 16.08 14.79 16.26C15.51 16.52 15.99 16.49 16.35 16.43C16.75 16.36 17.64 15.79 17.83 15.29C18.02 14.8 18.02 14.39 17.97 14.29C17.92 14.18 17.68 14.07 17.46 14.47Z"></path></svg>
                     WhatsApp
                 </a>
-                </nav>
-            <div class="lg:hidden w-6"></div> </div>
+                <a href="#" id="contact-us-link-mainnav" class="text-gray-600 hover:text-blue-500 flex items-center">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    Fale Conosco (SAC)
+                </a>
+            </nav>
+            <div class="lg:hidden w-6"></div> 
+        </div>
     </header>
 
     <div class="main-content-area container mx-auto mt-4 gap-4 px-2 md:px-0">
@@ -180,21 +172,17 @@
             
             <div id="store-view" class="flex flex-col lg:flex-row gap-4">
                 <main id="main-product-list" class="w-full lg:w-3/4 bg-white p-6 rounded-lg shadow-lg main-content-section">
-                    <h1 class="text-3xl font-bold mb-8 text-center text-gray-700">Nossos Produtos</h1>
-                    <section class="mb-12">
-                        <h2 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-2">Destaques da Semana</h2>
-                        <div id="product-row-1" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-                    </section>
-                     <section class="mb-12">
-                        <h2 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-2">Novidades</h2>
-                        <div id="product-row-2" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-                    </section>
-                    <section>
-                        <h2 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-2">Mais Vendidos</h2>
-                        <div id="product-row-3" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-                    </section>
+                    <div class="mb-6">
+                        <input type="search" id="search-product-input" placeholder="Buscar produtos..." class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div id="category-filters-container" class="mb-6 flex flex-wrap gap-2">
+                        </div>
+                    <h1 id="store-section-title" class="text-3xl font-bold mb-8 text-center text-gray-700">Nossos Produtos</h1>
+                    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        </div>
+                    <p id="no-products-found" class="text-center text-gray-500 hidden">Nenhum produto encontrado.</p>
                 </main>
-                <aside id="cart-sidebar" class="w-full lg:w-1/4 bg-white p-6 rounded-lg shadow-lg lg:sticky lg:top-20 main-content-section" style="max-height: calc(100vh - 10rem); overflow-y: auto;">
+                <aside id="cart-sidebar" class="w-full lg:w-1/4 bg-white p-6 rounded-lg shadow-lg lg:sticky lg:top-20 main-content-section" style="max-height: calc(100vh - 6rem); overflow-y: auto;">
                     <h2 class="text-xl font-semibold mb-4 text-gray-700">Carrinho</h2>
                     <div id="cart-items-list"></div>
                     <div id="cart-total-section" class="mt-6 pt-4 border-t border-gray-300">
@@ -229,6 +217,18 @@
                             <div>
                                 <label for="product-price" class="block text-sm font-medium text-gray-600 mb-1">Preço (R$)</label>
                                 <input type="number" step="0.01" id="product-price" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
+                            </div>
+                        </div>
+                         <div class="mb-4">
+                            <label for="product-category-select" class="block text-sm font-medium text-gray-600 mb-1">Categoria</label>
+                            <select id="product-category-select" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="new-product-category-input" class="block text-sm font-medium text-gray-600 mb-1">Ou Nova Categoria</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="new-product-category-input" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: Eletrônicos">
+                                <button type="button" id="add-new-category-button" class="bg-indigo-500 hover:bg-indigo-600 text-white text-sm py-2 px-3 rounded-md">Criar</button>
                             </div>
                         </div>
                         <div class="mb-4">
@@ -285,8 +285,7 @@
                             Continuar Comprando
                         </button>
                     </div>
-                    <div id="cart-items-list-dedicated" class="space-y-4 mb-8">
-                        </div>
+                    <div id="cart-items-list-dedicated" class="space-y-4 mb-8"></div>
                     <div id="cart-empty-message-dedicated" class="text-center text-gray-500 py-8 hidden">
                         <p class="text-xl mb-4">Seu carrinho está vazio.</p>
                         <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
@@ -406,16 +405,31 @@
         const continueShoppingFromCartViewButton = document.getElementById('continue-shopping-from-cart-view');
         const cartSummaryDedicated = document.getElementById('cart-summary-dedicated');
 
+        // Search and Filter elements
+        const searchProductInput = document.getElementById('search-product-input');
+        const categoryFiltersContainer = document.getElementById('category-filters-container');
+        const storeSectionTitle = document.getElementById('store-section-title');
+        const productGrid = document.getElementById('product-grid');
+        const noProductsFoundMessage = document.getElementById('no-products-found');
+        const productCategorySelect = document.getElementById('product-category-select');
+        const newProductCategoryInput = document.getElementById('new-product-category-input');
+        const addNewCategoryButton = document.getElementById('add-new-category-button');
 
 
         // --- ESTADO DA APLICAÇÃO ---
+        let categories = [
+            { id: 'cat0', name: 'Todas as Categorias' }, // Special category for showing all
+            { id: 'cat1', name: 'Destaques da Semana' },
+            { id: 'cat2', name: 'Novidades' },
+            { id: 'cat3', name: 'Mais Vendidos' }
+        ];
         let products = [ 
-            { id: 'prod1', name: "Produto Exemplo Alfa", price: 99.90, imageUrl: "https://placehold.co/400x300/E0E7FF/4F46E5?text=Produto+Alfa", description: "Descrição detalhada do Produto Exemplo Alfa. Este produto é feito com materiais de alta qualidade e oferece excelente durabilidade. Ideal para diversas aplicações e gostos." },
-            { id: 'prod2', name: "Produto Exemplo Beta", price: 129.50, imageUrl: "https://placehold.co/400x300/DBEAFE/1D4ED8?text=Produto+Beta", description: "O Produto Exemplo Beta combina design moderno com funcionalidade superior. Perfeito para quem busca inovação e estilo. Aproveite esta oferta especial." },
-            { id: 'prod3', name: "Produto Exemplo Gama", price: 75.00, imageUrl: "https://placehold.co/400x300/BFDBFE/1E40AF?text=Produto+Gama", description: "Conheça o Produto Exemplo Gama, uma solução prática e eficiente para o seu dia a dia. Com garantia estendida e suporte ao cliente." },
-            { id: 'prod4', name: "Produto Exemplo Delta", price: 210.00, imageUrl: "https://placehold.co/400x300/93C5FD/1C3FAA?text=Produto+Delta", description: "Produto Exemplo Delta: robustez e tecnologia de ponta. Indicado para uso profissional e para os entusiastas mais exigentes." },
-            { id: 'prod5', name: "Produto Exemplo Epsilon", price: 45.99, imageUrl: "https://placehold.co/400x300/60A5FA/1B3A9A?text=Produto+Epsilon", description: "Leve e compacto, o Produto Exemplo Epsilon é seu companheiro ideal para todas as horas. Fácil de transportar e usar." },
-            { id: 'prod6', name: "Produto Exemplo Zeta", price: 88.80, imageUrl: "https://placehold.co/400x300/3B82F6/1A358A?text=Produto+Zeta", description: "O Produto Exemplo Zeta oferece um excelente custo-benefício sem abrir mão da qualidade. Satisfação garantida ou seu dinheiro de volta." }
+            { id: 'prod1', name: "Produto Exemplo Alfa", categoryId: 'cat2', price: 99.90, imageUrl: "https://placehold.co/400x300/E0E7FF/4F46E5?text=Produto+Alfa", description: "Descrição detalhada do Produto Exemplo Alfa. Este produto é feito com materiais de alta qualidade e oferece excelente durabilidade. Ideal para diversas aplicações e gostos." },
+            { id: 'prod2', name: "Produto Exemplo Beta", categoryId: 'cat1', price: 129.50, imageUrl: "https://placehold.co/400x300/DBEAFE/1D4ED8?text=Produto+Beta", description: "O Produto Exemplo Beta combina design moderno com funcionalidade superior. Perfeito para quem busca inovação e estilo. Aproveite esta oferta especial." },
+            { id: 'prod3', name: "Produto Exemplo Gama", categoryId: 'cat2', price: 75.00, imageUrl: "https://placehold.co/400x300/BFDBFE/1E40AF?text=Produto+Gama", description: "Conheça o Produto Exemplo Gama, uma solução prática e eficiente para o seu dia a dia. Com garantia estendida e suporte ao cliente." },
+            { id: 'prod4', name: "Produto Exemplo Delta", categoryId: 'cat3', price: 210.00, imageUrl: "https://placehold.co/400x300/93C5FD/1C3FAA?text=Produto+Delta", description: "Produto Exemplo Delta: robustez e tecnologia de ponta. Indicado para uso profissional e para os entusiastas mais exigentes." },
+            { id: 'prod5', name: "Produto Exemplo Epsilon", categoryId: 'cat2', price: 45.99, imageUrl: "https://placehold.co/400x300/60A5FA/1B3A9A?text=Produto+Epsilon", description: "Leve e compacto, o Produto Exemplo Epsilon é seu companheiro ideal para todas as horas. Fácil de transportar e usar." },
+            { id: 'prod6', name: "Produto Exemplo Zeta", categoryId: 'cat1', price: 88.80, imageUrl: "https://placehold.co/400x300/3B82F6/1A358A?text=Produto+Zeta", description: "O Produto Exemplo Zeta oferece um excelente custo-benefício sem abrir mão da qualidade. Satisfação garantida ou seu dinheiro de volta." }
         ];
         let adminUsers = [
             { email: "viniciusaraujomatos1@gmail.com", password: "Belohorizonte2020@" }
@@ -424,6 +438,9 @@
         let isAdminLoggedIn = false;
         let currentAdminEmail = null;
         let activeFeedbackTimeout = null; 
+        let currentCategoryFilter = 'cat0'; // Default to "Todas as Categorias"
+        let currentSearchTerm = '';
+
 
         // --- CONTROLE DO MENU LATERAL ---
         function openSideMenu() {
@@ -453,38 +470,85 @@
         }
         
         function renderStoreProducts() {
-            const productRow1 = document.getElementById('product-row-1');
-            const productRow2 = document.getElementById('product-row-2');
-            const productRow3 = document.getElementById('product-row-3'); 
-
-            if (!productRow1 || !productRow2 || !productRow3) return;
+            if (!productGrid || !noProductsFoundMessage || !storeSectionTitle) return;
             
-            productRow1.innerHTML = ''; productRow2.innerHTML = ''; productRow3.innerHTML = '';
+            productGrid.innerHTML = '';
+            
+            let filteredProducts = products;
 
-            products.forEach((product, index) => {
-                const productCard = document.createElement('div');
-                productCard.className = "product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center";
-                productCard.dataset.id = product.id;
-                productCard.innerHTML = `
-                    <img src="${product.imageUrl || 'https://placehold.co/300x200/cccccc/969696?text=Sem+Imagem'}" alt="Imagem de ${product.name}" class="w-full h-48 object-cover rounded-md mb-4 product-image">
-                    <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">${product.name}</h3>
-                    <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ ${product.price.toFixed(2)}</p>
-                    <p class="text-xs text-gray-500 mb-2 product-description h-10 overflow-hidden" title="${product.description || ''}">${product.description.substring(0,50) + "..." || 'Sem descrição detalhada.'}</p>
-                    <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button-list">Adicionar ao Carrinho</button>
-                    <div class="add-to-cart-feedback hidden mt-2 text-sm w-full"></div>
-                `;
-                productCard.addEventListener('click', (e) => {
-                    if (!e.target.classList.contains('add-to-cart-button-list') && !e.target.closest('.add-to-cart-feedback')) { 
-                         showProductDetailView(product.id);
-                    }
+            // Aplicar filtro de categoria (exceto se for "Todas as Categorias")
+            if (currentCategoryFilter !== 'cat0') {
+                filteredProducts = filteredProducts.filter(p => p.categoryId === currentCategoryFilter);
+            }
+
+            // Aplicar filtro de busca
+            if (currentSearchTerm) {
+                const searchTermLower = currentSearchTerm.toLowerCase();
+                filteredProducts = filteredProducts.filter(p => 
+                    p.name.toLowerCase().includes(searchTermLower) || 
+                    p.description.toLowerCase().includes(searchTermLower)
+                );
+            }
+            
+            const selectedCategory = categories.find(c => c.id === currentCategoryFilter);
+            storeSectionTitle.textContent = selectedCategory ? selectedCategory.name : "Nossos Produtos";
+
+
+            if (filteredProducts.length === 0) {
+                noProductsFoundMessage.classList.remove('hidden');
+            } else {
+                noProductsFoundMessage.classList.add('hidden');
+                filteredProducts.forEach((product) => {
+                    const productCard = document.createElement('div');
+                    productCard.className = "product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center";
+                    productCard.dataset.id = product.id;
+                    productCard.innerHTML = `
+                        <img src="${product.imageUrl || 'https://placehold.co/300x200/cccccc/969696?text=Sem+Imagem'}" alt="Imagem de ${product.name}" class="w-full h-48 object-cover rounded-md mb-4 product-image">
+                        <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">${product.name}</h3>
+                        <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ ${product.price.toFixed(2)}</p>
+                        <p class="text-xs text-gray-500 mb-2 product-description h-10 overflow-hidden" title="${product.description || ''}">${product.description.substring(0,50) + "..." || 'Sem descrição detalhada.'}</p>
+                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button-list">Adicionar ao Carrinho</button>
+                        <div class="add-to-cart-feedback hidden mt-2 text-sm w-full"></div>
+                    `;
+                    productCard.addEventListener('click', (e) => {
+                        if (!e.target.classList.contains('add-to-cart-button-list') && !e.target.closest('.add-to-cart-feedback')) { 
+                             showProductDetailView(product.id);
+                        }
+                    });
+                    productGrid.appendChild(productCard);
                 });
-                
-                if (index < 3) productRow1.appendChild(productCard);
-                else if (index < 6) productRow2.appendChild(productCard);
-                else productRow3.appendChild(productCard); 
-            });
+            }
             addEventListenersToAddToCartButtons();
         }
+
+        function renderCategoryFilters() {
+            if (!categoryFiltersContainer) return;
+            categoryFiltersContainer.innerHTML = '';
+            categories.forEach(category => {
+                const button = document.createElement('button');
+                button.className = `category-filter-button px-4 py-2 border rounded-md text-sm font-medium hover:bg-blue-500 hover:text-white transition-colors ${category.id === currentCategoryFilter ? 'active' : 'bg-white text-gray-700 border-gray-300'}`;
+                button.textContent = category.name;
+                button.dataset.categoryId = category.id;
+                button.addEventListener('click', () => {
+                    currentCategoryFilter = category.id;
+                    renderCategoryFilters(); // Re-render para atualizar o botão ativo
+                    renderStoreProducts();
+                });
+                categoryFiltersContainer.appendChild(button);
+            });
+        }
+
+        function populateCategoryDropdown() {
+            if (!productCategorySelect) return;
+            productCategorySelect.innerHTML = '';
+            categories.filter(c => c.id !== 'cat0').forEach(category => { // Não incluir "Todas as Categorias" no admin
+                const option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                productCategorySelect.appendChild(option);
+            });
+        }
+
 
         function showProductDetailView(productId) {
             const product = products.find(p => p.id === productId);
@@ -534,6 +598,7 @@
             document.getElementById('store-logo').textContent = "Painel Admin";
             document.getElementById('store-nav').classList.add('hidden');
             openMenuButton.classList.add('lg:hidden'); 
+            populateCategoryDropdown();
             renderAdminProducts();
             renderAdminUsers();
             closeSideMenu();
@@ -548,6 +613,7 @@
             document.getElementById('store-logo').textContent = "LogoLoja";
             document.getElementById('store-nav').classList.remove('hidden'); 
             openMenuButton.classList.remove('lg:hidden'); 
+            renderCategoryFilters();
             renderStoreProducts(); 
             closeSideMenu();
         }
@@ -560,7 +626,6 @@
 
         function showCheckoutView() {
             if (cart.length === 0) {
-                // Em vez de alert, podemos redirecionar para a visualização de carrinho vazio
                 showCartViewDedicated(); 
                 return;
             }
@@ -586,10 +651,10 @@
 
             if (cart.length === 0) {
                 cartEmptyMessageDedicated.classList.remove('hidden');
-                cartSummaryDedicated.classList.add('hidden'); // Esconde o sumário e botão de pagamento
+                cartSummaryDedicated.classList.add('hidden'); 
             } else {
                 cartEmptyMessageDedicated.classList.add('hidden');
-                cartSummaryDedicated.classList.remove('hidden'); // Mostra o sumário e botão de pagamento
+                cartSummaryDedicated.classList.remove('hidden'); 
                 cart.forEach((item) => {
                     const itemElement = document.createElement('div');
                     itemElement.className = 'flex justify-between items-center p-4 border-b border-gray-200';
@@ -641,7 +706,7 @@
 
         adminLogoutButtonMenu?.addEventListener('click', () => { showStoreView(); });
         backToStoreButtonAdmin?.addEventListener('click', showStoreView);
-        backToCartButton?.addEventListener('click', showCartViewDedicated); // Alterado para ir para a nova tela de carrinho
+        backToCartButton?.addEventListener('click', showCartViewDedicated); 
         checkoutButtonDedicated?.addEventListener('click', showCheckoutView);
         continueShoppingFromCartViewButton?.addEventListener('click', showStoreView);
 
@@ -653,31 +718,50 @@
                 const price = parseFloat(document.getElementById('product-price').value);
                 let imageUrl = document.getElementById('product-image-url').value;
                 const description = document.getElementById('product-description').value;
+                const categoryId = productCategorySelect.value;
+
                 if (uploadedImageFile) {
                     if (!imageUrl) imageUrl = URL.createObjectURL(uploadedImageFile);
                 }
-                if (name && price > 0) {
+                if (name && price > 0 && categoryId) {
                     const newProduct = {
                         id: 'prod' + (products.length + 1) + Date.now(), 
-                        name, price,
+                        name, price, categoryId,
                         imageUrl: imageUrl || 'https://placehold.co/300x200/cccccc/969696?text=Nova+Imagem',
                         description
                     };
                     products.push(newProduct);
-                    renderAdminProducts(); renderStoreProducts(); 
+                    renderAdminProducts(); renderStoreProducts(); renderCategoryFilters();
                     addProductForm.reset();
                     imagePreview.classList.add('hidden'); imagePreview.src = '';
                     uploadedImageFile = null;
                     document.getElementById('product-image-url').value = ''; 
                 } else {
                     const feedback = document.createElement('p');
-                    feedback.textContent = "Por favor, preencha nome e preço do produto.";
+                    feedback.textContent = "Por favor, preencha nome, preço e selecione uma categoria.";
                     feedback.className = "text-red-500 text-sm mt-2 product-add-feedback";
                     addProductForm.querySelector('button[type="submit"]').insertAdjacentElement('afterend', feedback);
                     setTimeout(() => feedback.remove(), 3000);
                 }
             });
         }
+        
+        addNewCategoryButton?.addEventListener('click', () => {
+            const newCategoryName = newProductCategoryInput.value.trim();
+            if (newCategoryName && !categories.find(c => c.name.toLowerCase() === newCategoryName.toLowerCase())) {
+                const newCategoryId = 'cat' + Date.now();
+                categories.push({ id: newCategoryId, name: newCategoryName });
+                populateCategoryDropdown();
+                renderCategoryFilters(); // Atualiza os filtros na loja
+                productCategorySelect.value = newCategoryId; // Seleciona a nova categoria
+                newProductCategoryInput.value = '';
+            } else if (newCategoryName) {
+                alert('Essa categoria já existe.');
+            } else {
+                alert('Por favor, insira um nome para a nova categoria.');
+            }
+        });
+
 
         function addEventListenersToRemoveProductButtons() {
             const removeButtons = adminProductListContainer.querySelectorAll('.remove-product-button');
@@ -760,13 +844,13 @@
             });
         }
         
-        const cartItemsContainer = document.getElementById('cart-items-list'); // Sidebar cart
-        const cartTotalValueElement = document.getElementById('cart-total-value'); // Sidebar cart
-        const checkoutButtonSidebar = document.getElementById('checkout-button-sidebar'); // Sidebar cart
-        const cartEmptyMessage = document.getElementById('cart-empty-message'); // Sidebar cart
-        const cartTotalSection = document.getElementById('cart-total-section'); // Sidebar cart
+        const cartItemsContainer = document.getElementById('cart-items-list'); 
+        const cartTotalValueElement = document.getElementById('cart-total-value'); 
+        const checkoutButtonSidebar = document.getElementById('checkout-button-sidebar'); 
+        const cartEmptyMessage = document.getElementById('cart-empty-message'); 
+        const cartTotalSection = document.getElementById('cart-total-section'); 
 
-        checkoutButtonSidebar?.addEventListener('click', showCartViewDedicated); // Botão do sidebar leva para a tela de carrinho dedicada
+        checkoutButtonSidebar?.addEventListener('click', showCartViewDedicated); 
 
 
         function handleAddToCart(product, buttonElement) {
@@ -787,8 +871,8 @@
             } else {
                 cart.push({ ...product, quantity: 1 });
             }
-            updateCartDisplay(); // Atualiza o sidebar do carrinho
-            updateCartViewDedicatedDisplay(); // Atualiza a view dedicada do carrinho, se estiver visível
+            updateCartDisplay(); 
+            updateCartViewDedicatedDisplay(); 
 
             if (buttonElement) {
                 const originalButtonText = buttonElement.textContent;
@@ -814,7 +898,7 @@
                         e.preventDefault(); e.stopPropagation();
                         clearTimeout(activeFeedbackTimeout);
                         revertButtonAndHide();
-                        showCartViewDedicated(); // Alterado para mostrar a view dedicada
+                        showCartViewDedicated(); 
                     });
                     feedbackDiv.querySelector('.continue-shopping-link-feedback')?.addEventListener('click', (e) => {
                         e.preventDefault(); e.stopPropagation();
@@ -825,7 +909,7 @@
             }
         }
 
-        function updateCartDisplay() { // Atualiza o carrinho na sidebar
+        function updateCartDisplay() { 
             if (!cartItemsContainer || !cartTotalValueElement || !checkoutButtonSidebar || !cartEmptyMessage || !cartTotalSection) return;
             cartItemsContainer.innerHTML = '';
             let total = 0;
@@ -853,7 +937,7 @@
             addEventListenersToRemoveFromCartButtons();
         }
         
-        function updateCartViewDedicatedDisplay() { // Atualiza a view dedicada do carrinho
+        function updateCartViewDedicatedDisplay() { 
             if (!cartItemsListDedicated || !cartTotalValueDedicated || !cartEmptyMessageDedicated || !cartSummaryDedicated) return;
             cartItemsListDedicated.innerHTML = '';
             let total = 0;
@@ -905,7 +989,7 @@
             });
         }
         
-        function addEventListenersToRemoveFromCartButtons() { // Para a sidebar
+        function addEventListenersToRemoveFromCartButtons() { 
             const removeButtons = cartItemsContainer.querySelectorAll('.remove-from-cart-button');
             removeButtons.forEach(button => {
                 const newButton = button.cloneNode(true);
@@ -914,12 +998,12 @@
                     const productIdToRemove = event.target.dataset.id;
                     cart = cart.filter(item => item.id !== productIdToRemove);
                     updateCartDisplay();
-                    updateCartViewDedicatedDisplay(); // Sincroniza a view dedicada
+                    updateCartViewDedicatedDisplay(); 
                 });
             });
         }
 
-        function addEventListenersToRemoveFromCartButtonsDedicated() { // Para a view dedicada do carrinho
+        function addEventListenersToRemoveFromCartButtonsDedicated() { 
             const removeButtons = cartItemsListDedicated.querySelectorAll('.remove-from-cart-button-dedicated');
             removeButtons.forEach(button => {
                 const newButton = button.cloneNode(true);
@@ -927,13 +1011,12 @@
                 newButton.addEventListener('click', (event) => {
                     const productIdToRemove = event.target.dataset.id;
                     cart = cart.filter(item => item.id !== productIdToRemove);
-                    updateCartDisplay(); // Sincroniza a sidebar
+                    updateCartDisplay(); 
                     updateCartViewDedicatedDisplay();
                 });
             });
         }
 
-        // --- Checkout Logic ---
         copyPixKeyButton?.addEventListener('click', () => {
             pixKeyTextElement.select();
             try {
@@ -989,21 +1072,33 @@
                 showOrdersView(status);
             });
         });
+        
+        searchProductInput?.addEventListener('input', (e) => {
+            currentSearchTerm = e.target.value;
+            renderStoreProducts();
+        });
+
 
         showStoreView(); 
         updateCartDisplay(); 
 
-        document.getElementById('contact-us-link')?.addEventListener('click', (e) => {
+        document.getElementById('contact-us-link-mainnav')?.addEventListener('click', (e) => {
             e.preventDefault(); alert('Funcionalidade "Fale Conosco (SAC)" a ser implementada.');
         });
         
         document.getElementById('store-logo')?.addEventListener('click', (e) => {
             e.preventDefault();
+            currentCategoryFilter = 'cat0'; // Reset category filter
+            currentSearchTerm = ''; // Reset search term
+            if(searchProductInput) searchProductInput.value = '';
             showStoreView();
         });
-        document.querySelector('#store-nav a[href="#"]')?.addEventListener('click', (e) => { 
+        document.querySelector('#store-nav a[onclick="showStoreView()"]')?.addEventListener('click', (e) => { 
              if (e.target.textContent === "Início") {
                 e.preventDefault();
+                currentCategoryFilter = 'cat0'; // Reset category filter
+                currentSearchTerm = ''; // Reset search term
+                if(searchProductInput) searchProductInput.value = '';
                 showStoreView();
             }
         });
@@ -1011,4 +1106,4 @@
     </script>
 
 </body>
-</ht
+</html>
