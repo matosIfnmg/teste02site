@@ -20,17 +20,14 @@
         body {
             font-family: 'Inter', sans-serif;
         }
-        /* Para garantir que as sidebars tenham uma altura mínima em telas menores e rolagem se necessário */
         .sidebar {
-            min-height: calc(100vh - 4rem); /* Altura da viewport menos a altura do header */
+            min-height: calc(100vh - 4rem); 
             max-height: calc(100vh - 4rem);
             overflow-y: auto;
         }
         .main-content {
              min-height: calc(100vh - 4rem);
         }
-
-        /* Melhorias visuais para os cards de produto */
         .product-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
@@ -38,7 +35,6 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-        /* Estilo para mensagens de feedback (login) */
         .feedback-message {
             padding: 0.75rem;
             margin-bottom: 1rem;
@@ -46,14 +42,34 @@
             font-size: 0.875rem;
         }
         .feedback-success {
-            background-color: #D1FAE5; /* green-100 */
-            color: #065F46; /* green-700 */
-            border: 1px solid #6EE7B7; /* green-300 */
+            background-color: #D1FAE5;
+            color: #065F46;
+            border: 1px solid #6EE7B7;
         }
         .feedback-error {
-            background-color: #FEE2E2; /* red-100 */
-            color: #991B1B; /* red-700 */
-            border: 1px solid #FCA5A5; /* red-300 */
+            background-color: #FEE2E2;
+            color: #991B1B;
+            border: 1px solid #FCA5A5;
+        }
+        /* Estilos para a área de arrastar e soltar imagem (placeholder) */
+        .drop-zone {
+            border: 2px dashed #cbd5e1; /* border-gray-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            background-color: #f9fafb; /* bg-gray-50 */
+        }
+        .drop-zone.dragover {
+            background-color: #eff6ff; /* bg-blue-50 */
+            border-color: #93c5fd; /* border-blue-300 */
+        }
+        .product-image-preview {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: cover;
+            border-radius: 0.25rem; /* rounded-sm */
+            margin-top: 0.5rem; /* mt-2 */
         }
     </style>
 </head>
@@ -61,8 +77,8 @@
 
     <header class="bg-white shadow-md sticky top-0 z-50">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-blue-600">LogoLoja</a>
-            <nav>
+            <a href="#" id="store-logo" class="text-2xl font-bold text-blue-600">LogoLoja</a>
+            <nav id="store-nav">
                 <a href="#" class="px-4 text-gray-600 hover:text-blue-500">Início</a>
                 <a href="#" class="px-4 text-gray-600 hover:text-blue-500">Produtos</a>
                 <a href="#" class="px-4 text-gray-600 hover:text-blue-500">Contato</a>
@@ -72,128 +88,165 @@
 
     <div class="flex flex-col md:flex-row container mx-auto mt-4 gap-4 px-2 md:px-0">
 
-        <aside class="w-full md:w-1/5 bg-white p-6 rounded-lg shadow-lg sidebar order-2 md:order-1">
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">Login Administrador</h2>
-            <div id="login-feedback" class="hidden"></div> <form id="login-form">
-                <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-gray-600 mb-1">Email</label>
-                    <input type="email" id="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="seu@email.com" required>
-                </div>
-                <div class="mb-4">
-                    <label for="senha" class="block text-sm font-medium text-gray-600 mb-1">Senha</label>
-                    <input type="password" id="senha" name="senha" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="********" required>
-                </div>
-                <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Entrar</button>
-                <p class="text-xs text-gray-500 mt-3 text-center">Não tem uma conta? <a href="#" class="text-blue-500 hover:underline">Cadastre-se</a></p>
-            </form>
-        </aside>
-
-        <main class="w-full md:w-3/5 bg-white p-6 rounded-lg shadow-lg main-content order-1 md:order-2">
-            <h1 class="text-3xl font-bold mb-8 text-center text-gray-700">Nossos Produtos</h1>
-
-            <section class="mb-12">
-                <h2 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-2">Destaques da Semana</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
-                        <img src="https://placehold.co/300x200/E0E7FF/4F46E5?text=Produto+1" alt="Imagem do Produto 1" class="w-full h-48 object-cover rounded-md mb-4">
-                        <h3 class="text-lg font-medium text-gray-700 mb-1">Nome do Produto A</h3>
-                        <p class="text-xl font-bold text-blue-600 mb-3">R$ 99,90</p>
-                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Adicionar ao Carrinho</button>
+        <aside id="login-sidebar" class="w-full md:w-1/5 bg-white p-6 rounded-lg shadow-lg sidebar order-2 md:order-1">
+            <div id="login-section">
+                <h2 class="text-xl font-semibold mb-4 text-gray-700">Login Administrador</h2>
+                <div id="login-feedback" class="hidden"></div>
+                <form id="login-form">
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-medium text-gray-600 mb-1">Email</label>
+                        <input type="email" id="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="seu@email.com" required>
                     </div>
-                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
-                        <img src="https://placehold.co/300x200/DBEAFE/1D4ED8?text=Produto+2" alt="Imagem do Produto 2" class="w-full h-48 object-cover rounded-md mb-4">
-                        <h3 class="text-lg font-medium text-gray-700 mb-1">Nome do Produto B</h3>
-                        <p class="text-xl font-bold text-blue-600 mb-3">R$ 129,50</p>
-                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Adicionar ao Carrinho</button>
+                    <div class="mb-4">
+                        <label for="senha" class="block text-sm font-medium text-gray-600 mb-1">Senha</label>
+                        <input type="password" id="senha" name="senha" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="********" required>
                     </div>
-                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
-                        <img src="https://placehold.co/300x200/BFDBFE/1E40AF?text=Produto+3" alt="Imagem do Produto 3" class="w-full h-48 object-cover rounded-md mb-4">
-                        <h3 class="text-lg font-medium text-gray-700 mb-1">Nome do Produto C</h3>
-                        <p class="text-xl font-bold text-blue-600 mb-3">R$ 75,00</p>
-                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Adicionar ao Carrinho</button>
-                    </div>
-                </div>
-            </section>
-
-            <section class="mb-12">
-                <h2 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-2">Novidades</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
-                        <img src="https://placehold.co/300x200/93C5FD/1C3FAA?text=Produto+4" alt="Imagem do Produto 4" class="w-full h-48 object-cover rounded-md mb-4">
-                        <h3 class="text-lg font-medium text-gray-700 mb-1">Nome do Produto D</h3>
-                        <p class="text-xl font-bold text-blue-600 mb-3">R$ 210,00</p>
-                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Adicionar ao Carrinho</button>
-                    </div>
-                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
-                        <img src="https://placehold.co/300x200/60A5FA/1B3A9A?text=Produto+5" alt="Imagem do Produto 5" class="w-full h-48 object-cover rounded-md mb-4">
-                        <h3 class="text-lg font-medium text-gray-700 mb-1">Nome do Produto E</h3>
-                        <p class="text-xl font-bold text-blue-600 mb-3">R$ 45,99</p>
-                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Adicionar ao Carrinho</button>
-                    </div>
-                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
-                        <img src="https://placehold.co/300x200/3B82F6/1A358A?text=Produto+6" alt="Imagem do Produto 6" class="w-full h-48 object-cover rounded-md mb-4">
-                        <h3 class="text-lg font-medium text-gray-700 mb-1">Nome do Produto F</h3>
-                        <p class="text-xl font-bold text-blue-600 mb-3">R$ 88,80</p>
-                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Adicionar ao Carrinho</button>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <h2 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-2">Mais Vendidos</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
-                        <img src="https://placehold.co/300x200/2563EB/EFF6FF?text=Produto+7" alt="Imagem do Produto 7" class="w-full h-48 object-cover rounded-md mb-4">
-                        <h3 class="text-lg font-medium text-gray-700 mb-1">Nome do Produto G</h3>
-                        <p class="text-xl font-bold text-blue-600 mb-3">R$ 150,00</p>
-                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Adicionar ao Carrinho</button>
-                    </div>
-                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
-                        <img src="https://placehold.co/300x200/1D4ED8/DBEAFE?text=Produto+8" alt="Imagem do Produto 8" class="w-full h-48 object-cover rounded-md mb-4">
-                        <h3 class="text-lg font-medium text-gray-700 mb-1">Nome do Produto H</h3>
-                        <p class="text-xl font-bold text-blue-600 mb-3">R$ 199,90</p>
-                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Adicionar ao Carrinho</button>
-                    </div>
-                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
-                        <img src="https://placehold.co/300x200/1E40AF/BFDBFE?text=Produto+9" alt="Imagem do Produto 9" class="w-full h-48 object-cover rounded-md mb-4">
-                        <h3 class="text-lg font-medium text-gray-700 mb-1">Nome do Produto I</h3>
-                        <p class="text-xl font-bold text-blue-600 mb-3">R$ 55,25</p>
-                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300">Adicionar ao Carrinho</button>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <aside class="w-full md:w-1/5 bg-white p-6 rounded-lg shadow-lg sidebar order-3 md:order-3">
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">Carrinho</h2>
-            <div id="cart-items-list">
-                <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-200">
-                    <div>
-                        <h4 class="font-medium text-gray-600">Produto X</h4>
-                        <p class="text-xs text-gray-500">1 x R$ 49,90</p>
-                    </div>
-                    <button class="text-red-500 hover:text-red-700 text-sm">Remover</button>
-                </div>
-                <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-200">
-                    <div>
-                        <h4 class="font-medium text-gray-600">Produto Y Longo Nome</h4>
-                        <p class="text-xs text-gray-500">2 x R$ 25,00</p>
-                    </div>
-                    <button class="text-red-500 hover:text-red-700 text-sm">Remover</button>
-                </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Entrar</button>
+                    <p class="text-xs text-gray-500 mt-3 text-center">Não tem uma conta? <a href="#" class="text-blue-500 hover:underline">Cadastre-se</a></p>
+                </form>
             </div>
-
-            <div id="cart-total-section" class="mt-6 pt-4 border-t border-gray-300">
-                <div class="flex justify-between items-center font-semibold text-gray-700">
-                    <span>Total:</span>
-                    <span id="cart-total-value">R$ 99,90</span>
-                </div>
-                <button id="checkout-button" class="w-full mt-4 bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300">Finalizar Compra</button>
-            </div>
-            <div id="cart-empty-message" class="text-center text-gray-500 mt-6 hidden">
-                Seu carrinho está vazio.
+            <div id="admin-info-section" class="hidden">
+                 <h2 class="text-xl font-semibold mb-4 text-gray-700">Administrador</h2>
+                 <p class="text-sm text-gray-600 mb-4">Logado como: <span id="admin-email-display" class="font-medium"></span></p>
+                 <button id="admin-logout-button" class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-300">Logout</button>
             </div>
         </aside>
+
+        <div id="dynamic-content-area" class="w-full md:w-4/5 order-1 md:order-2">
+            
+            <div id="store-view" class="flex flex-col lg:flex-row gap-4">
+                <main id="main-product-list" class="w-full lg:w-3/4 bg-white p-6 rounded-lg shadow-lg main-content">
+                    <h1 class="text-3xl font-bold mb-8 text-center text-gray-700">Nossos Produtos</h1>
+                    <section class="mb-12">
+                        <h2 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-2">Destaques da Semana</h2>
+                        <div id="product-row-1" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
+                                <img src="https://placehold.co/300x200/E0E7FF/4F46E5?text=Produto+1" alt="Imagem do Produto 1" class="w-full h-48 object-cover rounded-md mb-4 product-image">
+                                <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">Nome do Produto A</h3>
+                                <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ 99,90</p>
+                                <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button">Adicionar ao Carrinho</button>
+                            </div>
+                            <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
+                                <img src="https://placehold.co/300x200/DBEAFE/1D4ED8?text=Produto+2" alt="Imagem do Produto 2" class="w-full h-48 object-cover rounded-md mb-4 product-image">
+                                <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">Nome do Produto B</h3>
+                                <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ 129,50</p>
+                                <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button">Adicionar ao Carrinho</button>
+                            </div>
+                             <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
+                                <img src="https://placehold.co/300x200/BFDBFE/1E40AF?text=Produto+3" alt="Imagem do Produto 3" class="w-full h-48 object-cover rounded-md mb-4 product-image">
+                                <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">Nome do Produto C</h3>
+                                <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ 75,00</p>
+                                <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button">Adicionar ao Carrinho</button>
+                            </div>
+                        </div>
+                    </section>
+                     <section class="mb-12">
+                        <h2 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-2">Novidades</h2>
+                        <div id="product-row-2" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                             <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
+                                <img src="https://placehold.co/300x200/93C5FD/1C3FAA?text=Produto+4" alt="Imagem do Produto 4" class="w-full h-48 object-cover rounded-md mb-4 product-image">
+                                <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">Nome do Produto D</h3>
+                                <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ 210,00</p>
+                                <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button">Adicionar ao Carrinho</button>
+                            </div>
+                            <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
+                                <img src="https://placehold.co/300x200/60A5FA/1B3A9A?text=Produto+5" alt="Imagem do Produto 5" class="w-full h-48 object-cover rounded-md mb-4 product-image">
+                                <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">Nome do Produto E</h3>
+                                <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ 45,99</p>
+                                <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button">Adicionar ao Carrinho</button>
+                            </div>
+                             <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center">
+                                <img src="https://placehold.co/300x200/3B82F6/1A358A?text=Produto+6" alt="Imagem do Produto 6" class="w-full h-48 object-cover rounded-md mb-4 product-image">
+                                <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">Nome do Produto F</h3>
+                                <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ 88,80</p>
+                                <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button">Adicionar ao Carrinho</button>
+                            </div>
+                        </div>
+                    </section>
+                    <section>
+                        <h2 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-2">Mais Vendidos</h2>
+                        <div id="product-row-3" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            </div>
+                    </section>
+                </main>
+                <aside id="cart-sidebar" class="w-full lg:w-1/4 bg-white p-6 rounded-lg shadow-lg sidebar">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Carrinho</h2>
+                    <div id="cart-items-list">
+                        </div>
+                    <div id="cart-total-section" class="mt-6 pt-4 border-t border-gray-300">
+                        <div class="flex justify-between items-center font-semibold text-gray-700">
+                            <span>Total:</span>
+                            <span id="cart-total-value">R$ 0,00</span>
+                        </div>
+                        <button id="checkout-button" class="w-full mt-4 bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300">Finalizar Compra</button>
+                    </div>
+                    <div id="cart-empty-message" class="text-center text-gray-500 mt-6">
+                        Seu carrinho está vazio.
+                    </div>
+                </aside>
+            </div>
+
+            <div id="admin-panel" class="hidden w-full bg-white p-6 rounded-lg shadow-lg main-content">
+                <h2 class="text-3xl font-bold mb-8 text-center text-gray-700">Painel do Administrador</h2>
+
+                <section id="product-management" class="mb-10">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-3">Gerenciar Produtos</h3>
+                    <form id="add-product-form" class="mb-8 p-6 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
+                        <h4 class="text-xl font-medium mb-4 text-gray-700">Adicionar Novo Produto</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label for="product-name" class="block text-sm font-medium text-gray-600 mb-1">Nome do Produto</label>
+                                <input type="text" id="product-name" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                            </div>
+                            <div>
+                                <label for="product-price" class="block text-sm font-medium text-gray-600 mb-1">Preço (R$)</label>
+                                <input type="number" step="0.01" id="product-price" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="product-image-url" class="block text-sm font-medium text-gray-600 mb-1">URL da Imagem</label>
+                            <input type="url" id="product-image-url" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="https://exemplo.com/imagem.jpg">
+                             <div id="image-drop-zone" class="mt-2 drop-zone">
+                                <p>Arraste e solte uma imagem aqui, ou clique para selecionar.</p>
+                                <input type="file" id="product-image-file" class="hidden" accept="image/*">
+                                <img id="image-preview" class="hidden product-image-preview" alt="Pré-visualização da imagem"/>
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <label for="product-description" class="block text-sm font-medium text-gray-600 mb-1">Descrição</label>
+                            <textarea id="product-description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                        </div>
+                        <button type="submit" class="w-full md:w-auto bg-green-600 text-white py-2 px-6 rounded-md hover:bg-green-700 transition duration-300">Adicionar Produto</button>
+                    </form>
+
+                    <h4 class="text-xl font-medium mb-4 text-gray-700">Produtos Cadastrados</h4>
+                    <div id="admin-product-list" class="space-y-4">
+                        <p id="no-admin-products" class="text-gray-500">Nenhum produto cadastrado ainda.</p>
+                    </div>
+                </section>
+
+                <section id="admin-user-management" class="mb-10">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-600 border-b pb-3">Gerenciar Administradores</h3>
+                    <form id="add-admin-form" class="mb-8 p-6 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
+                        <h4 class="text-xl font-medium mb-4 text-gray-700">Adicionar Novo Administrador</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label for="admin-new-email" class="block text-sm font-medium text-gray-600 mb-1">Email do Novo Admin</label>
+                                <input type="email" id="admin-new-email" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                            </div>
+                            <div>
+                                <label for="admin-new-password" class="block text-sm font-medium text-gray-600 mb-1">Senha do Novo Admin</label>
+                                <input type="password" id="admin-new-password" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full md:w-auto bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700 transition duration-300">Adicionar Administrador</button>
+                    </form>
+                     <h4 class="text-xl font-medium mb-4 text-gray-700">Administradores Cadastrados</h4>
+                    <div id="admin-users-list" class="space-y-2">
+                        </div>
+                </section>
+            </div>
+        </div>
     </div>
 
     <footer class="bg-gray-800 text-white text-center p-6 mt-12">
@@ -201,75 +254,330 @@
     </footer>
 
     <script>
-        // --- LÓGICA DE LOGIN DO ADMINISTRADOR ---
+        // --- ELEMENTOS DO DOM ---
         const loginForm = document.getElementById('login-form');
         const loginFeedbackDiv = document.getElementById('login-feedback');
+        const loginSidebar = document.getElementById('login-sidebar');
+        const loginSection = document.getElementById('login-section');
+        const adminInfoSection = document.getElementById('admin-info-section');
+        const adminEmailDisplay = document.getElementById('admin-email-display');
+        const adminLogoutButton = document.getElementById('admin-logout-button');
+
+        const dynamicContentArea = document.getElementById('dynamic-content-area');
+        const storeView = document.getElementById('store-view');
+        const adminPanel = document.getElementById('admin-panel');
+        const mainProductList = document.getElementById('main-product-list'); // Para exibir produtos na loja
+        const cartSidebar = document.getElementById('cart-sidebar');
+
+        // Elementos do Painel Admin
+        const addProductForm = document.getElementById('add-product-form');
+        const adminProductListContainer = document.getElementById('admin-product-list');
+        const noAdminProductsMessage = document.getElementById('no-admin-products');
+        const addAdminForm = document.getElementById('add-admin-form');
+        const adminUsersListContainer = document.getElementById('admin-users-list');
+        
+        const imageDropZone = document.getElementById('image-drop-zone');
+        const productImageFileInput = document.getElementById('product-image-file');
+        const imagePreview = document.getElementById('image-preview');
+        let uploadedImageFile = null; // Para armazenar o arquivo de imagem
+
+
+        // --- ESTADO DA APLICAÇÃO ---
+        let products = [ // Produtos iniciais de exemplo para a loja
+            { id: 'prod1', name: "Nome do Produto A", price: 99.90, imageUrl: "https://placehold.co/300x200/E0E7FF/4F46E5?text=Produto+1", description: "Descrição breve do produto A." },
+            { id: 'prod2', name: "Nome do Produto B", price: 129.50, imageUrl: "https://placehold.co/300x200/DBEAFE/1D4ED8?text=Produto+2", description: "Descrição breve do produto B." },
+            { id: 'prod3', name: "Nome do Produto C", price: 75.00, imageUrl: "https://placehold.co/300x200/BFDBFE/1E40AF?text=Produto+3", description: "Descrição breve do produto C." },
+            { id: 'prod4', name: "Nome do Produto D", price: 210.00, imageUrl: "https://placehold.co/300x200/93C5FD/1C3FAA?text=Produto+4", description: "Descrição breve do produto D." },
+            { id: 'prod5', name: "Nome do Produto E", price: 45.99, imageUrl: "https://placehold.co/300x200/60A5FA/1B3A9A?text=Produto+5", description: "Descrição breve do produto E." },
+            { id: 'prod6', name: "Nome do Produto F", price: 88.80, imageUrl: "https://placehold.co/300x200/3B82F6/1A358A?text=Produto+6", description: "Descrição breve do produto F." }
+        ];
+        let adminUsers = [
+            { email: "viniciusaraujomatos1@gmail.com", password: "Belohorizonte2020@" }
+        ];
+        let cart = [];
+        let isAdminLoggedIn = false;
+
+        // --- FUNÇÕES DE RENDERIZAÇÃO ---
+
+        // Renderiza produtos na página principal da loja
+        function renderStoreProducts() {
+            const productRow1 = document.getElementById('product-row-1');
+            const productRow2 = document.getElementById('product-row-2');
+            const productRow3 = document.getElementById('product-row-3'); // Para "Mais Vendidos" ou outros
+
+            if (!productRow1 || !productRow2 || !productRow3) {
+                console.error("Um ou mais containers de linha de produto não encontrados.");
+                return;
+            }
+            
+            productRow1.innerHTML = '';
+            productRow2.innerHTML = '';
+            productRow3.innerHTML = '';
+
+
+            products.forEach((product, index) => {
+                const productHTML = `
+                    <div class="product-card bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm flex flex-col items-center text-center" data-id="${product.id}">
+                        <img src="${product.imageUrl || 'https://placehold.co/300x200/cccccc/969696?text=Sem+Imagem'}" alt="Imagem de ${product.name}" class="w-full h-48 object-cover rounded-md mb-4 product-image">
+                        <h3 class="text-lg font-medium text-gray-700 mb-1 product-name">${product.name}</h3>
+                        <p class="text-xl font-bold text-blue-600 mb-3 product-price">R$ ${product.price.toFixed(2)}</p>
+                        <p class="text-xs text-gray-500 mb-2 product-description h-10 overflow-hidden">${product.description || ''}</p>
+                        <button class="mt-auto w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 add-to-cart-button">Adicionar ao Carrinho</button>
+                    </div>
+                `;
+                // Distribui os produtos entre as linhas
+                if (index < 3) productRow1.innerHTML += productHTML;
+                else if (index < 6) productRow2.innerHTML += productHTML;
+                else productRow3.innerHTML += productHTML; // O restante vai para a terceira linha
+            });
+            addEventListenersToAddToCartButtons();
+        }
+
+
+        // Renderiza produtos no painel do administrador
+        function renderAdminProducts() {
+            if (!adminProductListContainer || !noAdminProductsMessage) return;
+            adminProductListContainer.innerHTML = ''; // Limpa a lista atual
+
+            if (products.length === 0) {
+                noAdminProductsMessage.classList.remove('hidden');
+            } else {
+                noAdminProductsMessage.classList.add('hidden');
+                products.forEach(product => {
+                    const productDiv = document.createElement('div');
+                    productDiv.className = 'flex justify-between items-center p-3 border border-gray-200 rounded-md bg-white shadow-sm';
+                    productDiv.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <img src="${product.imageUrl || 'https://placehold.co/60x40/cccccc/969696?text=N/A'}" alt="${product.name}" class="w-16 h-10 object-cover rounded-sm">
+                            <div>
+                                <h5 class="font-medium text-gray-700">${product.name}</h5>
+                                <p class="text-sm text-blue-500">R$ ${product.price.toFixed(2)}</p>
+                                <p class="text-xs text-gray-500 truncate w-64" title="${product.description}">${product.description || 'Sem descrição'}</p>
+                            </div>
+                        </div>
+                        <button data-id="${product.id}" class="remove-product-button text-red-500 hover:text-red-700 font-medium py-1 px-3 rounded-md hover:bg-red-100 transition-colors">Remover</button>
+                    `;
+                    adminProductListContainer.appendChild(productDiv);
+                });
+                addEventListenersToRemoveProductButtons();
+            }
+        }
+        
+        // Renderiza lista de administradores
+        function renderAdminUsers() {
+            if (!adminUsersListContainer) return;
+            adminUsersListContainer.innerHTML = '';
+            adminUsers.forEach(admin => {
+                const adminDiv = document.createElement('div');
+                adminDiv.className = 'p-2 border-b border-gray-200 text-sm text-gray-600';
+                adminDiv.textContent = admin.email;
+                // Poderia adicionar um botão de remover aqui no futuro, exceto para o admin principal
+                adminUsersListContainer.appendChild(adminDiv);
+            });
+        }
+
+        // --- LÓGICA DE LOGIN E CONTROLE DE VISUALIZAÇÃO ---
+        function showAdminView(adminEmail) {
+            isAdminLoggedIn = true;
+            storeView.classList.add('hidden');
+            adminPanel.classList.remove('hidden');
+            loginSection.classList.add('hidden');
+            adminInfoSection.classList.remove('hidden');
+            adminEmailDisplay.textContent = adminEmail;
+            
+            document.getElementById('store-logo').textContent = "Painel Admin";
+            document.getElementById('store-nav').classList.add('hidden');
+
+            renderAdminProducts();
+            renderAdminUsers();
+        }
+
+        function showStoreView() {
+            isAdminLoggedIn = false;
+            adminPanel.classList.add('hidden');
+            storeView.classList.remove('hidden');
+            loginSection.classList.remove('hidden');
+            adminInfoSection.classList.add('hidden');
+            loginFeedbackDiv.classList.add('hidden');
+            if(loginForm) loginForm.reset();
+
+            document.getElementById('store-logo').textContent = "LogoLoja";
+            document.getElementById('store-nav').classList.remove('hidden');
+            
+            renderStoreProducts(); // Garante que os produtos da loja sejam re-renderizados
+        }
 
         if (loginForm) {
             loginForm.addEventListener('submit', function(event) {
-                event.preventDefault(); // Previne o envio padrão do formulário
+                event.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('senha').value;
+                
+                const admin = adminUsers.find(user => user.email === email && user.password === password);
 
-                const emailInput = document.getElementById('email');
-                const passwordInput = document.getElementById('senha');
-                const email = emailInput.value;
-                const password = passwordInput.value;
-
-                // Credenciais do administrador
-                const adminEmail = "viniciusaraujomatos1@gmail.com";
-                const adminPassword = "Belohorizonte2020@";
-
-                loginFeedbackDiv.innerHTML = ''; // Limpa mensagens anteriores
+                loginFeedbackDiv.innerHTML = '';
                 loginFeedbackDiv.classList.remove('hidden', 'feedback-success', 'feedback-error');
 
-
-                if (email === adminEmail && password === adminPassword) {
-                    // Login bem-sucedido
-                    loginFeedbackDiv.textContent = "Login de administrador bem-sucedido! Redirecionando...";
+                if (admin) {
+                    loginFeedbackDiv.textContent = "Login bem-sucedido! Carregando painel...";
                     loginFeedbackDiv.classList.add('feedback-message', 'feedback-success');
-                    loginFeedbackDiv.classList.remove('hidden');
-                    // Aqui você pode redirecionar para a página de admin:
-                    // window.location.href = "/admin-dashboard.html"; // Exemplo
-                    console.log("Login de administrador bem-sucedido!");
-                    // Por enquanto, apenas limpamos o formulário e mantemos na página
-                    // loginForm.reset(); // Opcional: limpar campos após login
+                    setTimeout(() => {
+                       showAdminView(admin.email);
+                    }, 500); // Pequeno delay para mostrar a mensagem
                 } else {
-                    // Falha no login
                     loginFeedbackDiv.textContent = "Email ou senha inválidos.";
                     loginFeedbackDiv.classList.add('feedback-message', 'feedback-error');
-                    loginFeedbackDiv.classList.remove('hidden');
-                    console.error("Falha no login do administrador.");
                 }
             });
-        } else {
-            console.error("Formulário de login não encontrado.");
         }
 
-        // --- LÓGICA DO CARRINHO DE COMPRAS ---
+        if (adminLogoutButton) {
+            adminLogoutButton.addEventListener('click', showStoreView);
+        }
+
+        // --- GERENCIAMENTO DE PRODUTOS (ADMIN) ---
+        if (addProductForm) {
+            addProductForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const name = document.getElementById('product-name').value;
+                const price = parseFloat(document.getElementById('product-price').value);
+                let imageUrl = document.getElementById('product-image-url').value;
+                const description = document.getElementById('product-description').value;
+
+                if (uploadedImageFile) {
+                    // Em um app real, você faria upload do arquivo e obteria uma URL
+                    // Por agora, vamos usar um Object URL para preview local se não houver URL manual
+                    if (!imageUrl) imageUrl = URL.createObjectURL(uploadedImageFile);
+                }
+
+
+                if (name && price > 0) {
+                    const newProduct = {
+                        id: 'prod' + (products.length + 1) + Date.now(), // ID simples
+                        name,
+                        price,
+                        imageUrl: imageUrl || 'https://placehold.co/300x200/cccccc/969696?text=Nova+Imagem',
+                        description
+                    };
+                    products.push(newProduct);
+                    renderAdminProducts();
+                    renderStoreProducts(); // Atualiza a loja também
+                    addProductForm.reset();
+                    imagePreview.classList.add('hidden');
+                    imagePreview.src = '';
+                    uploadedImageFile = null;
+                    document.getElementById('product-image-url').value = ''; // Limpa o campo URL
+                } else {
+                    alert("Por favor, preencha nome e preço do produto.");
+                }
+            });
+        }
+
+        function addEventListenersToRemoveProductButtons() {
+            const removeButtons = adminProductListContainer.querySelectorAll('.remove-product-button');
+            removeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = this.dataset.id;
+                    products = products.filter(p => p.id !== productId);
+                    renderAdminProducts();
+                    renderStoreProducts(); // Atualiza a loja também
+                });
+            });
+        }
+        
+        // --- LÓGICA DE UPLOAD/DRAG-AND-DROP DE IMAGEM (SIMPLIFICADO) ---
+        if (imageDropZone) {
+            imageDropZone.addEventListener('click', () => productImageFileInput.click());
+
+            imageDropZone.addEventListener('dragover', (event) => {
+                event.preventDefault();
+                imageDropZone.classList.add('dragover');
+            });
+
+            imageDropZone.addEventListener('dragleave', () => {
+                imageDropZone.classList.remove('dragover');
+            });
+
+            imageDropZone.addEventListener('drop', (event) => {
+                event.preventDefault();
+                imageDropZone.classList.remove('dragover');
+                const files = event.dataTransfer.files;
+                if (files.length > 0) {
+                    handleImageFile(files[0]);
+                }
+            });
+
+            productImageFileInput.addEventListener('change', (event) => {
+                const files = event.target.files;
+                if (files.length > 0) {
+                    handleImageFile(files[0]);
+                }
+            });
+        }
+
+        function handleImageFile(file) {
+            if (file && file.type.startsWith('image/')) {
+                uploadedImageFile = file; // Armazena o arquivo
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imagePreview.src = e.target.result;
+                    imagePreview.classList.remove('hidden');
+                    document.getElementById('product-image-url').value = ''; // Limpa o campo URL se uma imagem for carregada/arrastada
+                }
+                reader.readAsDataURL(file);
+            } else {
+                alert("Por favor, selecione um arquivo de imagem válido.");
+                uploadedImageFile = null;
+                imagePreview.classList.add('hidden');
+                imagePreview.src = '';
+            }
+        }
+
+
+        // --- GERENCIAMENTO DE ADMINISTRADORES (ADMIN) ---
+        if (addAdminForm) {
+            addAdminForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const email = document.getElementById('admin-new-email').value;
+                const password = document.getElementById('admin-new-password').value;
+
+                if (email && password) {
+                    if (adminUsers.find(user => user.email === email)) {
+                        alert("Este email de administrador já existe.");
+                        return;
+                    }
+                    adminUsers.push({ email, password });
+                    console.log("Novo administrador adicionado (em memória):", { email, password });
+                    renderAdminUsers();
+                    addAdminForm.reset();
+                } else {
+                    alert("Por favor, preencha email e senha para o novo administrador.");
+                }
+            });
+        }
+
+        // --- LÓGICA DO CARRINHO DE COMPRAS (CLIENTE) ---
         const cartItemsContainer = document.getElementById('cart-items-list');
         const cartTotalValueElement = document.getElementById('cart-total-value');
         const checkoutButton = document.getElementById('checkout-button');
         const cartEmptyMessage = document.getElementById('cart-empty-message');
         const cartTotalSection = document.getElementById('cart-total-section');
-        const addToCartButtons = document.querySelectorAll('main button.bg-green-500');
 
-        let cart = []; // Array para armazenar os itens do carrinho
-
-        // Função para atualizar a exibição do carrinho
         function updateCartDisplay() {
             if (!cartItemsContainer || !cartTotalValueElement || !checkoutButton || !cartEmptyMessage || !cartTotalSection) {
                 console.error("Um ou mais elementos do carrinho não foram encontrados no DOM.");
                 return;
             }
 
-            cartItemsContainer.innerHTML = ''; // Limpa os itens atuais do display
+            cartItemsContainer.innerHTML = '';
             let total = 0;
 
             if (cart.length === 0) {
-                cartEmptyMessage.classList.remove('hidden'); // Mostra mensagem de carrinho vazio
-                cartTotalSection.classList.add('hidden'); // Esconde seção de total e botão de finalizar
+                cartEmptyMessage.classList.remove('hidden');
+                cartTotalSection.classList.add('hidden');
             } else {
-                cartEmptyMessage.classList.add('hidden'); // Esconde mensagem de carrinho vazio
-                cartTotalSection.classList.remove('hidden'); // Mostra seção de total e botão de finalizar
+                cartEmptyMessage.classList.add('hidden');
+                cartTotalSection.classList.remove('hidden');
 
                 cart.forEach((item, index) => {
                     const itemElement = document.createElement('div');
@@ -279,55 +587,63 @@
                             <h4 class="font-medium text-gray-600 truncate w-32" title="${item.name}">${item.name}</h4>
                             <p class="text-xs text-gray-500">${item.quantity} x R$ ${item.price.toFixed(2)}</p>
                         </div>
-                        <button class="text-red-500 hover:text-red-700 text-sm" data-index="${index}">Remover</button>
+                        <button class="text-red-500 hover:text-red-700 text-sm remove-from-cart-button" data-id="${item.id}">Remover</button>
                     `;
                     cartItemsContainer.appendChild(itemElement);
                     total += item.price * item.quantity;
                 });
             }
-            cartTotalValueElement.textContent = `R$ ${total.toFixed(2)}`; // Atualiza o valor total
-            addRemoveEventListeners(); // Adiciona listeners aos novos botões "Remover"
+            cartTotalValueElement.textContent = `R$ ${total.toFixed(2)}`;
+            addEventListenersToRemoveFromCartButtons();
         }
 
-        // Função para adicionar listeners aos botões "Remover"
-        function addRemoveEventListeners() {
-            const removeButtons = cartItemsContainer.querySelectorAll('button[data-index]');
-            removeButtons.forEach(button => {
-                // Remove listener antigo para evitar duplicação, se houver
-                button.replaceWith(button.cloneNode(true));
+        function addEventListenersToAddToCartButtons() {
+            const addToCartButtons = document.querySelectorAll('.add-to-cart-button');
+            addToCartButtons.forEach(button => {
+                 // Remove listener antigo para evitar duplicação, se houver
+                const newButton = button.cloneNode(true);
+                button.parentNode.replaceChild(newButton, button);
+
+                newButton.addEventListener('click', (event) => {
+                    if (isAdminLoggedIn) {
+                        alert("Funcionalidade de adicionar ao carrinho desabilitada no modo administrador.");
+                        return;
+                    }
+                    const productCard = event.target.closest('.product-card');
+                    const productId = productCard.dataset.id;
+                    const product = products.find(p => p.id === productId);
+
+                    if (product) {
+                        const existingItem = cart.find(item => item.id === productId);
+                        if (existingItem) {
+                            existingItem.quantity++;
+                        } else {
+                            cart.push({ ...product, quantity: 1 });
+                        }
+                        updateCartDisplay();
+                    }
+                });
             });
-            // Adiciona novos listeners
-            cartItemsContainer.querySelectorAll('button[data-index]').forEach(button => {
-                 button.addEventListener('click', (event) => {
-                    const indexToRemove = parseInt(event.target.dataset.index);
-                    cart.splice(indexToRemove, 1); // Remove o item do array 'cart'
-                    updateCartDisplay(); // Atualiza a exibição do carrinho
+        }
+        
+        function addEventListenersToRemoveFromCartButtons() {
+            const removeButtons = cartItemsContainer.querySelectorAll('.remove-from-cart-button');
+            removeButtons.forEach(button => {
+                const newButton = button.cloneNode(true);
+                button.parentNode.replaceChild(newButton, button);
+
+                newButton.addEventListener('click', (event) => {
+                    const productIdToRemove = event.target.dataset.id;
+                    cart = cart.filter(item => item.id !== productIdToRemove);
+                    updateCartDisplay();
                 });
             });
         }
 
-        // Adiciona listener de evento para os botões "Adicionar ao Carrinho"
-        addToCartButtons.forEach(button => {
-            button.addEventListener('click', (event) => {
-                const productCard = event.target.closest('.product-card');
-                const productName = productCard.querySelector('h3').textContent;
-                const productPriceText = productCard.querySelector('p.text-xl').textContent;
-                // Converte o preço para número (removendo "R$", espaços e trocando vírgula por ponto)
-                const productPrice = parseFloat(productPriceText.replace('R$', '').replace(/\s/g, '').replace(',', '.'));
 
-                const existingItem = cart.find(item => item.name === productName);
-                if (existingItem) {
-                    existingItem.quantity++; // Incrementa a quantidade se o item já existe
-                } else {
-                    // Adiciona novo item ao carrinho
-                    cart.push({ name: productName, price: productPrice, quantity: 1 });
-                }
-                updateCartDisplay(); // Atualiza a exibição do carrinho
-            });
-        });
-
-        // Inicializa a exibição do carrinho quando a página carrega
-        updateCartDisplay();
+        // --- INICIALIZAÇÃO ---
+        showStoreView(); // Mostra a loja por padrão
+        updateCartDisplay(); // Inicializa o carrinho
 
     </script>
 
